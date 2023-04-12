@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@chartext/examples-dummy",
+  "version": "1.0.0",
+  "dependencies": {
+    "@chartext/chart": "*",
+    "@chartext/canvaskit": "*",
+    "date-fns": "^2.29.3",
+    "date-fns-tz": "^2.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tinycolor2": "^1.6.0"
+  },
+  "scripts": {
+    "dev": "vite"
+  }
+}

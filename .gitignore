@@ -1,0 +1,19 @@
+# dependencies
+node_modules
+
+# production
+dist
+build
+
+# misc
+.DS_Store
+.gitconfig
+.vitest
+
+*.log*
+
+# app config
+.idea
+
+# build
+tsconfig.*.tsbuildinfo

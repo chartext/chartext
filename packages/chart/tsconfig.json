@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.dist.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@chartext/canvaskit/*": ["../../packages/canvaskit/src/*"],
+    },
+  },
+  "include": ["src", "__tests__", "./dts-bundle-generator.config.ts", "./vite.config.ts"],
+  "exclude": ["dist"]
+}

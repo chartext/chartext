@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@chartext/chart",
+  "version": "1.0.0",
+  "type": "module",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "main": "./dist/index.umd.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "import": {
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "require": {
+      "default": "./dist/index.umd.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "tsc": "tsc",
+    "dts": "dts-bundle-generator --config ./dts-bundle-generator.config.ts",
+    "dist": "npm run clean && tsc && vite build && npm run dts",
+    "test:run": "vitest run",
+    "test": "vitest",
+    "watch": "vite build --watch"
+  },
+  "peerDependencies": {
+    "canvaskit-wasm": "^0.38.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "dependencies": {
+    "@chartext/canvaskit": "*",
+    "date-fns": "^2.29.3",
+    "date-fns-tz": "^2.0.0",
+    "lodash": "^4.17.21",
+    "tinycolor2": "^1.6.0"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.dist.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "paths": {
+      "@/*": ["src/*"],
+      "@test/*": ["__tests__/*"],
+    },
+  },
+  "include": ["src", "__tests__", "./dts-bundle-generator.config.ts", "./vite.config.ts"],
+  "exclude": ["dist"]
+}

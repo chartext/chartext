@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@chartext/chart/*": ["../../packages/chart/src/*"],
+    }
+  },
+  "include": ["src", "./vite.config.ts"],
+}
