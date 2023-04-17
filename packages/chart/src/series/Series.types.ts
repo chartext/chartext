@@ -1,10 +1,11 @@
 import { CkGraphics } from '@chartext/canvaskit';
 import { Canvas, Paint } from 'canvaskit-wasm';
-import { Rect } from '@/Chart.types';
 import { DatePart } from '@/data/Dates';
 import { CoordDisplay } from '@/display/CoordDisplay';
 
 export type CoordType = number | string | Date;
+
+export type CoordTypeName = 'number' | 'string' | 'Date';
 
 export type CoordProps = {
   formatter?: string | ((coord: CoordType) => string);
@@ -14,8 +15,8 @@ export type CoordProps = {
 };
 
 export type XY = {
-  x: CoordType | undefined;
-  y: CoordType | undefined;
+  x: CoordType;
+  y: CoordType;
 };
 
 export type BoxData<O extends CoordType> = {
@@ -28,7 +29,9 @@ export type BoxData<O extends CoordType> = {
   readonly outliers?: number[];
 };
 
-export type SeriesData = (XY | undefined)[];
+export type SeriesData = XY[];
+
+// export type SeriesDataConfig = (Partial<XY> | undefined)[];
 
 export type SeriesType = 'line' | 'scatter' | 'box' | 'area' | 'bar';
 
@@ -38,15 +41,23 @@ export type Series = {
   readonly data: SeriesData;
 };
 
-export type DrawSeriesProps = {
-  canvas: Canvas;
+export type SeriesConfig = {
+  readonly type: SeriesType;
+  readonly name: string;
+};
+
+export type CkSeriesProps = {
   ckGraphics: CkGraphics;
-  data: SeriesData;
+  sortedData: XY[];
   index: number;
   color: string;
   fillPaint: Paint;
   strokePaint: Paint;
-  plotRect: Rect<number>;
   xDisplay: CoordDisplay<CoordType>;
   yDisplay: CoordDisplay<CoordType>;
+};
+
+export type CkSeries = {
+  draw(canvas: Canvas): void;
+  delete(): void;
 };

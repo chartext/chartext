@@ -73,6 +73,7 @@ export function generatePlot(props?: DummyPlotProps): Plot {
         const xData: CoordType[] = generateData(dataCount, xType);
         const yData: CoordType[] = generateData(dataCount, yType);
 
+        // @ts-expect-error Heh
         const data: XY[] = xData.map((x, xDataIndex) => ({ x, y: yData[xDataIndex] }));
 
         return {

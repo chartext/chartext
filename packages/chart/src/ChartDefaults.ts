@@ -26,8 +26,8 @@ const defaultAxisProps: Omit<AxisProps, 'position'> = {
   showZero: true,
   size: 50,
   theme: {
-    tickColor: '#909296',
-    zeroTickColor: '#5C5F66',
+    tickColor: 'rgb(131, 131, 131)',
+    zeroTickColor: 'rgb(197, 197, 197)',
   },
 };
 

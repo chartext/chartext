@@ -99,10 +99,12 @@ export default class DateCoordDisplay extends CoordDisplay<Date> {
       this.min = roundDate(minDate, this.datePart).getTime();
       this.max = roundDate(maxDate, this.datePart).getTime();
     }
+
+    this.resize(props.plotRect);
   }
 
   // eslint-disable-next-line class-methods-use-this
-  override toRaw(t: Date): number {
+  override toNumber(t: Date): number {
     return t.getTime();
   }
 }

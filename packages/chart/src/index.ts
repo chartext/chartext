@@ -8,15 +8,14 @@ export * from '@/data/Dates';
 
 // display
 export * from '@/display/CoordDisplay';
-export { default as PlotDisplay } from '@/display/PlotDisplay';
-export * from '@/display/SeriesDisplay';
 
 // series
 export * from '@/series/Series.types';
-export * from '@/series/Series';
+export * from '@/series/LineSeries';
+export * from '@/series/ScatterSeries';
 
 // plot
-export * from '@/plot/Plot.context';
+// export * from '@/plot/Plot.context';
 export * from '@/plot/Plot.types';
 
 // theme

@@ -4,20 +4,16 @@ import { Rect } from '@/Chart.types';
 import { AxisProps } from '@/axis/Axis.types';
 import { CoordDisplay } from '@/display/CoordDisplay';
 import { CoordType } from '@/series/Series.types';
-import { AxisTheme } from '@/theme/ChartTheme.types';
 
 export default class Axis {
   private readonly tickParagraphs: [number, Paragraph][];
 
-  private readonly theme: AxisTheme;
+  private readonly tickColorName: string;
 
-  private readonly tickPaint: Paint;
-
-  private readonly zeroTickPaint: Paint;
+  private readonly zeroTickColorName: string;
 
   constructor(
     readonly props: AxisProps,
-    private readonly paints: Map<string, Paint>,
     readonly coordDisplay: CoordDisplay<CoordType>,
     ckGraphics: CkGraphics,
   ) {
@@ -28,27 +24,10 @@ export default class Axis {
       throw new Error('Axis theme is not present');
     }
 
-    this.theme = theme;
-
     const { tickColor, zeroTickColor } = theme;
 
-    const tickColorName = `${tickColor}-Stroke`;
-    const tickPaint = paints.get(tickColorName);
-
-    if (!tickPaint) {
-      throw new Error(`Invalid tickColorName: ${tickColorName}`);
-    }
-
-    this.tickPaint = tickPaint;
-
-    const zeroTickColorName = `${zeroTickColor}-Stroke`;
-    const zeroTickPaint = paints.get(tickColorName);
-
-    if (!zeroTickPaint) {
-      throw new Error(`Invalid zeroTickColorName: ${zeroTickColorName}`);
-    }
-
-    this.zeroTickPaint = zeroTickPaint;
+    this.tickColorName = `${tickColor}-Stroke`;
+    this.zeroTickColorName = `${zeroTickColor}-Stroke`;
 
     const {
       CK: {
@@ -86,56 +65,61 @@ export default class Axis {
     }
   }
 
-  draw(canvas: Canvas, plotRect: Rect<number>) {
-    const { coordDisplay, tickParagraphs, props, tickPaint, zeroTickPaint } = this;
+  draw(canvas: Canvas, plotRect: Rect<number>, paints: Map<string, Paint>) {
+    const { coordDisplay, tickParagraphs, props } = this;
 
     const { fontSize = 12, position } = props;
 
-    tickParagraphs.forEach(([value, tickParagraph]) => {
-      const paint: Paint = value === 0 ? zeroTickPaint : tickPaint;
+    const tickPaint = paints.get(this.tickColorName);
+    const zeroTickPaint = paints.get(this.zeroTickColorName);
 
-      switch (position) {
-        case 'left':
-          {
-            const y = coordDisplay.toViewCoord(value, plotRect);
-            const x0 = plotRect.left - 7;
+    if (tickPaint && zeroTickPaint) {
+      tickParagraphs.forEach(([value, tickParagraph]) => {
+        const paint: Paint = value === 0 ? zeroTickPaint : tickPaint;
 
-            canvas.drawLine(x0, y, plotRect.right, y, paint);
+        switch (position) {
+          case 'left':
+            {
+              const y = coordDisplay.valueToViewCoord(value, plotRect);
+              const x0 = plotRect.left - 7;
 
-            CkGraphics.drawParagraph({
-              canvas,
-              paragraph: tickParagraph,
-              width: x0 - 5,
-              x: 0,
-              y: y - Math.round(fontSize / 2),
-            });
-          }
-          break;
-        case 'bottom':
-          {
-            const x = coordDisplay.toViewCoord(value, plotRect);
-            const y1 = plotRect.bottom + 7;
+              canvas.drawLine(x0, y, plotRect.right, y, paint);
 
-            canvas.drawLine(x, plotRect.top, x, y1, paint);
+              CkGraphics.drawParagraph({
+                canvas,
+                paragraph: tickParagraph,
+                width: x0 - 5,
+                x: 0,
+                y: y - Math.round(fontSize / 2),
+              });
+            }
+            break;
+          case 'bottom':
+            {
+              const x = coordDisplay.valueToViewCoord(value, plotRect);
+              const y1 = plotRect.bottom + 7;
 
-            // @todo width is a hack. need to find the paragraph width
+              canvas.drawLine(x, plotRect.top, x, y1, paint);
 
-            CkGraphics.drawParagraph({
-              canvas,
-              paragraph: tickParagraph,
-              width: 30,
-              x: x - 15,
-              y: y1 + 5,
-            });
-          }
-          break;
-        case 'top':
-        case 'right':
-          throw new Error('AxisPosition is not implemented', { cause: position });
-        default:
-          throw new Error('Invalid position', { cause: position });
-      }
-    });
+              // @todo width is a hack. need to find the paragraph width
+
+              CkGraphics.drawParagraph({
+                canvas,
+                paragraph: tickParagraph,
+                width: 30,
+                x: x - 15,
+                y: y1 + 5,
+              });
+            }
+            break;
+          case 'top':
+          case 'right':
+            throw new Error('AxisPosition is not implemented', { cause: position });
+          default:
+            throw new Error('Invalid position', { cause: position });
+        }
+      });
+    }
   }
 
   delete() {

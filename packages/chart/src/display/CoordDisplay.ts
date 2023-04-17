@@ -9,10 +9,10 @@ export type CoordMeta = {
 };
 
 export type CoordDisplayProps<T extends CoordType> = {
-  axis: 'x' | 'y';
+  axisType: AxisType;
   data: T[];
+  plotRect: Rect<number>;
   maxTicks?: number;
-  // plotRect: Rect;
 };
 
 export abstract class CoordDisplay<T extends CoordType> {
@@ -24,16 +24,13 @@ export abstract class CoordDisplay<T extends CoordType> {
 
   readonly data: T[];
 
-  readonly axis: AxisType;
+  readonly axisType: AxisType;
 
-  // readonly plotRect: Rect;
-  // readonly valueCoordCache: Map<number, number> = new Map();
-  // readonly valueDisplayCache: Map<number, T> = new Map();
-  // readonly rawData[];
+  readonly valueToViewCoordCache: Map<T, number> = new Map<T, number>();
 
   constructor(props: CoordDisplayProps<T>) {
     this.data = props.data;
-    this.axis = props.axis;
+    this.axisType = props.axisType;
   }
 
   /**
@@ -73,22 +70,33 @@ export abstract class CoordDisplay<T extends CoordType> {
     return [niceMin, niceMax, spacing];
   }
 
-  abstract toRaw(t: T): number;
+  abstract toNumber(t: T): number;
 
-  toViewCoord(t: T, plotRect: Rect<number>): number {
-    const { axis, min, max } = this;
+  getViewCoord(t: T): number {
+    return this.valueToViewCoordCache.get(t) ?? -1;
+  }
 
-    const size = axis === 'x' ? plotRect.right - plotRect.left : plotRect.bottom - plotRect.top;
+  resize(plotRect: Rect<number>): void {
+    this.valueToViewCoordCache.clear();
+    this.data.forEach((value: T) => {
+      this.valueToViewCoordCache.set(value, this.valueToViewCoord(value, plotRect));
+    });
+  }
+
+  valueToViewCoord(t: T, plotRect: Rect<number>): number {
+    const { axisType, min, max } = this;
+
+    const size = axisType === 'x' ? plotRect.right - plotRect.left : plotRect.bottom - plotRect.top;
     const scale = size / (max + min * -1);
-    const rawValue = this.toRaw(t);
+    const numberValue = this.toNumber(t);
 
-    switch (axis) {
+    switch (axisType) {
       case 'x':
-        return Math.round(plotRect.left + Math.abs(rawValue - min) * scale);
+        return Math.round(plotRect.left + Math.abs(numberValue - min) * scale);
       case 'y':
-        return Math.round(plotRect.top + Math.abs(max - rawValue) * scale);
+        return Math.round(plotRect.top + Math.abs(max - numberValue) * scale);
       default:
-        throw new Error('Invalid axis type.', { cause: { axis } });
+        throw new Error('Invalid axis type.', { cause: { axisType } });
     }
   }
 }

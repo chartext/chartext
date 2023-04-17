@@ -1,13 +1,13 @@
 import { CkSurface } from '@chartext/canvaskit';
 import { lazy, Suspense, useMemo } from 'react';
 import AxisSurface from '@/axis/AxisSurface';
-import { ChartContext, ChartContextProps } from '@/Chart.context';
+import { ChartContext } from '@/Chart.context';
 import { ChartProps, Rect } from '@/Chart.types';
 import { defaultAxisSurfaceProps, defaultChartProps } from '@/ChartDefaults';
 import ChartLoading from '@/ChartLoading';
-import PlotDisplay from '@/display/PlotDisplay';
 import PlotSurface from '@/plot/PlotSurface';
 import { ChartThemeProvider } from '@/theme/ChartTheme.context';
+import { DisplayProvider } from '@/display/Display.context';
 
 const CkGraphicsProviderLazy = lazy(() =>
   import('@chartext/canvaskit').then(({ CkGraphicsProvider }) => ({
@@ -28,8 +28,6 @@ export default function Chart(props: Partial<ChartProps>) {
     },
   } = props;
 
-  const plotDisplay = useMemo(() => new PlotDisplay(plot), [plot]);
-
   const plotRect: Rect<number> = useMemo(() => {
     const topMargin: number = axis.top?.size ?? 25;
     const rightMargin: number = axis.right?.size ?? 25;
@@ -47,40 +45,47 @@ export default function Chart(props: Partial<ChartProps>) {
     };
   }, [axis, size]);
 
-  const chartProviderProps: ChartContextProps = useMemo(
+  const chartProps: ChartProps = useMemo(
     () => ({
       ...defaultChartProps,
       ...props,
-      plotDisplay,
-      plotRect,
     }),
-    [plotDisplay, plotRect, props],
+    [props],
   );
 
   const {
     size: { height, width },
-  } = chartProviderProps;
+  } = chartProps;
 
   return (
     <Suspense fallback={<ChartLoading />}>
       <CkGraphicsProviderLazy>
-        <ChartContext.Provider value={chartProviderProps}>
+        <ChartContext.Provider value={chartProps}>
           <ChartThemeProvider>
-            <div style={{ height, width, backgroundColor }}>
-              <CkSurface
-                height={height}
-                width={width}
-                zIndex={1}
-              >
-                <AxisSurface />
-              </CkSurface>
-              <CkSurface
-                height={height}
-                width={width}
-                zIndex={2}
-              >
-                <PlotSurface />
-              </CkSurface>
+            <div style={{ height, width, backgroundColor, margin: 0 }}>
+              {plot ? (
+                <DisplayProvider
+                  plot={plot}
+                  plotRect={plotRect}
+                >
+                  <CkSurface
+                    height={height}
+                    width={width}
+                    zIndex={1}
+                  >
+                    <AxisSurface />
+                  </CkSurface>
+                  <CkSurface
+                    height={height}
+                    width={width}
+                    zIndex={2}
+                  >
+                    <PlotSurface />
+                  </CkSurface>
+                </DisplayProvider>
+              ) : (
+                <p>No data to display.</p>
+              )}
             </div>
           </ChartThemeProvider>
         </ChartContext.Provider>

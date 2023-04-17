@@ -35,22 +35,24 @@ describe('DateCoordDisplay', () => {
       spacing,
     });
 
-    const xDateDisplay = new DateCoordDisplay({
-      data: dates,
-      axis: 'x',
-    });
-
-    const yDateDisplay = new DateCoordDisplay({
-      data: dates,
-      axis: 'y',
-    });
-
     const plotRect: Rect<number> = {
       top: 0,
       right: 300,
       left: 0,
       bottom: 500,
     };
+
+    const xDateDisplay = new DateCoordDisplay({
+      data: dates,
+      axisType: 'x',
+      plotRect,
+    });
+
+    const yDateDisplay = new DateCoordDisplay({
+      data: dates,
+      axisType: 'y',
+      plotRect,
+    });
 
     console.log({
       'dateDisplay.min': xDateDisplay.min,
@@ -65,8 +67,8 @@ describe('DateCoordDisplay', () => {
       .filter((date) => !dateMap.has(date))
       .forEach((date) => {
         dateMap.set(date, [
-          xDateDisplay.toViewCoord(date, plotRect),
-          yDateDisplay.toViewCoord(date, plotRect),
+          xDateDisplay.valueToViewCoord(date, plotRect),
+          yDateDisplay.valueToViewCoord(date, plotRect),
         ]);
       });
 

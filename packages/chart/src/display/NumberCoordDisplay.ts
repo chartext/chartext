@@ -11,7 +11,7 @@ export default class NumberCoordDisplay extends CoordDisplay<number> {
   constructor(props: CoordDisplayProps<number>) {
     super(props);
 
-    this.toRaw = this.toRaw.bind(this);
+    this.toNumber = this.toNumber.bind(this);
 
     const { data, maxTicks = 10 } = props;
 
@@ -19,10 +19,12 @@ export default class NumberCoordDisplay extends CoordDisplay<number> {
     const maxValue = _.max(data) ?? 0;
 
     [this.min, this.max, this.spacing] = CoordDisplay.roundedMinMax(minValue, maxValue, maxTicks);
+
+    this.resize(props.plotRect);
   }
 
   // eslint-disable-next-line class-methods-use-this
-  override toRaw(t: number): number {
+  override toNumber(t: number): number {
     return t;
   }
 }

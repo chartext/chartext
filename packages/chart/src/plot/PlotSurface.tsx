@@ -1,60 +1,91 @@
 import { CkGraphics, useCkGraphicsContext, useCkSurfaceContext } from '@chartext/canvaskit';
 import { Canvas, Surface } from 'canvaskit-wasm';
+import { useEffect } from 'react';
 import { useChartContext } from '@/Chart.context';
 import { useChartThemeContext } from '@/theme/ChartTheme.context';
-import { drawLineSeries, drawScatterSeries } from '@/series/Series';
-import { DrawSeriesProps } from '@/series/Series.types';
+import { CkSeries, CkSeriesProps, SeriesType, XY } from '@/series/Series.types';
+import LineSeries from '@/series/LineSeries';
+import ScatterSeries from '@/series/ScatterSeries';
+import { useDisplayContext } from '@/display/Display.context';
+
+function createCkSeries(props: CkSeriesProps, seriesType: SeriesType): CkSeries {
+  switch (seriesType) {
+    case 'line':
+      return new LineSeries(props);
+    case 'scatter':
+      return new ScatterSeries(props);
+    case 'box':
+    case 'area':
+    case 'bar':
+    default:
+      throw new Error(`Series type not implemented: ${seriesType}`);
+  }
+}
 
 export default function PlotSurface() {
   const chartThemeContext = useChartThemeContext();
   const ckGraphics: CkGraphics = useCkGraphicsContext();
   const surface: Surface = useCkSurfaceContext();
-  const {
-    seriesTheme,
-    plot,
-    plotDisplay: { xDisplay, yDisplay },
-    plotRect,
-  } = useChartContext();
+  const { xDisplay, yDisplay } = useDisplayContext();
+  const { seriesTheme, plot } = useChartContext();
 
   const { CK } = ckGraphics;
 
-  surface.drawOnce((canvas: Canvas) => {
-    canvas.clear(CK.TRANSPARENT);
+  useEffect(() => {
+    const ckSeries: CkSeries[] | undefined = plot?.series.map((series, index) => {
+      const { data } = series;
 
-    plot?.series.forEach((series, index) => {
-      const seriesColor = seriesTheme.colors[index];
+      const sortedData: XY[] = data.sort((xy1, xy2) => {
+        const x1 = xy1.x;
+        const x2 = xy2.x;
+
+        const x1Number = xDisplay.toNumber(x1);
+        const x2Number = xDisplay.toNumber(x2);
+
+        const xCompare = x1Number - x2Number;
+
+        if (xCompare === 0) {
+          const y1 = xy1.y;
+          const y2 = xy2.y;
+
+          const y1Number = yDisplay.toNumber(y1);
+          const y2Number = yDisplay.toNumber(y2);
+
+          return y1Number - y2Number;
+        }
+
+        return xCompare;
+      });
+
+      const { colors: seriesThemeColors } = seriesTheme;
+      const seriesColor = seriesThemeColors[index % seriesThemeColors.length];
 
       const fillPaint = chartThemeContext.getPaint(seriesColor, CK.PaintStyle.Fill);
       const strokePaint = chartThemeContext.getPaint(seriesColor, CK.PaintStyle.Stroke);
 
-      const drawSeriesProps: DrawSeriesProps = {
-        canvas,
+      const ckSeriesProps: CkSeriesProps = {
         ckGraphics,
-        plotRect,
         xDisplay,
         yDisplay,
-        data: series.data,
+        sortedData,
         index,
         color: seriesColor ?? '#000',
         fillPaint,
         strokePaint,
       };
 
-      switch (series.type) {
-        case 'line':
-          drawLineSeries(drawSeriesProps);
-          break;
-        case 'scatter':
-          drawScatterSeries(drawSeriesProps);
-          break;
-        case 'box':
-        case 'area':
-        case 'bar':
-        default:
-          throw new Error(`Series type not implemented: ${series.type}`);
-      }
+      return createCkSeries(ckSeriesProps, series.type);
     });
-  });
+
+    surface.drawOnce((canvas: Canvas) => {
+      canvas.clear(CK.TRANSPARENT);
+      ckSeries?.forEach((cks) => cks.draw(canvas));
+    });
+
+    return () => {
+      ckSeries?.forEach((cks) => cks.delete());
+    };
+  }, [CK, chartThemeContext, ckGraphics, plot, seriesTheme, surface, xDisplay, yDisplay]);
 
   return null;
 }
