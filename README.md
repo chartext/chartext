@@ -5,33 +5,36 @@ React Skia Chart
 - [Project](https://github.com/orgs/chartext/projects/1)
 - [MIT License](./LICENSE)
 
-## Table of Contents
+## Packages
 
-- [Installation](#installation)
-- [Examples](#examples)
-- [Contributing](#contributing)
-- [Plugins](#plugins)
-
-## Installation (WIP)
-
-| Package | Dependencies | NPM |
-| - | - | - |
-| @chartext/canvaskit | <ul><li>[canvaskit-wasm](https://github.com/google/skia/tree/main/modules/canvaskit)</li><li>[react](https://github.com/facebook/react)</li><li>[tinycolor2](https://github.com/bgrins/TinyColor)</li></ul> | `npm install @chartext/canvaskit` |
-| @chartext/chart | <ul><li>[@chartext/canvaskit](./packages/canvaskit/)</li><li>[canvaskit-wasm](https://github.com/google/skia/tree/main/modules/canvaskit)</li><li>[date-fns](https://github.com/date-fns/date-fns)</li><li>[react](https://github.com/facebook/react)</li><li>[tinycolor2](https://github.com/bgrins/TinyColor)</li></ul> | `npm install @chartext/chart` |
+| Package | Description |
+| - | - |
+| [@chartext/canvaskit](./packages/canvaskit/) | |
+| [@chartext/chart](./packages/chart/) | |
+| [@chartext/utils](./packages/utils) | |
 
 ## Examples
 
 | Example | Command | Description |
 | - | - | - |
-| [examples/chart](./examples/chart/) | `npm run examples-chart:dev` | Basic example |
+| [examples/chart](./examples/chart/) | `pnpm examples:chart` |  |
+
+## Plugins
+
+WIP
 
 ## Contributing
 
-### Setup
+### Prerequisites
 
-#### Visual Studio Code Extensions
+- [git](https://git-scm.com/downloads)
+- [node](https://nodejs.org/)
+- [pnpm](https://pnpm.io/installation)
+- [typescript 5.0](https://www.typescriptlang.org/download)
 
-##### Recommended
+### Visual Studio Code Extensions
+
+#### Recommended
 See [.vscode/extensions.json](.vscode/extensions.json)
 
 - [EditorConfig for VS Code](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
@@ -43,8 +46,7 @@ See [.vscode/extensions.json](.vscode/extensions.json)
 - [Vitest](https://marketplace.visualstudio.com/items?itemName=ZixuanChen.vitest-explorer)
 - [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml)
 
-##### Optional
-- [Auto Import](https://marketplace.visualstudio.com/items?itemName=steoates.autoimport)
+#### Optional
 - [Auto Rename Tag](https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-rename-tag)
 - [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker)
 - [Color Highlight](https://marketplace.visualstudio.com/items?itemName=naumovs.color-highlight)
@@ -54,10 +56,10 @@ See [.vscode/extensions.json](.vscode/extensions.json)
 
 ### Steps
 
-1. Download the repository i.e. `git clone https://github.com/chartext/chartext.git`
+1. Clone the repository `git clone https://github.com/chartext/chartext.git`
 2. Change into the created directory `cd chartext`
 3. Run `pnpm i`
-4. Open vscode's command palette <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> and execute `>Reload Window`
+4. Use (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>) to open vscode's command palette and then execute `>Reload Window`
 
 ### Running locally
 
@@ -71,8 +73,20 @@ See [.vscode/extensions.json](.vscode/extensions.json)
 | pnpm canvaskit:dist |  |
 | pnpm canvaskit:test | |
 | pnpm chart:dist | |
+| pnpm chart:test | |
 | pnpm examples:chart | |
 
-## Plugins
-
-WIP
+## References
+- [canvaskit-wasm](https://github.com/google/skia/tree/main/modules/canvaskit)
+- [date-fns](https://github.com/date-fns/date-fns)
+- [eslint](https://github.com/eslint/eslint)
+- [node](https://github.com/nodejs/node)
+- [pnpm](https://github.com/pnpm/pnpm)
+- [prettier](https://github.com/prettier/prettier)
+- [react](https://github.com/facebook/react)
+- [syncpack](https://github.com/JamieMason/syncpack)
+- [tinycolor2](https://github.com/bgrins/TinyColor)
+- [typescript](https://github.com/microsoft/TypeScript)
+- [vite-tsconfig-paths](https://github.com/aleclarson/vite-tsconfig-paths)
+- [vite](https://github.com/vitejs/vite)
+- [vitest](https://github.com/vitest-dev/vitest)
