@@ -1,6 +1,6 @@
 # chartext
 
-Extensible chart
+React Skia Chart
 
 - [Project](https://github.com/orgs/chartext/projects/1)
 - [MIT License](./LICENSE)
@@ -12,18 +12,18 @@ Extensible chart
 - [Contributing](#contributing)
 - [Plugins](#plugins)
 
-## Installation
+## Installation (WIP)
 
 | Package | Dependencies | NPM |
 | - | - | - |
 | @chartext/canvaskit | <ul><li>[canvaskit-wasm](https://github.com/google/skia/tree/main/modules/canvaskit)</li><li>[react](https://github.com/facebook/react)</li><li>[tinycolor2](https://github.com/bgrins/TinyColor)</li></ul> | `npm install @chartext/canvaskit` |
-| @chartext/chart | <ul><li>[@chartext/canvaskit](./packages/canvaskit/)</li><li>[canvaskit-wasm](https://github.com/google/skia/tree/main/modules/canvaskit)</li><li>[date-fns](https://github.com/date-fns/date-fns)</li><li>[lodash](https://github.com/lodash/lodash)</li><li>[react](https://github.com/facebook/react)</li><li>[tinycolor2](https://github.com/bgrins/TinyColor)</li></ul> | `npm install @chartext/chart` |
+| @chartext/chart | <ul><li>[@chartext/canvaskit](./packages/canvaskit/)</li><li>[canvaskit-wasm](https://github.com/google/skia/tree/main/modules/canvaskit)</li><li>[date-fns](https://github.com/date-fns/date-fns)</li><li>[react](https://github.com/facebook/react)</li><li>[tinycolor2](https://github.com/bgrins/TinyColor)</li></ul> | `npm install @chartext/chart` |
 
 ## Examples
 
 | Example | Command | Description |
 | - | - | - |
-| [examples/dummy](./examples/dummy/) | `npm run examples-dummy:dev` | Basic example |
+| [examples/chart](./examples/chart/) | `npm run examples-chart:dev` | Basic example |
 
 ## Contributing
 
@@ -39,7 +39,6 @@ See [.vscode/extensions.json](.vscode/extensions.json)
 - [GitHub Pull Requests and Issues](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github)
 - [Markdown Preview Github Styling](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-preview-github-styles)
 - [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
-- [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
 - [Vite](https://marketplace.visualstudio.com/items?itemName=antfu.vite)
 - [Vitest](https://marketplace.visualstudio.com/items?itemName=ZixuanChen.vitest-explorer)
 - [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml)
@@ -57,23 +56,22 @@ See [.vscode/extensions.json](.vscode/extensions.json)
 
 1. Download the repository i.e. `git clone https://github.com/chartext/chartext.git`
 2. Change into the created directory `cd chartext`
-3. Run `npm i`
-4. Run `npm run dist`
-5. Reload vscode's window using the command palette
+3. Run `pnpm i`
+4. Open vscode's command palette <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> and execute `>Reload Window`
 
 ### Running locally
 
-1. Run `npm run examples-dummy:dev`
+1. Run `pnpm examples:chart`
 2. Open up a browser and go to [http://localhost:5173/](http://localhost:5173/)
-3. Modifying code in the project will automatically reload the latest
 
 ### Scripts
 
 | Command | Description |
 | - | - |
-| npm run canvaskit:dist | Removes the dist folder and builds the project including the type definitions |
-| npm run canvaskit:test | |
-| npm run chart:dist | |
+| pnpm canvaskit:dist |  |
+| pnpm canvaskit:test | |
+| pnpm chart:dist | |
+| pnpm examples:chart | |
 
 ## Plugins
 

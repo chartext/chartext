@@ -1,6 +1,6 @@
 import { createContext, ReactElement, useContext } from 'react';
-import useCkGraphics from '@/hooks/useCkGraphics';
-import CkGraphics from '@/CkGraphics';
+import { useCkGraphics } from '@/hooks/useCkGraphics';
+import { CkGraphics } from '@/CkGraphics';
 
 export const CkGraphicsContext = createContext<CkGraphics>({} as CkGraphics);
 export const useCkGraphicsContext = () => useContext(CkGraphicsContext);

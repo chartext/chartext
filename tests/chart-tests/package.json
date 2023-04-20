@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@chartext/chart-tests",
+  "private": true,
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "test:run": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@chartext/chart": "*",
+    "@chartext/utils": "*",
+    "date-fns": "^2.29.3"
+  }
+}

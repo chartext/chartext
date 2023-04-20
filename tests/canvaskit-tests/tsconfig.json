@@ -6,11 +6,11 @@
     "tsBuildInfoFile": "build/.tsbuildinfo",
     "paths": {
       "@/*": ["./src/*"],
-      "@chartext/canvaskit": ["../canvaskit/src"],
+      "@chartext/canvaskit": ["../../packages/canvaskit/src"],
     },
   },
   "references": [
-    { "path": "../canvaskit" },
+    { "path": "../../packages/canvaskit" },
   ],
-  "include": ["src", "dts-bundle-generator.config.ts", "vite.config.ts"]
+  "include": ["src", "vite.config.ts"],
 }

@@ -2,7 +2,7 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-// https://vitejs.dev/config/
+// eslint-disable-next-line import/no-default-export
 export default defineConfig({
   resolve: {
     alias: {
@@ -10,13 +10,6 @@ export default defineConfig({
     },
   },
   plugins: [tsconfigPaths()],
-  test: {
-    globals: true,
-    environment: 'happy-dom',
-    cache: {
-      dir: '../../.vitest/chartext-canvaskit',
-    },
-  },
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),

@@ -2,18 +2,10 @@
   "$schema": "https://json.schemastore.org/tsconfig.json",
   "extends": "@tsconfig/vite-react/tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@chartext/*": ["packages/*/src"]
-    },
-    "types": [
-      "@vitejs/plugin-react",
-      "vitest",
-      "vite/client",
-      "node"
-    ],
     "moduleResolution": "bundler",
     "incremental": true,
+    "composite": true,
+    "noEmit": false,
     // type checking
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,

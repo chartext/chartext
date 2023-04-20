@@ -21,11 +21,11 @@
     }
   },
   "scripts": {
-    "clean": "rimraf dist",
-    "tsc": "tsc",
+    "preinstall": "npx only-allow pnpm",
+    "clean": "rimraf dist && rimraf build",
+    "tsc": "rimraf build && tsc --build",
     "dts": "dts-bundle-generator --config ./dts-bundle-generator.config.ts",
-    "dist": "npm run clean && tsc && vite build && npm run dts",
-    "test": "vitest run",
+    "dist": "pnpm clean && tsc --build ./tsconfig.dist.json && vite build && pnpm dts",
     "watch": "vite build --watch"
   },
   "peerDependencies": {
@@ -35,5 +35,8 @@
   },
   "dependencies": {
     "tinycolor2": "^1.6.0"
+  },
+  "devDependencies": {
+    "vite": "*"
   }
 }

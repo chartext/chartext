@@ -1,4 +1,4 @@
-import CkGraphics from '@/CkGraphics';
+import { CkGraphics } from '@/CkGraphics';
 import { useCkGraphicsContext } from '@/components/CkGraphics.context';
 import { CkSurfaceContext } from '@/components/CkSurface.context';
 import { Surface, WebGPUCanvasContext } from 'canvaskit-wasm';

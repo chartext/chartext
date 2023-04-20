@@ -9,12 +9,11 @@ import {
   max,
   min,
 } from 'date-fns';
-import { DatePart, roundDate } from '@/data/Dates';
+import { roundDate } from '@/data/Dates';
 import { CoordDisplay, CoordDisplayProps } from '@/display/CoordDisplay';
+import { DatePart, DateSpacing } from '@/data/Dates.types';
 
-export type DateSpacing = [datePart: DatePart, diff: number];
-
-export default class DateCoordDisplay extends CoordDisplay<Date> {
+export class DateCoordDisplay extends CoordDisplay<Date> {
   readonly min: number;
 
   readonly max: number;

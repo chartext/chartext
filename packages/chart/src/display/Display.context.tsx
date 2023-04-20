@@ -1,12 +1,11 @@
 import { PropsWithChildren, createContext, useContext, useMemo } from 'react';
-import _ from 'lodash';
 import { Rect } from '@/Chart.types';
 import { CoordDisplay } from '@/display/CoordDisplay';
 import { Plot } from '@/plot/Plot.types';
 import { CoordProps, CoordType, CoordTypeName } from '@/series/Series.types';
 import { AxisType } from '@/axis/Axis.types';
-import NumberCoordDisplay from '@/display/NumberCoordDisplay';
-import DateCoordDisplay from '@/display/DateCoordDisplay';
+import { NumberCoordDisplay } from '@/display/NumberCoordDisplay';
+import { DateCoordDisplay } from '@/display/DateCoordDisplay';
 
 export type DisplayContextProps = {
   xDisplay: CoordDisplay<CoordType>;
@@ -25,8 +24,8 @@ function parseSeriesType(val: CoordType): CoordTypeName {
     if (date) {
       return 'Date';
     }
-    const num = _.toNumber(val);
-    if (num) {
+    const num = Number.parseFloat(val);
+    if (!Number.isNaN(num)) {
       return 'number';
     }
 

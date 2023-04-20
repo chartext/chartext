@@ -1,7 +1,8 @@
+import { DatePart, roundDate } from '@chartext/chart';
+import { randomDate } from '@chartext/utils';
 import { describe, expect, it } from 'vitest';
-import { DatePart, randomDate, roundDate } from '@/data/Dates';
 
-function mockDates(
+function randomDates(
   datePart: DatePart,
 ): [testDate: Date, floorDate: Date, ceilingDate: Date, roundedDate: Date] {
   const testDate = randomDate();
@@ -23,7 +24,7 @@ function mockDates(
 describe('Dates test', () => {
   it('should round to the nearest [seconds]', () => {
     const datePart: DatePart = 'seconds';
-    const [testDate, floorDate, ceilingDate, roundedDate] = mockDates(datePart);
+    const [testDate, floorDate, ceilingDate, roundedDate] = randomDates(datePart);
 
     expect(floorDate, `round ${datePart} [floor]`).toStrictEqual(
       new Date(
@@ -59,7 +60,7 @@ describe('Dates test', () => {
 
   it('should round to the nearest [minutes]', () => {
     const datePart: DatePart = 'minutes';
-    const [testDate, floorDate, ceilingDate, roundedDate] = mockDates(datePart);
+    const [testDate, floorDate, ceilingDate, roundedDate] = randomDates(datePart);
 
     expect(floorDate, `round ${datePart} [floor]`).toStrictEqual(
       new Date(
@@ -92,7 +93,7 @@ describe('Dates test', () => {
 
   it('should round to the nearest [hours]', () => {
     const datePart: DatePart = 'hours';
-    const [testDate, floorDate, ceilingDate, roundedDate] = mockDates(datePart);
+    const [testDate, floorDate, ceilingDate, roundedDate] = randomDates(datePart);
 
     expect(floorDate, `round ${datePart} [floor]`).toStrictEqual(
       new Date(
@@ -122,7 +123,7 @@ describe('Dates test', () => {
 
   it('should round to the nearest [dayOfMonth]', () => {
     const datePart: DatePart = 'dayOfMonth';
-    const [testDate, floorDate, ceilingDate, roundedDate] = mockDates(datePart);
+    const [testDate, floorDate, ceilingDate, roundedDate] = randomDates(datePart);
 
     expect(floorDate, `round ${datePart} [floor]`).toStrictEqual(
       new Date(testDate.getFullYear(), testDate.getMonth(), testDate.getDate()),

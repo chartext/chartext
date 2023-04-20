@@ -1,9 +1,0 @@
-{
-  "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    // emit
-    // "composite": true,
-    "declaration": true,
-    "declarationMap": true,
-  },
-}

@@ -3,22 +3,9 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-// https://vitejs.dev/config/
+// eslint-disable-next-line import/no-default-export
 export default defineConfig({
-  resolve: {
-    alias: {
-      '@chartext/canvaskit': resolve(__dirname, '../canvaskit/src/index.ts'),
-      '@': resolve(__dirname, 'src'),
-    },
-  },
   plugins: [react(), tsconfigPaths()],
-  test: {
-    globals: true,
-    environment: 'happy-dom',
-    cache: {
-      dir: '../../.vitest/chartext-chart',
-    },
-  },
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
@@ -26,18 +13,10 @@ export default defineConfig({
       fileName: 'index',
     },
     rollupOptions: {
-      external: [
-        'react',
-        'react-dom',
-        'react/jsx-runtime',
-        '@chartext/canvaskit',
-        'tinycolor2',
-        'lodash',
-      ],
+      external: ['react', 'react-dom', 'react/jsx-runtime', '@chartext/canvaskit', 'tinycolor2'],
       treeshake: 'smallest',
       output: {
         globals: {
-          // lodash: '_',
           '@chartext/canvaskit': 'canvaskit',
           react: 'React',
           'react/jsx-runtime': 'jsxRuntime',

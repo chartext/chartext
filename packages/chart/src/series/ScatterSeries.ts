@@ -1,7 +1,7 @@
 import { Canvas, Paint } from 'canvaskit-wasm';
 import { CkSeries, CkSeriesProps } from '@/series/Series.types';
 
-export default class ScatterSeries implements CkSeries {
+export class ScatterSeries implements CkSeries {
   readonly viewCoords: [number, number][];
 
   readonly paint: Paint;

@@ -1,7 +1,7 @@
 import { CkGraphics } from '@chartext/canvaskit';
 import { Canvas, Paint } from 'canvaskit-wasm';
-import { DatePart } from '@/data/Dates';
 import { CoordDisplay } from '@/display/CoordDisplay';
+import { DatePart } from '@/data/Dates.types';
 
 export type CoordType = number | string | Date;
 

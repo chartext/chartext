@@ -14,7 +14,13 @@ module.exports = {
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: ['tsconfig.eslint.json', 'packages/*/tsconfig.json', 'examples/*/tsconfig.json'],
+    EXPERIMENTAL_useSourceOfProjectReferenceRedirect: true,
+    project: [
+      'tsconfig.eslint.json',
+      'examples/*/tsconfig.json',
+      'packages/*/tsconfig.json',
+      'tests/*/tsconfig.json',
+    ],
   },
   env: {
     browser: true,
@@ -28,6 +34,7 @@ module.exports = {
   },
   // plugins: ['no-relative-import-paths'],
   rules: {
+    'import/no-default-export': ['error'],
     'no-restricted-imports': [
       'error',
       {
@@ -40,21 +47,31 @@ module.exports = {
     ], */
   },
   overrides: [
+    // Fixes error when importing dev dependencies
     {
-      files: [
-        'packages/**/__tests__/*',
-        'packages/**/*{.,_}{test,spec}.{ts,tsx}',
-        'vite.config.ts',
-      ],
+      files: ['tests/**/*.ts', 'vite.config.ts'],
       rules: {
         'import/no-extraneous-dependencies': 'off',
+      },
+    },
+    {
+      files: ['tests/**/*.ts'],
+      rules: {
         'no-console': 'off',
       },
     },
     {
-      files: ['packages/**/*.tsx', 'packages/**/*.ts'],
+      files: [
+        'examples/**/*.tsx',
+        'examples/**/*.ts',
+        'packages/**/*.tsx',
+        'packages/**/*.ts',
+        'tests/**/*.tsx',
+        'tests/**/*.ts',
+      ],
       rules: {
         'import/extensions': 'off',
+        'import/prefer-default-export': 'off',
         '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       },
     },

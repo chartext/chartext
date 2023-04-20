@@ -2,7 +2,7 @@ import { Canvas, Paint, Path } from 'canvaskit-wasm';
 import { CkGraphics } from '@chartext/canvaskit';
 import { CkSeries, CkSeriesProps } from '@/series/Series.types';
 
-export default class LineSeries implements CkSeries {
+export class LineSeries implements CkSeries {
   readonly path: Path;
 
   readonly paint: Paint;

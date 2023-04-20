@@ -6,7 +6,8 @@
     "EditorConfig.EditorConfig",
     "esbenp.prettier-vscode",
     "GitHub.vscode-pull-request-github",
-    "rust-lang.rust-analyzer",
-    "ZixuanChen.vitest-explorer"
+    "ZixuanChen.vitest-explorer",
+    "streetsidesoftware.code-spell-checker",
+    "naumovs.color-highlight"
   ]
 }

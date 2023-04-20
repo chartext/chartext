@@ -21,12 +21,11 @@
     }
   },
   "scripts": {
-    "clean": "rimraf dist",
-    "tsc": "tsc",
+    "preinstall": "npx only-allow pnpm",
+    "clean": "rimraf dist && rimraf build",
+    "tsc": "rimraf build && tsc --build",
     "dts": "dts-bundle-generator --config ./dts-bundle-generator.config.ts",
-    "dist": "npm run clean && tsc && vite build && npm run dts",
-    "test:run": "vitest run",
-    "test:watch": "vitest",
+    "dist": "pnpm clean && tsc --build ./tsconfig.dist.json && vite build && pnpm dts",
     "watch": "vite build --watch"
   },
   "peerDependencies": {
@@ -38,7 +37,6 @@
     "@chartext/canvaskit": "*",
     "date-fns": "^2.29.3",
     "date-fns-tz": "^2.0.0",
-    "lodash": "^4.17.21",
     "tinycolor2": "^1.6.0"
   }
 }

@@ -1,16 +1,13 @@
-import _ from 'lodash';
 import { describe, it } from 'vitest';
-import { generateNumberData } from '@/data/DummyData';
-import { CoordDisplay } from '@/display/CoordDisplay';
-import NumberCoordDisplay from '@/display/NumberCoordDisplay';
-import { Rect } from '@/Chart.types';
+import { generateNumberData } from '@chartext/utils';
+import { CoordDisplay, NumberCoordDisplay, Rect } from '@chartext/chart';
 
 describe('NumberCoordDisplay', () => {
   it.only('Logs number displays', () => {
     const data: number[] = generateNumberData(100, 'number');
 
-    const minValue = _.min(data) ?? 0;
-    const maxValue = _.max(data) ?? 0;
+    const minValue = Math.min(...data);
+    const maxValue = Math.max(...data);
 
     const [min, max, spacing] = CoordDisplay.roundedMinMax(minValue, maxValue, 10);
 

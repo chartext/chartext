@@ -18,7 +18,7 @@ import {
   CkTypeface,
 } from '@/CkGraphics.types';
 
-export default class CkGraphics {
+export class CkGraphics {
   constructor(
     readonly CK: CanvasKit,
     readonly fontMgr: FontMgr,

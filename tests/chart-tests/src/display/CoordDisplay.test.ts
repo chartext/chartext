@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import _ from 'lodash';
-import { generateNumberData } from '@/data/DummyData';
-import { CoordDisplay } from '@/display/CoordDisplay';
+import { generateNumberData } from '@chartext/utils';
+import { CoordDisplay } from '@chartext/chart';
 
 describe('CoordDisplay', () => {
   it('rounds the number', () => {
@@ -13,8 +12,8 @@ describe('CoordDisplay', () => {
   it('rounds the min and max', () => {
     const data: number[] = generateNumberData(100, 'number');
 
-    const minValue = _.min(data) ?? 0;
-    const maxValue = _.max(data) ?? 0;
+    const minValue = Math.min(...data);
+    const maxValue = Math.max(...data);
 
     const [min, max, spacing] = CoordDisplay.roundedMinMax(minValue, maxValue, 10);
 

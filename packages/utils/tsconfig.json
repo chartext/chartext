@@ -2,15 +2,16 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "rootDir": "src",
     "outDir": "build",
     "tsBuildInfoFile": "build/.tsbuildinfo",
-    "esModuleInterop": true,
     "paths": {
       "@/*": ["src/*"],
+      "@chartext/chart": ["../chart/src"],
     },
-    "types": [
-      "vite/client",
-    ]
   },
-  "include": ["src", "dts-bundle-generator.config.ts", "vite.config.ts"]
+  "references": [
+    { "path": "../chart" }
+  ],
+  "include": ["src"]
 }

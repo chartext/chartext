@@ -16,4 +16,5 @@ build
 .idea
 
 # build
-tsconfig.*.tsbuildinfo
+tsconfig.tsbuildinfo
+tsconfig.dist.tsbuildinfo

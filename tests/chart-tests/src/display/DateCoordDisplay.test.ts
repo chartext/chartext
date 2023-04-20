@@ -1,21 +1,20 @@
 import { max, min } from 'date-fns';
 import { describe, it } from 'vitest';
-import { Rect } from '@/Chart.types';
-import { randomDate, roundDate } from '@/data/Dates';
-import DateCoordDisplay from '@/display/DateCoordDisplay';
+import { randomDate } from '@chartext/utils';
+import { DateCoordDisplay, Rect, roundDate } from '@chartext/chart';
 
 describe('DateCoordDisplay', () => {
   it('min max test', () => {
     const dates: Date[] = [];
     for (let i = 0; i < 100; i += 1) {
-      dates.push(
-        randomDate({
-          yearRange: [2020, 2020],
-          monthRange: [3, 3],
-          dayOfMonthRange: [2, 2],
-          hourRange: [1, 1],
-        }),
-      );
+      const date: Date = randomDate({
+        yearRange: [2020, 2020],
+        monthRange: [3, 3],
+        dayOfMonthRange: [2, 2],
+        hourRange: [1, 1],
+      });
+
+      dates.push(date);
     }
 
     const minDate = min(dates);

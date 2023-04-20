@@ -1,11 +1,11 @@
 import { CkSurface } from '@chartext/canvaskit';
 import { lazy, Suspense, useMemo } from 'react';
-import AxisSurface from '@/axis/AxisSurface';
+import { AxisSurface } from '@/axis/AxisSurface';
 import { ChartContext } from '@/Chart.context';
 import { ChartProps, Rect } from '@/Chart.types';
 import { defaultAxisSurfaceProps, defaultChartProps } from '@/ChartDefaults';
-import ChartLoading from '@/ChartLoading';
-import PlotSurface from '@/plot/PlotSurface';
+import { ChartLoading } from '@/ChartLoading';
+import { PlotSurface } from '@/plot/PlotSurface';
 import { ChartThemeProvider } from '@/theme/ChartTheme.context';
 import { DisplayProvider } from '@/display/Display.context';
 
@@ -15,7 +15,7 @@ const CkGraphicsProviderLazy = lazy(() =>
   })),
 );
 
-export default function Chart(props: Partial<ChartProps>) {
+export function Chart(props: Partial<ChartProps>) {
   console.log('Chart', props);
 
   const {

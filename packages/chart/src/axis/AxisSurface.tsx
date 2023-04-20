@@ -1,12 +1,12 @@
 import { CkGraphics, useCkGraphicsContext, useCkSurfaceContext } from '@chartext/canvaskit';
 import { Canvas, Surface } from 'canvaskit-wasm';
 import { useCallback, useEffect, useMemo } from 'react';
-import Axis from '@/axis/Axis';
+import { Axis } from '@/axis/Axis';
 import { useChartContext } from '@/Chart.context';
 import { useChartThemeContext } from '@/theme/ChartTheme.context';
 import { useDisplayContext } from '@/display/Display.context';
 
-export default function AxisSurface() {
+export function AxisSurface() {
   const ckGraphics: CkGraphics = useCkGraphicsContext();
   const surface: Surface = useCkSurfaceContext();
   const { xDisplay, yDisplay, plotRect } = useDisplayContext();

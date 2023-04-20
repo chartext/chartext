@@ -4,8 +4,8 @@ import { useEffect } from 'react';
 import { useChartContext } from '@/Chart.context';
 import { useChartThemeContext } from '@/theme/ChartTheme.context';
 import { CkSeries, CkSeriesProps, SeriesType, XY } from '@/series/Series.types';
-import LineSeries from '@/series/LineSeries';
-import ScatterSeries from '@/series/ScatterSeries';
+import { LineSeries } from '@/series/LineSeries';
+import { ScatterSeries } from '@/series/ScatterSeries';
 import { useDisplayContext } from '@/display/Display.context';
 
 function createCkSeries(props: CkSeriesProps, seriesType: SeriesType): CkSeries {
@@ -22,7 +22,7 @@ function createCkSeries(props: CkSeriesProps, seriesType: SeriesType): CkSeries 
   }
 }
 
-export default function PlotSurface() {
+export function PlotSurface() {
   const chartThemeContext = useChartThemeContext();
   const ckGraphics: CkGraphics = useCkGraphicsContext();
   const surface: Surface = useCkSurfaceContext();

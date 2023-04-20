@@ -1,7 +1,6 @@
-import _ from 'lodash';
 import { CoordDisplay, CoordDisplayProps } from '@/display/CoordDisplay';
 
-export default class NumberCoordDisplay extends CoordDisplay<number> {
+export class NumberCoordDisplay extends CoordDisplay<number> {
   readonly min: number;
 
   readonly max: number;
@@ -15,8 +14,8 @@ export default class NumberCoordDisplay extends CoordDisplay<number> {
 
     const { data, maxTicks = 10 } = props;
 
-    const minValue = _.min(data) ?? 0;
-    const maxValue = _.max(data) ?? 0;
+    const minValue = Math.min(...data);
+    const maxValue = Math.max(...data);
 
     [this.min, this.max, this.spacing] = CoordDisplay.roundedMinMax(minValue, maxValue, maxTicks);
 

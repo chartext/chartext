@@ -5,7 +5,7 @@ import { AxisProps } from '@/axis/Axis.types';
 import { CoordDisplay } from '@/display/CoordDisplay';
 import { CoordType } from '@/series/Series.types';
 
-export default class Axis {
+export class Axis {
   private readonly tickParagraphs: [number, Paragraph][];
 
   private readonly tickColorName: string;

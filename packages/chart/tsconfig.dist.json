@@ -1,7 +1,12 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": ["./tsconfig.json"],
   "compilerOptions": {
+    "baseUrl": ".",
     "rootDir": "src",
+    "outDir": "build",
   },
+  "references": [
+    { "path": "../canvaskit" },
+  ],
   "include": ["src"],
 }
