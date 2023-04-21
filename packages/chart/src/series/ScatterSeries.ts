@@ -7,9 +7,14 @@ export class ScatterSeries implements CkSeries {
   readonly paint: Paint;
 
   constructor(props: CkSeriesProps) {
-    const { sortedData, fillPaint, xDisplay, yDisplay } = props;
+    const {
+      sortedData,
+      paintSet: { fill },
+      xDisplay,
+      yDisplay,
+    } = props;
 
-    this.paint = fillPaint;
+    this.paint = fill;
 
     this.viewCoords = sortedData.filter(Boolean).map((xy) => {
       const { x: xValue, y: yValue } = xy;

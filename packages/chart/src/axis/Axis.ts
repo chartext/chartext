@@ -1,4 +1,4 @@
-import { CkGraphics } from '@chartext/canvaskit';
+import { CkGraphics, CkPaints } from '@chartext/canvaskit';
 import { Canvas, Paint, Paragraph, TextAlign } from 'canvaskit-wasm';
 import { Rect } from '@/Chart.types';
 import { AxisProps } from '@/axis/Axis.types';
@@ -65,7 +65,7 @@ export class Axis {
     }
   }
 
-  draw(canvas: Canvas, plotRect: Rect<number>, paints: Map<string, Paint>) {
+  draw(canvas: Canvas, plotRect: Rect<number>, paints: CkPaints) {
     const { coordDisplay, tickParagraphs, props } = this;
 
     const { fontSize = 12, position } = props;
@@ -73,53 +73,51 @@ export class Axis {
     const tickPaint = paints.get(this.tickColorName);
     const zeroTickPaint = paints.get(this.zeroTickColorName);
 
-    if (tickPaint && zeroTickPaint) {
-      tickParagraphs.forEach(([value, tickParagraph]) => {
-        const paint: Paint = value === 0 ? zeroTickPaint : tickPaint;
+    tickParagraphs.forEach(([value, tickParagraph]) => {
+      const paint: Paint = value === 0 ? zeroTickPaint.stroke : tickPaint.stroke;
 
-        switch (position) {
-          case 'left':
-            {
-              const y = coordDisplay.valueToViewCoord(value, plotRect);
-              const x0 = plotRect.left - 7;
+      switch (position) {
+        case 'left':
+          {
+            const y = coordDisplay.valueToViewCoord(value, plotRect);
+            const x0 = plotRect.left - 7;
 
-              canvas.drawLine(x0, y, plotRect.right, y, paint);
+            canvas.drawLine(x0, y, plotRect.right, y, paint);
 
-              CkGraphics.drawParagraph({
-                canvas,
-                paragraph: tickParagraph,
-                width: x0 - 5,
-                x: 0,
-                y: y - Math.round(fontSize / 2),
-              });
-            }
-            break;
-          case 'bottom':
-            {
-              const x = coordDisplay.valueToViewCoord(value, plotRect);
-              const y1 = plotRect.bottom + 7;
+            CkGraphics.drawParagraph({
+              canvas,
+              paragraph: tickParagraph,
+              width: x0 - 5,
+              x: 0,
+              y: y - Math.round(fontSize / 2),
+            });
+          }
+          break;
+        case 'bottom':
+          {
+            const x = coordDisplay.valueToViewCoord(value, plotRect);
+            const y1 = plotRect.bottom + 7;
 
-              canvas.drawLine(x, plotRect.top, x, y1, paint);
+            canvas.drawLine(x, plotRect.top, x, y1, paint);
 
-              // @todo width is a hack. need to find the paragraph width
+            // @todo width is a hack. need to find the paragraph width
 
-              CkGraphics.drawParagraph({
-                canvas,
-                paragraph: tickParagraph,
-                width: 30,
-                x: x - 15,
-                y: y1 + 5,
-              });
-            }
-            break;
-          case 'top':
-          case 'right':
-            throw new Error('AxisPosition is not implemented', { cause: position });
-          default:
-            throw new Error('Invalid position', { cause: position });
-        }
-      });
-    }
+            CkGraphics.drawParagraph({
+              canvas,
+              paragraph: tickParagraph,
+              width: 30,
+              x: x - 15,
+              y: y1 + 5,
+            });
+          }
+          break;
+        case 'top':
+        case 'right':
+          throw new Error('AxisPosition is not implemented', { cause: position });
+        default:
+          throw new Error('Invalid position', { cause: position });
+      }
+    });
   }
 
   delete() {

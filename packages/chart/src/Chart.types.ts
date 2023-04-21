@@ -10,7 +10,7 @@ export type Rect<T> = {
   bottom: T;
 };
 
-export type Margin<T> = Partial<Rect<T>>;
+export type Margin<T> = Partial<Rect<T | undefined>>;
 
 export type Size = {
   height: number;

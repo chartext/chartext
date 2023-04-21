@@ -2,12 +2,13 @@ import { CkSurface } from '@chartext/canvaskit';
 import { lazy, Suspense, useMemo } from 'react';
 import { AxisSurface } from '@/axis/AxisSurface';
 import { ChartContext } from '@/Chart.context';
-import { ChartProps, Rect } from '@/Chart.types';
-import { defaultAxisSurfaceProps, defaultChartProps } from '@/ChartDefaults';
+import { ChartProps, Margin, Rect } from '@/Chart.types';
+import { defaultAxisSurfaceProps, defaultChartProps, defaultSeriesTheme } from '@/ChartDefaults';
 import { ChartLoading } from '@/ChartLoading';
 import { PlotSurface } from '@/plot/PlotSurface';
 import { ChartThemeProvider } from '@/theme/ChartTheme.context';
 import { DisplayProvider } from '@/display/Display.context';
+import { AxisTheme } from '@/theme/ChartTheme.types';
 
 const CkGraphicsProviderLazy = lazy(() =>
   import('@chartext/canvaskit').then(({ CkGraphicsProvider }) => ({
@@ -26,6 +27,7 @@ export function Chart(props: Partial<ChartProps>) {
       height: defaultChartProps.size.height,
       width: defaultChartProps.size.width,
     },
+    seriesTheme = defaultSeriesTheme,
   } = props;
 
   const plotRect: Rect<number> = useMemo(() => {
@@ -45,6 +47,13 @@ export function Chart(props: Partial<ChartProps>) {
     };
   }, [axis, size]);
 
+  const axisThemes: Margin<AxisTheme> = {
+    left: axis.left?.theme,
+    right: axis.right?.theme,
+    top: axis.top?.theme,
+    bottom: axis.bottom?.theme,
+  };
+
   const chartProps: ChartProps = useMemo(
     () => ({
       ...defaultChartProps,
@@ -60,8 +69,11 @@ export function Chart(props: Partial<ChartProps>) {
   return (
     <Suspense fallback={<ChartLoading />}>
       <CkGraphicsProviderLazy>
-        <ChartContext.Provider value={chartProps}>
-          <ChartThemeProvider>
+        <ChartThemeProvider
+          axisThemes={axisThemes}
+          seriesTheme={seriesTheme}
+        >
+          <ChartContext.Provider value={chartProps}>
             <div style={{ height, width, backgroundColor, margin: 0 }}>
               {plot ? (
                 <DisplayProvider
@@ -87,8 +99,8 @@ export function Chart(props: Partial<ChartProps>) {
                 <p>No data to display.</p>
               )}
             </div>
-          </ChartThemeProvider>
-        </ChartContext.Provider>
+          </ChartContext.Provider>
+        </ChartThemeProvider>
       </CkGraphicsProviderLazy>
     </Suspense>
   );

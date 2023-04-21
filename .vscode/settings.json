@@ -1,8 +1,12 @@
 {
   "cSpell.words": [
+    "canvaskit",
     "chartext",
     "preinstall",
     "quantiles",
-    "tsbuildinfo"
-  ]
+    "syncpack",
+    "tinycolor",
+    "tsbuildinfo",
+    "webgpu"
+  ],
 }

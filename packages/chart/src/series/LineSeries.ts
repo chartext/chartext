@@ -8,9 +8,15 @@ export class LineSeries implements CkSeries {
   readonly paint: Paint;
 
   constructor(props: CkSeriesProps) {
-    const { ckGraphics, sortedData, strokePaint, xDisplay, yDisplay } = props;
+    const {
+      ckGraphics,
+      sortedData,
+      paintSet: { stroke },
+      xDisplay,
+      yDisplay,
+    } = props;
 
-    this.paint = strokePaint;
+    this.paint = stroke;
     this.path = ckGraphics.createPath();
 
     const startXY = sortedData[0];

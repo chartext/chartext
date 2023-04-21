@@ -23,7 +23,7 @@ function createCkSeries(props: CkSeriesProps, seriesType: SeriesType): CkSeries 
 }
 
 export function PlotSurface() {
-  const chartThemeContext = useChartThemeContext();
+  const { paints } = useChartThemeContext();
   const ckGraphics: CkGraphics = useCkGraphicsContext();
   const surface: Surface = useCkSurfaceContext();
   const { xDisplay, yDisplay } = useDisplayContext();
@@ -60,8 +60,7 @@ export function PlotSurface() {
       const { colors: seriesThemeColors } = seriesTheme;
       const seriesColor = seriesThemeColors[index % seriesThemeColors.length];
 
-      const fillPaint = chartThemeContext.getPaint(seriesColor, CK.PaintStyle.Fill);
-      const strokePaint = chartThemeContext.getPaint(seriesColor, CK.PaintStyle.Stroke);
+      const paintSet = paints.get(seriesColor ?? '');
 
       const ckSeriesProps: CkSeriesProps = {
         ckGraphics,
@@ -70,8 +69,7 @@ export function PlotSurface() {
         sortedData,
         index,
         color: seriesColor ?? '#000',
-        fillPaint,
-        strokePaint,
+        paintSet,
       };
 
       return createCkSeries(ckSeriesProps, series.type);
@@ -85,7 +83,7 @@ export function PlotSurface() {
     return () => {
       ckSeries?.forEach((cks) => cks.delete());
     };
-  }, [CK, chartThemeContext, ckGraphics, plot, seriesTheme, surface, xDisplay, yDisplay]);
+  }, [CK, paints, ckGraphics, plot, seriesTheme, surface, xDisplay, yDisplay]);
 
   return null;
 }

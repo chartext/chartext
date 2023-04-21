@@ -1,141 +1,56 @@
-import {
-  PropsWithChildren,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-} from 'react';
-import { CkGraphics, useCkGraphicsContext } from '@chartext/canvaskit';
-import { Paint, PaintStyle } from 'canvaskit-wasm';
-import { useChartContext } from '@/Chart.context';
+import { CkPaints, useCkGraphicsContext } from '@chartext/canvaskit';
+import { PropsWithChildren, createContext, useContext, useMemo } from 'react';
+import { AxisTheme, SeriesTheme } from '@/theme/ChartTheme.types';
 import { Margin } from '@/Chart.types';
-import { AxisTheme } from '@/theme/ChartTheme.types';
 
 export type ChartThemeContextProps = {
-  blackFillPaint: Paint;
-  blackStrokePaint: Paint;
-  paints: Map<string, Paint>;
-  getPaint(color: string | undefined, paintStyle: PaintStyle): Paint;
+  paints: CkPaints;
 };
 
 export type ChartThemeProviderProps = {
-  /* axisSurfaceProps: Margin<AxisProps>;
-  seriesTheme: SeriesTheme; */
+  axisThemes: Margin<AxisTheme>;
+  seriesTheme: SeriesTheme;
 };
 
 const ChartThemeContext = createContext<ChartThemeContextProps>({} as ChartThemeContextProps);
 export const useChartThemeContext = () => useContext(ChartThemeContext);
 
-function addPaint(color: string, ckGraphics: CkGraphics, paints: Map<string, Paint>) {
-  const fillName = `${color}-Fill`;
-  const strokeName = `${color}-Stroke`;
-
-  if (!paints.has(fillName)) {
-    paints.set(fillName, ckGraphics.createPaint({ color, style: ckGraphics.CK.PaintStyle.Fill }));
-  }
-
-  if (!paints.has(strokeName)) {
-    paints.set(
-      strokeName,
-      ckGraphics.createPaint({ color, style: ckGraphics.CK.PaintStyle.Stroke }),
-    );
-  }
-}
-
 export function ChartThemeProvider(props: PropsWithChildren<ChartThemeProviderProps>) {
   const ckGraphics = useCkGraphicsContext();
-  const { axis, seriesTheme } = useChartContext();
-  const {
-    CK: {
-      PaintStyle: { Fill, Stroke },
-    },
-  } = ckGraphics;
-  const { children } = props;
 
-  const blackFillPaint: Paint = useMemo(
-    () => ckGraphics.createPaint({ color: '#000', style: Fill }),
-    [Fill, ckGraphics],
-  );
+  const { axisThemes, seriesTheme, children } = props;
 
-  const blackStrokePaint: Paint = useMemo(
-    () => ckGraphics.createPaint({ color: '#000', style: Stroke }),
-    [Stroke, ckGraphics],
-  );
+  const contextProps: ChartThemeContextProps = useMemo(() => {
+    const colors: string[] = [];
 
-  const axisThemes = useMemo(
-    () =>
-      ({
-        left: axis.left?.theme,
-        bottom: axis.bottom?.theme,
-        top: axis.top?.theme,
-        right: axis.right?.theme,
-      } as Margin<AxisTheme>),
-    [axis],
-  );
-
-  const paints: Map<string, Paint> = useMemo(() => {
-    const paintMap: Map<string, Paint> = new Map<string, Paint>();
-
-    seriesTheme.colors.forEach((color) => {
-      addPaint(color, ckGraphics, paintMap);
-    });
-
-    if (axisThemes.bottom) {
-      addPaint(axisThemes.bottom.tickColor, ckGraphics, paintMap);
-      addPaint(axisThemes.bottom.zeroTickColor, ckGraphics, paintMap);
-    }
+    colors.push(...seriesTheme.colors);
 
     if (axisThemes.left) {
-      addPaint(axisThemes.left.tickColor, ckGraphics, paintMap);
-      addPaint(axisThemes.left.zeroTickColor, ckGraphics, paintMap);
-    }
-
-    if (axisThemes.top) {
-      addPaint(axisThemes.top.tickColor, ckGraphics, paintMap);
-      addPaint(axisThemes.top.zeroTickColor, ckGraphics, paintMap);
+      colors.push(axisThemes.left.tickColor);
+      colors.push(axisThemes.left.zeroTickColor);
     }
 
     if (axisThemes.right) {
-      addPaint(axisThemes.right.tickColor, ckGraphics, paintMap);
-      addPaint(axisThemes.right.zeroTickColor, ckGraphics, paintMap);
+      colors.push(axisThemes.right.tickColor);
+      colors.push(axisThemes.right.zeroTickColor);
     }
 
-    return paintMap;
+    if (axisThemes.top) {
+      colors.push(axisThemes.top.tickColor);
+      colors.push(axisThemes.top.zeroTickColor);
+    }
+
+    if (axisThemes.bottom) {
+      colors.push(axisThemes.bottom.tickColor);
+      colors.push(axisThemes.bottom.zeroTickColor);
+    }
+
+    const paints = new CkPaints(ckGraphics, colors);
+
+    return {
+      paints,
+    };
   }, [axisThemes, ckGraphics, seriesTheme]);
 
-  const getPaint: (color: string | undefined, paintStyle: PaintStyle) => Paint = useCallback(
-    (color: string | undefined, paintStyle: PaintStyle) => {
-      switch (paintStyle) {
-        case Fill:
-          return color ? paints.get(`${color}-Fill`) ?? blackFillPaint : blackFillPaint;
-        case Stroke:
-          return color ? paints.get(`${color}-Stroke`) ?? blackStrokePaint : blackStrokePaint;
-        default:
-          throw new Error('');
-      }
-    },
-    [Fill, Stroke, blackFillPaint, blackStrokePaint, paints],
-  );
-
-  useEffect(() => {
-    return () => {
-      CkGraphics.delete(blackFillPaint, blackStrokePaint);
-      paints.forEach((paint) => CkGraphics.delete(paint));
-    };
-  });
-
-  const context: ChartThemeContextProps = useMemo(
-    () => ({
-      axisThemes,
-      seriesTheme,
-      paints,
-      blackFillPaint,
-      blackStrokePaint,
-      getPaint,
-    }),
-    [axisThemes, blackFillPaint, blackStrokePaint, getPaint, paints, seriesTheme],
-  );
-
-  return <ChartThemeContext.Provider value={context}>{children}</ChartThemeContext.Provider>;
+  return <ChartThemeContext.Provider value={contextProps}>{children}</ChartThemeContext.Provider>;
 }

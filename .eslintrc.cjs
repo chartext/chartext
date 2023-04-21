@@ -72,7 +72,7 @@ module.exports = {
       rules: {
         'import/extensions': 'off',
         'import/prefer-default-export': 'off',
-        '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+        '@typescript-eslint/consistent-type-definitions': 'off',
       },
     },
   ],

@@ -1,7 +1,7 @@
-import { CkGraphics } from '@chartext/canvaskit';
-import { Canvas, Paint } from 'canvaskit-wasm';
-import { CoordDisplay } from '@/display/CoordDisplay';
+import { CkGraphics, CkPaintSet } from '@chartext/canvaskit';
+import { Canvas } from 'canvaskit-wasm';
 import { DatePart } from '@/data/Dates.types';
+import { CoordDisplay } from '@/display/CoordDisplay';
 
 export type CoordType = number | string | Date;
 
@@ -51,8 +51,7 @@ export type CkSeriesProps = {
   sortedData: XY[];
   index: number;
   color: string;
-  fillPaint: Paint;
-  strokePaint: Paint;
+  paintSet: CkPaintSet;
   xDisplay: CoordDisplay<CoordType>;
   yDisplay: CoordDisplay<CoordType>;
 };
