@@ -1,59 +1,70 @@
+import { useChartContext } from '@/Chart.context';
+import { useChartDisplayContext } from '@/ChartDisplay.context';
+import { Axis } from '@/axis/axis';
+import { useChartThemeContext } from '@/theme/ChartTheme.context';
 import { CkGraphics, useCkGraphicsContext, useCkSurfaceContext } from '@chartext/canvaskit';
 import { Canvas, Surface } from 'canvaskit-wasm';
-import { useCallback, useEffect, useMemo } from 'react';
-import { Axis } from '@/axis/Axis';
-import { useChartContext } from '@/Chart.context';
-import { useChartThemeContext } from '@/theme/ChartTheme.context';
-import { useDisplayContext } from '@/display/Display.context';
+import { useLayoutEffect } from 'react';
 
 export function AxisSurface() {
   const ckGraphics: CkGraphics = useCkGraphicsContext();
-  const surface: Surface = useCkSurfaceContext();
-  const { xDisplay, yDisplay, plotRect } = useDisplayContext();
+  const surface: Surface | undefined = useCkSurfaceContext();
+  const { xDisplay, yDisplay, plotRect } = useChartDisplayContext();
   const {
     axis: { left: leftAxisProps, bottom: bottomAxisProps },
   } = useChartContext();
 
-  const { paints } = useChartThemeContext();
+  const { paintRepository: paintRepository } = useChartThemeContext();
 
-  const leftAxis: Axis | null = useMemo(
-    (): Axis | null => (leftAxisProps ? new Axis(leftAxisProps, yDisplay, ckGraphics) : null),
-    [ckGraphics, leftAxisProps, yDisplay],
-  );
-  const bottomAxis: Axis | null = useMemo(
-    (): Axis | null => (bottomAxisProps ? new Axis(bottomAxisProps, xDisplay, ckGraphics) : null),
-    [bottomAxisProps, ckGraphics, xDisplay],
-  );
+  useLayoutEffect(() => {
+    const leftAxis = leftAxisProps
+      ? new Axis({
+          ckGraphics,
+          coordDisplay: yDisplay,
+          fontSize: leftAxisProps.fontSize!,
+          paintRepository,
+          position: 'left',
+          theme: leftAxisProps.theme!,
+        })
+      : null;
 
-  if (!leftAxis || !bottomAxis) {
-    console.error('No axis defined');
-  }
+    const bottomAxis = bottomAxisProps
+      ? new Axis({
+          ckGraphics,
+          coordDisplay: xDisplay,
+          fontSize: bottomAxisProps.fontSize!,
+          paintRepository,
+          position: 'bottom',
+          theme: bottomAxisProps.theme!,
+        })
+      : null;
 
-  useEffect(() => {
-    return () => {
-      if (leftAxis) leftAxis.delete();
-      if (bottomAxis) bottomAxis.delete();
-    };
-  });
-
-  const drawOnceCallback = useCallback(
-    (canvas: Canvas) => {
+    surface.requestAnimationFrame((canvas: Canvas) => {
       canvas.clear(ckGraphics.CK.TRANSPARENT);
-
-      if (leftAxis) {
-        leftAxis.draw(canvas, plotRect, paints);
+      if (!leftAxis?.isDeleted) {
+        leftAxis?.draw(canvas, plotRect);
       }
 
-      if (bottomAxis) {
-        bottomAxis.draw(canvas, plotRect, paints);
+      if (!bottomAxis?.isDeleted) {
+        bottomAxis?.draw(canvas, plotRect);
       }
-    },
-    [ckGraphics.CK.TRANSPARENT, leftAxis, bottomAxis, plotRect, paints],
-  );
+    });
 
-  useEffect(() => {
-    surface.drawOnce(drawOnceCallback);
-  }, [drawOnceCallback, surface]);
+    return () => {
+      leftAxis?.delete();
+      bottomAxis?.delete();
+    };
+  }, [
+    surface,
+    ckGraphics.CK.TRANSPARENT,
+    plotRect,
+    leftAxisProps,
+    yDisplay,
+    ckGraphics,
+    bottomAxisProps,
+    xDisplay,
+    paintRepository,
+  ]);
 
   return null;
 }

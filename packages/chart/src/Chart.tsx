@@ -2,13 +2,14 @@ import { CkSurface } from '@chartext/canvaskit';
 import { lazy, Suspense, useMemo } from 'react';
 import { AxisSurface } from '@/axis/AxisSurface';
 import { ChartContext } from '@/Chart.context';
-import { ChartProps, Margin, Rect } from '@/Chart.types';
-import { defaultAxisSurfaceProps, defaultChartProps, defaultSeriesTheme } from '@/ChartDefaults';
+import { ChartProps, Margin, Rect } from '@/chart.types';
+import { defaultAxisSurfaceProps, defaultChartProps, defaultSeriesTheme } from '@/chartDefaults';
 import { ChartLoading } from '@/ChartLoading';
 import { PlotSurface } from '@/plot/PlotSurface';
 import { ChartThemeProvider } from '@/theme/ChartTheme.context';
-import { DisplayProvider } from '@/display/Display.context';
-import { AxisTheme } from '@/theme/ChartTheme.types';
+import { ChartDisplayProvider } from '@/ChartDisplay.context';
+import { AxisTheme } from '@/theme/chartTheme.types';
+import { ChartEmpty } from '@/ChartEmpty';
 
 const CkGraphicsProviderLazy = lazy(() =>
   import('@chartext/canvaskit').then(({ CkGraphicsProvider }) => ({
@@ -76,7 +77,7 @@ export function Chart(props: Partial<ChartProps>) {
           <ChartContext.Provider value={chartProps}>
             <div style={{ height, width, backgroundColor, margin: 0 }}>
               {plot ? (
-                <DisplayProvider
+                <ChartDisplayProvider
                   plot={plot}
                   plotRect={plotRect}
                 >
@@ -94,9 +95,9 @@ export function Chart(props: Partial<ChartProps>) {
                   >
                     <PlotSurface />
                   </CkSurface>
-                </DisplayProvider>
+                </ChartDisplayProvider>
               ) : (
-                <p>No data to display.</p>
+                <ChartEmpty />
               )}
             </div>
           </ChartContext.Provider>

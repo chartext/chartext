@@ -3,30 +3,28 @@
   "name": "@chartext/chart",
   "version": "1.0.0",
   "type": "module",
-  "files": [
-    "src",
-    "dist"
-  ],
+  "packageManager": "pnpm@8.3.1",
+  "files": ["dist"],
   "main": "./dist/index.umd.cjs",
   "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/types/index.d.ts",
   "exports": {
     "import": {
       "default": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/types/index.d.ts"
     },
     "require": {
       "default": "./dist/index.umd.cjs",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/types/index.d.ts"
     }
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "clean": "rimraf dist && rimraf build",
-    "tsc": "rimraf build && tsc --build",
-    "dts": "dts-bundle-generator --config ./dts-bundle-generator.config.ts",
-    "dist": "pnpm clean && tsc --build ./tsconfig.dist.json && vite build && pnpm dts",
-    "watch": "vite build --watch"
+    "tsc": "tsc -b",
+    "build": "pnpm tsc && vite build",
+    "test": "vitest run",
+    "dist": "pnpm clean && vite build && tsc -b ./tsconfig.dist.json"
   },
   "peerDependencies": {
     "canvaskit-wasm": "^0.38.0",

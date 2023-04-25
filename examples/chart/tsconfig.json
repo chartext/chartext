@@ -4,13 +4,12 @@
     "baseUrl": ".",
     "outDir": "build",
     "paths": {
+      "@/*": ["src/*"],
       "@chartext/chart": ["../../packages/chart/src"],
-      "@chartext/utils": ["../../packages/utils/src"],
     }
   },
   "references": [
     { "path": "../../packages/chart" },
-    { "path": "../../packages/utils" }
   ],
   "include": ["src", "vite.config.ts"],
 }

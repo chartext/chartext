@@ -16,7 +16,7 @@ import {
   CkPaintProps,
   CkParagraphProps,
   CkTypeface,
-} from '@/CkGraphics.types';
+} from '@/ckGraphics.types';
 
 export class CkGraphics {
   constructor(

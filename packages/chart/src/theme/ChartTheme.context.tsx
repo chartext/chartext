@@ -1,10 +1,12 @@
-import { CkPaints, useCkGraphicsContext } from '@chartext/canvaskit';
+import { CkPaintRepository, useCkGraphicsContext } from '@chartext/canvaskit';
 import { PropsWithChildren, createContext, useContext, useMemo } from 'react';
-import { AxisTheme, SeriesTheme } from '@/theme/ChartTheme.types';
-import { Margin } from '@/Chart.types';
+import { AxisTheme, SeriesTheme } from '@/theme/chartTheme.types';
+import { Margin } from '@/chart.types';
 
 export type ChartThemeContextProps = {
-  paints: CkPaints;
+  paintRepository: CkPaintRepository;
+  axisThemes: Margin<AxisTheme>;
+  seriesTheme: SeriesTheme;
 };
 
 export type ChartThemeProviderProps = {
@@ -45,10 +47,12 @@ export function ChartThemeProvider(props: PropsWithChildren<ChartThemeProviderPr
       colors.push(axisThemes.bottom.zeroTickColor);
     }
 
-    const paints = new CkPaints(ckGraphics, colors);
+    const paintRepository = new CkPaintRepository(ckGraphics, colors);
 
     return {
-      paints,
+      paintRepository,
+      axisThemes,
+      seriesTheme,
     };
   }, [axisThemes, ckGraphics, seriesTheme]);
 

@@ -1,23 +1,4 @@
-import { CkGraphics, CkPaintSet } from '@chartext/canvaskit';
-import { Canvas } from 'canvaskit-wasm';
-import { DatePart } from '@/data/Dates.types';
-import { CoordDisplay } from '@/display/CoordDisplay';
-
-export type CoordType = number | string | Date;
-
-export type CoordTypeName = 'number' | 'string' | 'Date';
-
-export type CoordProps = {
-  formatter?: string | ((coord: CoordType) => string);
-  parser?: (val: CoordType | object) => CoordType;
-  spacing?: number | DatePart;
-  name?: string;
-};
-
-export type XY = {
-  x: CoordType;
-  y: CoordType;
-};
+import { CoordType, XY } from '@/coord/coord.types';
 
 export type BoxData<O extends CoordType> = {
   readonly one: O;
@@ -39,24 +20,4 @@ export type Series = {
   readonly type: SeriesType;
   readonly name: string;
   readonly data: SeriesData;
-};
-
-export type SeriesConfig = {
-  readonly type: SeriesType;
-  readonly name: string;
-};
-
-export type CkSeriesProps = {
-  ckGraphics: CkGraphics;
-  sortedData: XY[];
-  index: number;
-  color: string;
-  paintSet: CkPaintSet;
-  xDisplay: CoordDisplay<CoordType>;
-  yDisplay: CoordDisplay<CoordType>;
-};
-
-export type CkSeries = {
-  draw(canvas: Canvas): void;
-  delete(): void;
 };

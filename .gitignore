@@ -14,7 +14,10 @@ build
 
 # app config
 .idea
+.vscode/launch.json
 
 # build
 tsconfig.tsbuildinfo
 tsconfig.dist.tsbuildinfo
+
+.eslintcache

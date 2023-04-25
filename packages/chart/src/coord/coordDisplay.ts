@@ -1,6 +1,6 @@
-import { Rect } from '@/Chart.types';
-import { AxisType, TickInterval } from '@/axis/Axis.types';
-import { CoordType } from '@/series/Series.types';
+import { Rect } from '@/chart.types';
+import { AxisType, TickInterval } from '@/axis/axis.types';
+import { CoordType } from '@/coord/coord.types';
 
 export type CoordMeta = {
   viewCoord: number;
@@ -16,21 +16,13 @@ export type CoordDisplayProps<T extends CoordType> = {
 };
 
 export abstract class CoordDisplay<T extends CoordType> {
-  abstract readonly min: number;
-
-  abstract readonly max: number;
-
-  abstract readonly spacing: number;
-
-  readonly data: T[];
-
-  readonly axisType: AxisType;
-
-  readonly valueToViewCoordCache: Map<T, number> = new Map<T, number>();
+  readonly #data: T[];
+  readonly #axisType: AxisType;
+  readonly #valueToViewCoordCache: Map<T, number> = new Map<T, number>();
 
   constructor(props: CoordDisplayProps<T>) {
-    this.data = props.data;
-    this.axisType = props.axisType;
+    this.#data = props.data;
+    this.#axisType = props.axisType;
   }
 
   /**
@@ -73,30 +65,33 @@ export abstract class CoordDisplay<T extends CoordType> {
   abstract toNumber(t: T): number;
 
   getViewCoord(t: T): number {
-    return this.valueToViewCoordCache.get(t) ?? -1;
+    return this.#valueToViewCoordCache.get(t) ?? -1;
   }
 
   resize(plotRect: Rect<number>): void {
-    this.valueToViewCoordCache.clear();
-    this.data.forEach((value: T) => {
-      this.valueToViewCoordCache.set(value, this.valueToViewCoord(value, plotRect));
+    this.#valueToViewCoordCache.clear();
+    this.#data.forEach((value: T) => {
+      this.#valueToViewCoordCache.set(value, this.valueToViewCoord(value, plotRect));
     });
   }
 
   valueToViewCoord(t: T, plotRect: Rect<number>): number {
-    const { axisType, min, max } = this;
-
-    const size = axisType === 'x' ? plotRect.right - plotRect.left : plotRect.bottom - plotRect.top;
-    const scale = size / (max + min * -1);
+    const size =
+      this.#axisType === 'x' ? plotRect.right - plotRect.left : plotRect.bottom - plotRect.top;
+    const scale = size / (this.max + this.min * -1);
     const numberValue = this.toNumber(t);
 
-    switch (axisType) {
+    switch (this.#axisType) {
       case 'x':
-        return Math.round(plotRect.left + Math.abs(numberValue - min) * scale);
+        return Math.round(plotRect.left + Math.abs(numberValue - this.min) * scale);
       case 'y':
-        return Math.round(plotRect.top + Math.abs(max - numberValue) * scale);
+        return Math.round(plotRect.top + Math.abs(this.max - numberValue) * scale);
       default:
-        throw new Error('Invalid axis type.', { cause: { axisType } });
+        throw new Error('Invalid axis type.', { cause: this.#axisType });
     }
   }
+
+  abstract get max(): number;
+  abstract get min(): number;
+  abstract get spacing(): number;
 }

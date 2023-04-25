@@ -1,11 +1,14 @@
-import { DatePart, roundDate } from '@chartext/chart';
-import { randomDate } from '@chartext/utils';
+import { roundDate } from '@/data/dates';
+import { DatePart } from '@/data/dates.types';
+import { randomDate } from '@/utils/random';
 import { describe, expect, it } from 'vitest';
 
 function randomDates(
   datePart: DatePart,
 ): [testDate: Date, floorDate: Date, ceilingDate: Date, roundedDate: Date] {
-  const testDate = randomDate();
+  const minDate = new Date('2020-01-01');
+  const maxDate = new Date('2022-01-01');
+  const testDate = randomDate(minDate, maxDate);
   const floorDate = roundDate(testDate, datePart, 'floor');
   const ceilingDate = roundDate(testDate, datePart, 'ceiling');
   const roundedDate = roundDate(testDate, datePart);
@@ -22,8 +25,8 @@ function randomDates(
 }
 
 describe('Dates test', () => {
-  it('should round to the nearest [seconds]', () => {
-    const datePart: DatePart = 'seconds';
+  it('should round to the nearest [second]', () => {
+    const datePart: DatePart = 'second';
     const [testDate, floorDate, ceilingDate, roundedDate] = randomDates(datePart);
 
     expect(floorDate, `round ${datePart} [floor]`).toStrictEqual(
@@ -58,8 +61,8 @@ describe('Dates test', () => {
     );
   });
 
-  it('should round to the nearest [minutes]', () => {
-    const datePart: DatePart = 'minutes';
+  it('should round to the nearest [minute]', () => {
+    const datePart: DatePart = 'minute';
     const [testDate, floorDate, ceilingDate, roundedDate] = randomDates(datePart);
 
     expect(floorDate, `round ${datePart} [floor]`).toStrictEqual(
@@ -91,8 +94,8 @@ describe('Dates test', () => {
     );
   });
 
-  it('should round to the nearest [hours]', () => {
-    const datePart: DatePart = 'hours';
+  it('should round to the nearest [hour]', () => {
+    const datePart: DatePart = 'hour';
     const [testDate, floorDate, ceilingDate, roundedDate] = randomDates(datePart);
 
     expect(floorDate, `round ${datePart} [floor]`).toStrictEqual(

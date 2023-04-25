@@ -1,4 +1,4 @@
-import { useCkGraphics } from '@chartext/canvaskit';
+import { useCkGraphics } from '@/hooks/useCkGraphics';
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 

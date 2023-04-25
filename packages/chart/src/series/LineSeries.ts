@@ -1,50 +1,53 @@
-import { Canvas, Paint, Path } from 'canvaskit-wasm';
 import { CkGraphics } from '@chartext/canvaskit';
-import { CkSeries, CkSeriesProps } from '@/series/Series.types';
+import { Canvas, Paint, Path } from 'canvaskit-wasm';
+import { SeriesData } from '@/series/series.types';
+import { SeriesDisplay, SeriesDisplayProps, sortedSeriesData } from '@/series/seriesDisplay';
 
-export class LineSeries implements CkSeries {
-  readonly path: Path;
+export class LineSeries implements SeriesDisplay {
+  readonly #path: Path;
 
-  readonly paint: Paint;
+  readonly #paint: Paint;
 
-  constructor(props: CkSeriesProps) {
-    const {
-      ckGraphics,
-      sortedData,
-      paintSet: { stroke },
-      xDisplay,
-      yDisplay,
-    } = props;
+  #isDeleted = false;
 
-    this.paint = stroke;
-    this.path = ckGraphics.createPath();
+  constructor(props: SeriesDisplayProps) {
+    const { series, paintSet, xDisplay, yDisplay, ckGraphics } = props;
 
-    const startXY = sortedData[0];
+    this.#paint = paintSet.stroke;
+    this.#path = ckGraphics.createPath();
+
+    const data: SeriesData = sortedSeriesData(series, xDisplay, yDisplay);
+    const startXY = data[0];
 
     if (startXY) {
       const { x: startXValue, y: startYValue } = startXY;
       const x0 = xDisplay.getViewCoord(startXValue);
       const y0 = yDisplay.getViewCoord(startYValue);
 
-      this.path.moveTo(x0, y0);
+      this.#path.moveTo(x0, y0);
 
-      sortedData.slice(1).forEach((xy) => {
+      data.slice(1).forEach((xy) => {
         const { x: xValue, y: yValue } = xy;
 
         if (xValue && yValue) {
           const x = xDisplay.getViewCoord(xValue);
           const y = yDisplay.getViewCoord(yValue);
-          this.path.lineTo(x, y);
+          this.#path.lineTo(x, y);
         }
       });
     }
   }
 
   draw(canvas: Canvas) {
-    canvas.drawPath(this.path, this.paint);
+    canvas.drawPath(this.#path, this.#paint);
   }
 
   delete(): void {
-    CkGraphics.delete(this.path);
+    this.#isDeleted = true;
+    CkGraphics.delete(this.#path);
+  }
+
+  get isDeleted() {
+    return this.#isDeleted;
   }
 }

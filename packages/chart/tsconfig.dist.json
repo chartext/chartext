@@ -1,12 +1,13 @@
 {
   "extends": ["./tsconfig.json"],
   "compilerOptions": {
-    "baseUrl": ".",
     "rootDir": "src",
-    "outDir": "build",
+    "outDir": "dist/types",
+    "emitDeclarationOnly": true,
   },
   "references": [
     { "path": "../canvaskit" },
   ],
   "include": ["src"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/utils"],
 }

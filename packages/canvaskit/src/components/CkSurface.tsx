@@ -1,13 +1,8 @@
-import { CkGraphics } from '@/CkGraphics';
+import { Canvas, Surface, WebGPUCanvasContext } from 'canvaskit-wasm';
+import { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { CkGraphics } from '../ckGraphics';
 import { useCkGraphicsContext } from '@/components/CkGraphics.context';
 import { CkSurfaceContext } from '@/components/CkSurface.context';
-import { Surface, WebGPUCanvasContext } from 'canvaskit-wasm';
-import {
-  PropsWithChildren,
-  useEffect,
-  useRef,
-  useState
-} from 'react';
 
 type CkSurfaceProps = {
   height: number;
@@ -16,7 +11,7 @@ type CkSurfaceProps = {
   zIndex?: number;
 };
 
-export function createSurface(ckGraphics: CkGraphics, canvas: HTMLCanvasElement): Surface | null {
+function createSurface(ckGraphics: CkGraphics, canvas: HTMLCanvasElement): Surface | null {
   const { CK, gpuDeviceContext } = ckGraphics;
 
   if (gpuDeviceContext) {
@@ -26,21 +21,30 @@ export function createSurface(ckGraphics: CkGraphics, canvas: HTMLCanvasElement)
     );
 
     if (gpuCanvasContext) {
-      return CK.MakeGPUCanvasSurface(gpuCanvasContext, CK.ColorSpace.SRGB);
+      return CK.MakeGPUCanvasSurface(gpuCanvasContext, CK.ColorSpace.SRGB) as Surface | null;
     }
   }
 
-  return CK.MakeWebGLCanvasSurface(canvas, CK.ColorSpace.SRGB);
+  return CK.MakeWebGLCanvasSurface(canvas, CK.ColorSpace.SRGB) as Surface | null;
 }
 
+const defaultCkSurfaceProps = {
+  scale: window.devicePixelRatio,
+  zIndex: 1,
+};
+
 export function CkSurface(props: PropsWithChildren<CkSurfaceProps>) {
-  console.log('CkSurface', props);
+  const {
+    height,
+    width,
+    scale = defaultCkSurfaceProps.scale,
+    zIndex = defaultCkSurfaceProps.zIndex,
+    children,
+  } = props;
 
   const ckGraphics = useCkGraphicsContext();
-
-  const { children, height, width, scale = window.devicePixelRatio, zIndex } = props;
-  const [surface, setSurface] = useState<Surface | undefined>();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [surface, setSurface] = useState<Surface>();
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -48,8 +52,9 @@ export function CkSurface(props: PropsWithChildren<CkSurfaceProps>) {
 
       const draftSurface: Surface | null = createSurface(ckGraphics, canvas);
 
-      if (draftSurface) {
-        draftSurface.getCanvas().scale(scale, scale);
+      if (draftSurface && !draftSurface.isDeleted()) {
+        const ckCanvas: Canvas = draftSurface.getCanvas();
+        ckCanvas.scale(scale, scale);
         setSurface(draftSurface);
       }
       return () => {
@@ -57,8 +62,10 @@ export function CkSurface(props: PropsWithChildren<CkSurfaceProps>) {
       };
     }
 
-    return () => {};
-  }, [scale, height, width, canvasRef]);
+    return () => {
+      // no cleanup necessary
+    };
+  }, [scale, height, width, canvasRef, ckGraphics]);
 
   return (
     <>
@@ -68,14 +75,11 @@ export function CkSurface(props: PropsWithChildren<CkSurfaceProps>) {
         width={width * scale}
         style={{ height, width, zIndex, position: 'absolute' }}
       />
-      {surface && !surface.isDeleted() ? (
+      {surface ? (
         <CkSurfaceContext.Provider value={surface}>{children}</CkSurfaceContext.Provider>
       ) : null}
     </>
   );
 }
 
-CkSurface.defaultProps = {
-  scale: window.devicePixelRatio,
-  zIndex: 1,
-};
+CkSurface.defaultProps = defaultCkSurfaceProps;

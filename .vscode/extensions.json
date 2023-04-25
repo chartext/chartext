@@ -1,13 +1,11 @@
 {
   "recommendations": [
-    "antfu.vite",
     "bierner.markdown-preview-github-styles",
     "dbaeumer.vscode-eslint",
     "EditorConfig.EditorConfig",
     "esbenp.prettier-vscode",
     "GitHub.vscode-pull-request-github",
-    "ZixuanChen.vitest-explorer",
+    "naumovs.color-highlight",
     "streetsidesoftware.code-spell-checker",
-    "naumovs.color-highlight"
   ]
 }

@@ -4,10 +4,10 @@ export type DatePart =
   | 'month'
   | 'week'
   | 'dayOfMonth'
-  | 'hours'
-  | 'minutes'
-  | 'seconds'
-  | 'milliseconds';
+  | 'hour'
+  | 'minute'
+  | 'second'
+  | 'millisecond';
 
 export enum Months {
   Jan,
@@ -23,7 +23,5 @@ export enum Months {
   Nov,
   Dec,
 }
-
-export type MaxDayOfMonth = 28 | 29 | 30 | 31;
 
 export type DateSpacing = [datePart: DatePart, diff: number];

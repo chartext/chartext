@@ -2,13 +2,7 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-// eslint-disable-next-line import/no-default-export
 export default defineConfig({
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, 'src'),
-    },
-  },
   plugins: [tsconfigPaths()],
   build: {
     lib: {
@@ -29,5 +23,9 @@ export default defineConfig({
         sourcemap: true,
       },
     },
+  },
+  test: {
+    globals: true,
+    environment: 'happy-dom',
   },
 });

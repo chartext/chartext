@@ -1,23 +1,23 @@
-import { ChartProps, Margin } from '@/Chart.types';
-import { AxisProps } from '@/axis/Axis.types';
-import { SeriesTheme } from '@/theme/ChartTheme.types';
+import { ChartProps, Margin } from '@/chart.types';
+import { AxisProps } from '@/axis/axis.types';
+import { SeriesTheme } from '@/theme/chartTheme.types';
 
 const defaultSeriesTheme: SeriesTheme = {
   colors: [
-    '#8a3ffc',
-    '#33b1ff',
     '#007d79',
-    '#ff7eb6',
+    '#33b1ff',
     '#fa4d56',
-    '#fff1f1',
     '#6fdc8c',
-    '#4589ff',
-    '#d12771',
-    '#d2a106',
-    '#08bdba',
-    '#bae6ff',
+    '#8a3ffc',
     '#ba4e00',
+    '#bae6ff',
+    '#d12771',
+    '#4589ff',
+    '#d2a106',
     '#d4bbff',
+    '#ff7eb6',
+    '#fff1f1',
+    '#08bdba',
   ],
 };
 
@@ -34,11 +34,9 @@ const defaultAxisProps: Omit<AxisProps, 'position'> = {
 const defaultAxisSurfaceProps: Margin<AxisProps> = {
   left: {
     ...defaultAxisProps,
-    position: 'left',
   },
   bottom: {
     ...defaultAxisProps,
-    position: 'bottom',
   },
 };
 

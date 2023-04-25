@@ -32,3 +32,8 @@ export type CkDrawParagraphProps = {
   x: number;
   y: number;
 };
+
+export type CkEmbindObject = {
+  delete(): void;
+  isDeleted(): void;
+};

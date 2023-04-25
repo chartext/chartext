@@ -1,12 +1,11 @@
 module.exports = {
   root: true,
   extends: [
-    // 'eslint:recommended',
-    'airbnb',
-    'airbnb-typescript',
+    'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'plugin:@typescript-eslint/strict',
+    // 'plugin:import/recommended',
+    // 'plugin:import/typescript',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
@@ -15,12 +14,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     EXPERIMENTAL_useSourceOfProjectReferenceRedirect: true,
-    project: [
-      'tsconfig.eslint.json',
-      'examples/*/tsconfig.json',
-      'packages/*/tsconfig.json',
-      'tests/*/tsconfig.json',
-    ],
+    project: ['tsconfig.eslint.json', 'examples/*/tsconfig.json', 'packages/*/tsconfig.json'],
   },
   env: {
     browser: true,
@@ -34,7 +28,7 @@ module.exports = {
   },
   // plugins: ['no-relative-import-paths'],
   rules: {
-    'import/no-default-export': ['error'],
+    // 'import/no-default-export': ['error'],
     'no-restricted-imports': [
       'error',
       {
@@ -55,23 +49,10 @@ module.exports = {
       },
     },
     {
-      files: ['tests/**/*.ts'],
+      files: ['examples/**/*.tsx', 'examples/**/*.ts', 'packages/**/*.tsx', 'packages/**/*.ts'],
       rules: {
-        'no-console': 'off',
-      },
-    },
-    {
-      files: [
-        'examples/**/*.tsx',
-        'examples/**/*.ts',
-        'packages/**/*.tsx',
-        'packages/**/*.ts',
-        'tests/**/*.tsx',
-        'tests/**/*.ts',
-      ],
-      rules: {
-        'import/extensions': 'off',
-        'import/prefer-default-export': 'off',
+        // 'import/extensions': 'off',
+        // 'import/prefer-default-export': 'off',
         '@typescript-eslint/consistent-type-definitions': 'off',
       },
     },

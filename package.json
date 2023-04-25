@@ -1,23 +1,36 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
+  "private": true,
   "name": "chartext",
   "version": "1.0.0",
-  "private": true,
+  "license": "MIT",
+  "author": "threaddot<threaddot@users.noreply.github.com>",
   "packageManager": "pnpm@8.3.1",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
+    "clean": "pnpm -r clean",
+    "test": "pnpm -r test",
+    "tsc": "pnpm -r tsc",
     "dist": "pnpm -r dist",
-    "test:run": "pnpm -r test:run",
+
+    "canvaskit:clean": "pnpm --filter @chartext/canvaskit clean",
+    "canvaskit:test": "pnpm --filter @chartext/canvaskit test",
     "canvaskit:tsc": "pnpm --filter @chartext/canvaskit tsc",
     "canvaskit:dist": "pnpm --filter @chartext/canvaskit dist",
-    "canvaskit:test": "pnpm --filter @chartext/canvaskit test:run",
+
+    "chart:clean": "pnpm --filter @chartext/chart clean",
+    "chart:test": "pnpm --filter @chartext/chart test",
+    "chart:tsc": "pnpm --filter @chartext/chart tsc",
     "chart:dist": "pnpm --filter @chartext/chart dist",
-    "chart:test:run": "pnpm --filter @chartext/chart-tests test:run",
-    "chart:test:watch": "pnpm --filter @chartext/chart test:watch",
-    "examples:chart": "pnpm --filter @chartext/examples-chart dev",
+
+    "examples:chart": "pnpm --filter @examples/chart dev",
+
     "syncpack:fix-mismatches": "syncpack fix-mismatches",
     "syncpack:format": "syncpack format",
-    "syncpack:list": "syncpack list"
+    "syncpack:list": "syncpack list",
+
+    "lint": "eslint --cache \"**/*.{,ts,tsx}\"",
+    "lint:fix": "eslint --cache --fix \"**/*.{ts,tsx}\""
   },
   "devDependencies": {
     "@alloc/fast-rimraf": "^1.0.8",
@@ -33,9 +46,8 @@
     "@webgpu/types": "^0.1.30",
     "dts-bundle-generator": "^8.0.0",
     "eslint": "^8.38.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.8.0",
+    "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-no-relative-import-paths": "^1.5.2",

@@ -8,9 +8,6 @@
     "paths": {
       "@/*": ["src/*"],
     },
-    "types": [
-      "vite/client",
-    ]
   },
-  "include": ["src", "dts-bundle-generator.config.ts", "vite.config.ts"]
+  "include": ["src", "vite.config.ts"]
 }

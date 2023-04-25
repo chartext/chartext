@@ -1,7 +1,7 @@
 import { isLeapYear, nextSaturday, previousSunday } from 'date-fns';
-import { DatePart, MaxDayOfMonth, Months } from '@/data/Dates.types';
+import { DatePart, Months } from '@/data/dates.types';
 
-export function maxDayOfMonth(month: Months, year: number): MaxDayOfMonth {
+export function maxDayOfMonth(month: Months, year: number): 28 | 29 | 30 | 31 {
   switch (month) {
     case Months.Jan:
     case Months.Mar:
@@ -38,7 +38,7 @@ export function roundDate(date: Date, datePart: DatePart, direction?: 'floor' | 
   })(); */
 
   switch (datePart) {
-    case 'seconds': {
+    case 'second': {
       const adjustment = (() => {
         if (!direction) {
           return date.getMilliseconds() < 500 ? 0 : 1;
@@ -56,7 +56,7 @@ export function roundDate(date: Date, datePart: DatePart, direction?: 'floor' | 
         date.getSeconds() + adjustment,
       );
     }
-    case 'minutes': {
+    case 'minute': {
       const adjustment = (() => {
         if (!direction) {
           return date.getSeconds() < 30 ? 0 : 1;
@@ -73,7 +73,7 @@ export function roundDate(date: Date, datePart: DatePart, direction?: 'floor' | 
         date.getMinutes() + adjustment,
       );
     }
-    case 'hours': {
+    case 'hour': {
       const adjustment = (() => {
         if (!direction) {
           return date.getMinutes() < 30 ? 0 : 1;

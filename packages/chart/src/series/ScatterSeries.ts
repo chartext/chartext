@@ -1,22 +1,24 @@
 import { Canvas, Paint } from 'canvaskit-wasm';
-import { CkSeries, CkSeriesProps } from '@/series/Series.types';
+import { SeriesDisplay, SeriesDisplayProps } from '@/series/seriesDisplay';
 
-export class ScatterSeries implements CkSeries {
-  readonly viewCoords: [number, number][];
+export class ScatterSeries implements SeriesDisplay {
+  readonly #viewCoords: [number, number][];
 
-  readonly paint: Paint;
+  readonly #paint: Paint;
 
-  constructor(props: CkSeriesProps) {
+  #isDeleted = false;
+
+  constructor(props: SeriesDisplayProps) {
     const {
-      sortedData,
+      series: { data },
       paintSet: { fill },
       xDisplay,
       yDisplay,
     } = props;
 
-    this.paint = fill;
+    this.#paint = fill;
 
-    this.viewCoords = sortedData.filter(Boolean).map((xy) => {
+    this.#viewCoords = data.map((xy) => {
       const { x: xValue, y: yValue } = xy;
 
       const x = xDisplay.getViewCoord(xValue);
@@ -27,13 +29,16 @@ export class ScatterSeries implements CkSeries {
   }
 
   draw(canvas: Canvas): void {
-    this.viewCoords.forEach(([x, y]) => {
-      canvas.drawCircle(x, y, 2, this.paint);
+    this.#viewCoords.forEach(([x, y]) => {
+      canvas.drawCircle(x, y, 2, this.#paint);
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   delete(): void {
-    // Nothing to delete
+    this.#isDeleted = true;
+  }
+
+  get isDeleted() {
+    return this.#isDeleted;
   }
 }

@@ -2,11 +2,19 @@
   "cSpell.words": [
     "canvaskit",
     "chartext",
+    "embind",
+    "mantine",
     "preinstall",
     "quantiles",
+    "roboto",
+    "skia",
     "syncpack",
+    "threaddot",
     "tinycolor",
+    "treeshake",
     "tsbuildinfo",
     "webgpu"
   ],
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "eslint.packageManager": "pnpm"
 }

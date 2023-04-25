@@ -1,10 +1,10 @@
 {
+  "bracketSameLine": false,
+  "endOfLine": "auto",
+  "jsxSingleQuote": false,
   "printWidth": 100,
-  "trailingComma": "all",
+  "singleAttributePerLine": true,
   "singleQuote": true,
   "tabWidth": 2,
-  "endOfLine": "auto",
-  "singleAttributePerLine": true,
-  "parser": "typescript",
-  "bracketSameLine": false
+  "trailingComma": "all"
 }

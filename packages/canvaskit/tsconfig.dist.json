@@ -2,11 +2,9 @@
   "extends": ["./tsconfig.json"],
   "compilerOptions": {
     "rootDir": "src",
-    "noEmit": true
+    "outDir": "dist/types",
+    "emitDeclarationOnly": true
   },
   "include": ["src"],
-  "buildOptions": {
-    "verbose": true,
-    "traceResolution": true
-  },
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"],
 }

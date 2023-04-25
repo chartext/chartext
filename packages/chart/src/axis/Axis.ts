@@ -1,39 +1,52 @@
-import { CkGraphics, CkPaints } from '@chartext/canvaskit';
+import { CkGraphics, CkPaintRepository } from '@chartext/canvaskit';
 import { Canvas, Paint, Paragraph, TextAlign } from 'canvaskit-wasm';
-import { Rect } from '@/Chart.types';
-import { AxisProps } from '@/axis/Axis.types';
-import { CoordDisplay } from '@/display/CoordDisplay';
-import { CoordType } from '@/series/Series.types';
+import { ChartSurfaceRenderer, Rect } from '@/chart.types';
+import { AxisPosition } from '@/axis/axis.types';
+import { CoordDisplay } from '@/coord/coordDisplay';
+import { AxisTheme } from '@/theme/chartTheme.types';
+import { CoordType } from '@/coord/coord.types';
 
-export class Axis {
-  private readonly tickParagraphs: [number, Paragraph][];
+type AxisSurfaceRendererProps = {
+  ckGraphics: CkGraphics;
+  coordDisplay: CoordDisplay<CoordType>;
+  fontSize: number;
+  paintRepository: CkPaintRepository;
+  position: AxisPosition;
+  theme: AxisTheme;
+};
+export class Axis implements ChartSurfaceRenderer {
+  readonly #coordDisplay: CoordDisplay<CoordType>;
+  readonly #fontSize: number;
+  readonly #position: AxisPosition;
+  readonly #tickPaint: Paint;
+  readonly #tickParagraphs: [number, Paragraph][];
+  readonly #zeroTickPaint: Paint;
 
-  private readonly tickColorName: string;
+  #isDeleted = false;
 
-  private readonly zeroTickColorName: string;
-
-  constructor(
-    readonly props: AxisProps,
-    readonly coordDisplay: CoordDisplay<CoordType>,
-    ckGraphics: CkGraphics,
-  ) {
-    const { min, max, spacing } = coordDisplay;
-    const { fontSize = 12, position, theme } = props;
-
-    if (!theme) {
-      throw new Error('Axis theme is not present');
-    }
-
-    const { tickColor, zeroTickColor } = theme;
-
-    this.tickColorName = `${tickColor}-Stroke`;
-    this.zeroTickColorName = `${zeroTickColor}-Stroke`;
+  constructor(props: AxisSurfaceRendererProps) {
+    const {
+      fontSize,
+      position,
+      paintRepository,
+      ckGraphics,
+      coordDisplay,
+      theme: { tickColor, zeroTickColor },
+    } = props;
 
     const {
       CK: {
         TextAlign: { Left, Right, Center },
       },
     } = ckGraphics;
+
+    const { min, max, spacing } = coordDisplay;
+
+    this.#tickPaint = paintRepository.getPaintSet(tickColor).stroke;
+    this.#zeroTickPaint = paintRepository.getPaintSet(zeroTickColor).stroke;
+    this.#position = position;
+    this.#coordDisplay = coordDisplay;
+    this.#fontSize = fontSize;
 
     const textAlign: TextAlign = (() => {
       switch (position) {
@@ -49,7 +62,7 @@ export class Axis {
       }
     })();
 
-    this.tickParagraphs = [];
+    this.#tickParagraphs = [];
 
     for (let value = min; value <= max; value += spacing) {
       const color = value === 0 ? zeroTickColor : tickColor;
@@ -61,25 +74,20 @@ export class Axis {
         textAlign,
       });
 
-      this.tickParagraphs.push([value, tickParagraph]);
+      this.#tickParagraphs.push([value, tickParagraph]);
     }
   }
 
-  draw(canvas: Canvas, plotRect: Rect<number>, paints: CkPaints) {
-    const { coordDisplay, tickParagraphs, props } = this;
+  draw(canvas: Canvas, plotRect: Rect<number>) {
+    if (this.isDeleted) return;
 
-    const { fontSize = 12, position } = props;
+    this.#tickParagraphs.forEach(([value, tickParagraph]) => {
+      const paint: Paint = value === 0 ? this.#zeroTickPaint : this.#tickPaint;
 
-    const tickPaint = paints.get(this.tickColorName);
-    const zeroTickPaint = paints.get(this.zeroTickColorName);
-
-    tickParagraphs.forEach(([value, tickParagraph]) => {
-      const paint: Paint = value === 0 ? zeroTickPaint.stroke : tickPaint.stroke;
-
-      switch (position) {
+      switch (this.#position) {
         case 'left':
           {
-            const y = coordDisplay.valueToViewCoord(value, plotRect);
+            const y = this.#coordDisplay.valueToViewCoord(value, plotRect);
             const x0 = plotRect.left - 7;
 
             canvas.drawLine(x0, y, plotRect.right, y, paint);
@@ -89,13 +97,13 @@ export class Axis {
               paragraph: tickParagraph,
               width: x0 - 5,
               x: 0,
-              y: y - Math.round(fontSize / 2),
+              y: y - Math.round(this.#fontSize / 2),
             });
           }
           break;
         case 'bottom':
           {
-            const x = coordDisplay.valueToViewCoord(value, plotRect);
+            const x = this.#coordDisplay.valueToViewCoord(value, plotRect);
             const y1 = plotRect.bottom + 7;
 
             canvas.drawLine(x, plotRect.top, x, y1, paint);
@@ -113,16 +121,19 @@ export class Axis {
           break;
         case 'top':
         case 'right':
-          throw new Error('AxisPosition is not implemented', { cause: position });
+          throw new Error('AxisPosition is not implemented', { cause: this.#position });
         default:
-          throw new Error('Invalid position', { cause: position });
+          throw new Error('Invalid position', { cause: this.#position });
       }
     });
   }
 
+  public get isDeleted() {
+    return this.#isDeleted;
+  }
+
   delete() {
-    const { tickParagraphs } = this;
-    const tps: Paragraph[] = tickParagraphs.map(([, p]) => p);
-    CkGraphics.delete(...tps);
+    this.#isDeleted = true;
+    this.#tickParagraphs.forEach(([, p]) => CkGraphics.delete(p));
   }
 }

@@ -1,10 +1,12 @@
+import { Rect } from '@/chart.types';
+import { CoordDisplay } from '@/coord/coordDisplay';
+import { NumberCoordDisplay } from '@/coord/numberCoordDisplay';
+import { generateIntData } from '@/utils/generateData';
 import { describe, it } from 'vitest';
-import { generateNumberData } from '@chartext/utils';
-import { CoordDisplay, NumberCoordDisplay, Rect } from '@chartext/chart';
 
 describe('NumberCoordDisplay', () => {
-  it.only('Logs number displays', () => {
-    const data: number[] = generateNumberData(100, 'number');
+  it('Logs number displays', () => {
+    const data: number[] = generateIntData(-323, 678, 100);
 
     const minValue = Math.min(...data);
     const maxValue = Math.max(...data);
