@@ -1,6 +1,6 @@
-import { CoordType, XY } from '../coord/Coord.types';
-import { Plot } from '../plot/Plot.types';
-import { Series } from '../series/Series.types';
+import { CoordType, XY } from '@/coord/Coord.types';
+import { Plot } from '@/plot/Plot.types';
+import { Series } from '@/series/Series.types';
 import { RandomSeriesConfig, RandomSeriesProps } from '@/utils/generateData.types';
 import { randomDate, randomInt, randomNumber } from '@/utils/random';
 

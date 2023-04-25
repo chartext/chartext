@@ -77,7 +77,7 @@ importers:
         specifier: ^9.1.0
         version: 9.8.4
       husky:
-        specifier: ^8.0.3
+        specifier: ^8.0.0
         version: 8.0.3
       prettier:
         specifier: 2.8.7
@@ -176,33 +176,6 @@ importers:
       tinycolor2:
         specifier: ^1.6.0
         version: 1.6.0
-
-  packages/utils:
-    dependencies:
-      '@chartext/chart':
-        specifier: '*'
-        version: link:../chart
-
-  tests/canvaskit-tests:
-    devDependencies:
-      '@chartext/canvaskit':
-        specifier: '*'
-        version: link:../../packages/canvaskit
-      vitest:
-        specifier: '*'
-        version: 0.29.8(happy-dom@9.8.4)
-
-  tests/chart-tests:
-    devDependencies:
-      '@chartext/chart':
-        specifier: '*'
-        version: link:../../packages/chart
-      '@chartext/utils':
-        specifier: '*'
-        version: link:../../packages/utils
-      date-fns:
-        specifier: ^2.29.3
-        version: 2.29.3
 
 packages:
 
@@ -1964,6 +1937,7 @@ packages:
   /date-fns@2.29.3:
     resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
     engines: {node: '>=0.11'}
+    dev: false
 
   /debug@3.2.7:
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}

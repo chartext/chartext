@@ -25,7 +25,8 @@
     "syncpack:format": "syncpack format",
     "syncpack:list": "syncpack list",
     "lint": "eslint --cache \"**/*.{,ts,tsx}\"",
-    "lint:fix": "eslint --cache --fix \"**/*.{ts,tsx}\""
+    "lint:fix": "eslint --cache --fix \"**/*.{ts,tsx}\"",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@alloc/fast-rimraf": "^1.0.8",
@@ -52,7 +53,7 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "happy-dom": "^9.1.0",
-    "husky": "^8.0.3",
+    "husky": "^8.0.0",
     "prettier": "2.8.7",
     "syncpack": "^9.8.4",
     "tsconfig-paths": "^4.2.0",
