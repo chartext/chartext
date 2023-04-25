@@ -1,4 +1,4 @@
-import { NumberInput, NumberInputProps, Stack, Text } from '@mantine/core';
+import { Group, NumberInput, NumberInputProps, Stack, Text } from '@mantine/core';
 
 type SeriesControlProps = {
   label: string;
@@ -6,28 +6,39 @@ type SeriesControlProps = {
   dataCountProps: NumberInputProps;
 };
 
+export type SeriesControlValues = {
+  count: number;
+  dataCount: number;
+};
+
 export function SeriesControl(props: SeriesControlProps) {
   const { dataCountProps, label, seriesCountProps } = props;
 
   return (
-    <Stack spacing={0}>
+    <Stack spacing={5}>
       <Text
         align="center"
-        size="xs"
+        size="s"
         fw="bold"
       >
         {label}
       </Text>
-      <NumberInput
-        label="# Series"
-        size="xs"
-        {...seriesCountProps}
-      />
-      <NumberInput
-        label="# Data"
-        size="xs"
-        {...dataCountProps}
-      />
+      <Group
+        grow
+        spacing={5}
+      >
+        <NumberInput
+          label="# Series"
+          size="xs"
+          {...seriesCountProps}
+        />
+        <NumberInput
+          label="# Data"
+          size="xs"
+          hideControls
+          {...dataCountProps}
+        />
+      </Group>
     </Stack>
   );
 }

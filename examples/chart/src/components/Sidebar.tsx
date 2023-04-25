@@ -1,15 +1,17 @@
 import { useExampleChartContext } from '@/ExampleChart.context';
-import { CoordTypeControl } from '@/components/CoordTypeControl';
-import { SeriesControl } from '@/components/SeriesControl';
-import { CoordType, RandomSeriesConfig, generatePlot } from '@chartext/chart';
-import { Button, Group, Stack } from '@mantine/core';
+import { CoordControl, CoordControlValues } from '@/components/CoordControl';
+import { SeriesControl, SeriesControlValues } from '@/components/SeriesControl';
+import { generatePlot, randomInt } from '@chartext/chart';
+import { Button, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useCallback } from 'react';
 import { FaChartLine } from 'react-icons/fa';
 
 type RandomPlotFormProps = {
-  lineSeries: RandomSeriesConfig<CoordType, CoordType>;
-  // scatterSeries: RandomSeriesConfig<CoordType, CoordType>;
+  xCoord: CoordControlValues;
+  yCoord: CoordControlValues;
+  lineSeries: SeriesControlValues;
+  scatterSeries: SeriesControlValues;
 };
 
 type SidebarProps = {
@@ -18,26 +20,55 @@ type SidebarProps = {
   padding?: number;
 };
 
+function randomCoordValues(): CoordControlValues {
+  return {
+    coordType: 'number',
+    range: {
+      min: randomInt(-100, -1),
+      max: randomInt(0, 100),
+    },
+  };
+}
+
+function randomSeriesValues(): SeriesControlValues {
+  return {
+    count: randomInt(1, 5),
+    dataCount: randomInt(10, 100),
+  };
+}
+
 export function Sidebar(props: SidebarProps) {
   const { height, width, padding = 10 } = props;
   const { setPlot } = useExampleChartContext();
 
   const form = useForm<RandomPlotFormProps>({
     initialValues: {
-      lineSeries: {
-        count: 1,
-        dataCount: 100,
-        type: 'line',
-        xMinMax: [-1000, 1000],
-        yMinMax: [-1000, 1000],
-      },
+      xCoord: randomCoordValues(),
+      yCoord: randomCoordValues(),
+      lineSeries: randomSeriesValues(),
+      scatterSeries: randomSeriesValues(),
     },
   });
 
   const onSubmit = useCallback(
     (randomPlotFormProps: RandomPlotFormProps) => {
-      const { lineSeries } = randomPlotFormProps;
-      const plot = generatePlot([lineSeries]);
+      const { xCoord, yCoord, lineSeries, scatterSeries } = randomPlotFormProps;
+      const plot = generatePlot([
+        {
+          xRange: xCoord.range,
+          yRange: yCoord.range,
+          type: 'line',
+          count: lineSeries.count,
+          dataCount: lineSeries.dataCount,
+        },
+        {
+          xRange: xCoord.range,
+          yRange: yCoord.range,
+          type: 'scatter',
+          count: scatterSeries.count,
+          dataCount: scatterSeries.dataCount,
+        },
+      ]);
       setPlot(plot);
     },
     [setPlot],
@@ -51,23 +82,27 @@ export function Sidebar(props: SidebarProps) {
         justify="flex-start"
         p={padding}
       >
-        <Group
-          grow
-          spacing={5}
-        >
-          <CoordTypeControl
-            label="x"
-            {...form.getInputProps('xType')}
-          />
-          <CoordTypeControl
-            label="y"
-            {...form.getInputProps('yType')}
-          />
-        </Group>
+        <CoordControl
+          label="x"
+          minProps={form.getInputProps('xCoord.range.min')}
+          maxProps={form.getInputProps('xCoord.range.max')}
+          coordTypeProps={form.getInputProps('xCoord.coordType')}
+        />
+        <CoordControl
+          label="y"
+          minProps={form.getInputProps('yCoord.range.min')}
+          maxProps={form.getInputProps('yCoord.range.max')}
+          coordTypeProps={form.getInputProps('yCoord.coordType')}
+        />
         <SeriesControl
-          label="Line"
+          label="line"
           dataCountProps={form.getInputProps('lineSeries.dataCount')}
           seriesCountProps={form.getInputProps('lineSeries.count')}
+        />
+        <SeriesControl
+          label="scatter"
+          dataCountProps={form.getInputProps('scatterSeries.dataCount')}
+          seriesCountProps={form.getInputProps('scatterSeries.count')}
         />
         <Button
           variant="outline"

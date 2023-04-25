@@ -39,8 +39,8 @@ export function generateSeries<X extends CoordType, Y extends CoordType>(
     dataCount,
     index,
     type,
-    xMinMax: [xMin, xMax],
-    yMinMax: [yMin, yMax],
+    xRange: { min: xMin, max: xMax },
+    yRange: { min: yMin, max: yMax },
   } = props;
 
   const xData: CoordType[] = generateData(xMin, xMax, dataCount);
@@ -61,14 +61,14 @@ export function generatePlot<X extends CoordType, Y extends CoordType>(
   const randomSeriesArr: Series[] = [];
 
   series.forEach((seriesConfig) => {
-    const { count, dataCount, type, xMinMax, yMinMax } = seriesConfig;
+    const { count, dataCount, type, xRange, yRange } = seriesConfig;
 
     for (let seriesIndex = 0; seriesIndex < count; seriesIndex += 1) {
       const index = randomSeriesArr.length;
       const randomSeries = generateSeries({
         index,
-        xMinMax,
-        yMinMax,
+        xRange,
+        yRange,
         dataCount,
         type,
       });
