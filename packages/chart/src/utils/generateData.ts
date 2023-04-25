@@ -1,4 +1,5 @@
 import { CoordType, XY } from '@/coord/Coord.types';
+import { parseCoord } from '@/data/dataParsers';
 import { Plot } from '@/plot/Plot.types';
 import { Series } from '@/series/Series.types';
 import { RandomSeriesConfig, RandomSeriesProps } from '@/utils/generateData.types';
@@ -13,21 +14,19 @@ export function generateDateData(min: Date, max: Date, dataCount: number): Date[
 }
 
 export function generateData<T extends CoordType>(min: T, max: T, dataCount: number): T[] {
-  switch (typeof min) {
-    case 'number':
-      if (Number.isInteger(min) && Number.isInteger(max)) {
-        return Array.from({ length: dataCount }, () =>
-          randomInt(min as number, max as number),
-        ) as T[];
-      }
+  const coordType = parseCoord(min);
 
+  switch (coordType) {
+    case 'integer':
+      return Array.from({ length: dataCount }, () =>
+        randomInt(min as number, max as number),
+      ) as T[];
+    case 'float':
       return Array.from({ length: dataCount }, () =>
         randomNumber(min as number, max as number),
       ) as T[];
-    case 'object':
-      if (min instanceof Date) {
-        return Array.from({ length: dataCount }, () => randomDate(min as Date, max as Date)) as T[];
-      }
+    case 'date':
+      return Array.from({ length: dataCount }, () => randomDate(min as Date, max as Date)) as T[];
   }
 
   return [];

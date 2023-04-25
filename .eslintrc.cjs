@@ -42,12 +42,12 @@ module.exports = {
   },
   overrides: [
     // Fixes error when importing dev dependencies
-    {
-      files: ['tests/**/*.ts', 'vite.config.ts'],
-      rules: {
-        'import/no-extraneous-dependencies': 'off',
-      },
-    },
+    // {
+    //   files: ['tests/**/*.ts', 'vite.config.ts'],
+    //   rules: {
+    //     'import/no-extraneous-dependencies': 'off',
+    //   },
+    // },
     {
       files: ['examples/**/*.tsx', 'examples/**/*.ts', 'packages/**/*.tsx', 'packages/**/*.ts'],
       rules: {
