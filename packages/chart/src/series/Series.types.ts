@@ -1,4 +1,4 @@
-import { CoordType, XY } from '@/coord/coord.types';
+import { CoordType, XY } from '@/coord/Coord.types';
 
 export type BoxData<O extends CoordType> = {
   readonly one: O;

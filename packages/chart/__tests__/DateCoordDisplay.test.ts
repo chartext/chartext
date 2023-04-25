@@ -1,5 +1,5 @@
-import { Rect } from '@/chart.types';
-import { DateCoordDisplay } from '@/coord/dateCoordDisplay';
+import { Rect } from '@/Chart.types';
+import { DateCoordDisplay } from '@/coord/DateCoordDisplay';
 import { roundDate } from '@/data/dates';
 import { generateDateData } from '@/utils/generateData';
 import { max, min } from 'date-fns';

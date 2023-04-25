@@ -1,4 +1,4 @@
-import { CoordDisplay, CoordDisplayProps } from '@/coord/coordDisplay';
+import { CoordDisplay, CoordDisplayProps } from '@/coord/CoordDisplay';
 
 /**
  * @todo Chrome limitation Math.min and Math.max

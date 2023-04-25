@@ -1,6 +1,6 @@
-import { ChartProps, Margin } from '@/chart.types';
-import { AxisProps } from '@/axis/axis.types';
-import { SeriesTheme } from '@/theme/chartTheme.types';
+import { ChartProps, Margin } from '@/Chart.types';
+import { AxisProps } from '@/axis/Axis.types';
+import { SeriesTheme } from '@/theme/ChartTheme.types';
 
 const defaultSeriesTheme: SeriesTheme = {
   colors: [

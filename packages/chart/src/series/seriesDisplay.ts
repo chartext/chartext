@@ -1,9 +1,9 @@
 import { CkGraphics, CkPaintSet } from '@chartext/canvaskit';
 import { Canvas } from 'canvaskit-wasm';
-import { CoordDisplay } from '@/coord/coordDisplay';
-import { Series, SeriesData } from '@/series/series.types';
-import { ChartSurfaceRenderer } from '@/chart.types';
-import { CoordType } from '@/coord/coord.types';
+import { CoordDisplay } from '@/coord/CoordDisplay';
+import { Series, SeriesData } from '@/series/Series.types';
+import { ChartSurfaceRenderer } from '@/Chart.types';
+import { CoordType } from '@/coord/Coord.types';
 
 export function sortedSeriesData(
   series: Series,

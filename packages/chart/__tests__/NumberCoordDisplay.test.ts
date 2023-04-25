@@ -1,6 +1,6 @@
-import { Rect } from '@/chart.types';
-import { CoordDisplay } from '@/coord/coordDisplay';
-import { NumberCoordDisplay } from '@/coord/numberCoordDisplay';
+import { Rect } from '@/Chart.types';
+import { CoordDisplay } from '@/coord/CoordDisplay';
+import { NumberCoordDisplay } from '@/coord/NumberCoordDisplay';
 import { generateIntData } from '@/utils/generateData';
 import { describe, it } from 'vitest';
 

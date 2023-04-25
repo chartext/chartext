@@ -1,17 +1,17 @@
-import { Rect } from '@/chart.types';
-import { AxisType } from '@/axis/axis.types';
-import { CoordProps, CoordType, CoordTypeName } from '@/coord/coord.types';
-import { CoordDisplay } from '@/coord/coordDisplay';
-import { DateCoordDisplay } from '@/coord/dateCoordDisplay';
-import { NumberCoordDisplay } from '@/coord/numberCoordDisplay';
+import { Rect } from '@/Chart.types';
+import { AxisType } from '@/axis/Axis.types';
+import { CoordProps, CoordType, CoordTypeName } from '@/coord/Coord.types';
+import { CoordDisplay } from '@/coord/CoordDisplay';
+import { DateCoordDisplay } from '@/coord/DateCoordDisplay';
+import { NumberCoordDisplay } from '@/coord/NumberCoordDisplay';
 import { parseCoord } from '@/data/dataParsers';
-import { Plot } from '@/plot/plot.types';
-import { LineSeries } from '@/series/lineSeries';
-import { ScatterSeries } from '@/series/scatterSeries';
-import { SeriesType } from '@/series/series.types';
-import { SeriesDisplay, SeriesDisplayProps } from '@/series/seriesDisplay';
-import { useChartThemeContext } from '@/theme/ChartTheme.context';
-import { useCkGraphicsContext } from '@chartext/canvaskit';
+import { Plot } from '@/plot/Plot.types';
+import { LineSeries } from '@/series/LineSeries';
+import { ScatterSeries } from '@/series/ScatterSeries';
+import { SeriesType } from '@/series/Series.types';
+import { SeriesDisplay, SeriesDisplayProps } from '@/series/SeriesDisplay';
+import { useChartTheme } from '@/theme/ChartThemeProvider';
+import { useCkGraphics } from '@chartext/canvaskit';
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
 
 export type DisplayContextProps = {
@@ -86,12 +86,12 @@ function createSeriesDisplay(props: SeriesDisplayProps, seriesType: SeriesType):
 }
 
 export const ChartDisplayContext = createContext<DisplayContextProps>({} as DisplayContextProps);
-export const useChartDisplayContext = () => useContext(ChartDisplayContext);
+export const useChartDisplay = () => useContext(ChartDisplayContext);
 
 export function ChartDisplayProvider(props: PropsWithChildren<DisplayProviderProps>) {
   const { children, plot, plotRect } = props;
-  const { seriesTheme, paintRepository } = useChartThemeContext();
-  const ckGraphics = useCkGraphicsContext();
+  const { seriesTheme, paintRepository } = useChartTheme();
+  const ckGraphics = useCkGraphics();
 
   const [displayContextProps, setDisplayContextProps] = useState<DisplayContextProps>();
 

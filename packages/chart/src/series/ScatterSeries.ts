@@ -1,5 +1,5 @@
 import { Canvas, Paint } from 'canvaskit-wasm';
-import { SeriesDisplay, SeriesDisplayProps } from '@/series/seriesDisplay';
+import { SeriesDisplay, SeriesDisplayProps } from '@/series/SeriesDisplay';
 
 export class ScatterSeries implements SeriesDisplay {
   readonly #viewCoords: [number, number][];

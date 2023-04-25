@@ -1,7 +1,5 @@
-export * from '@/ckGraphics.types';
-export * from '@/ckGraphics';
-export * from '@/ckPaintRepository';
-export * from '@/components/CkGraphics.context';
-export * from '@/components/CkSurface';
-export * from '@/components/CkSurface.context';
-export * from '@/hooks/useCkGraphics';
+export * from '@/CkGraphics.types';
+export * from '@/CkGraphics';
+export * from '@/CkPaintRepository';
+export { CkSurface, useCkSurface } from '@/CkSurface';
+export { CkGraphicsProvider, useCkGraphics } from '@/CkGraphicsProvider';

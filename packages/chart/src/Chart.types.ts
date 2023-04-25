@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
-import { AxisProps } from '@/axis/axis.types';
-import { Plot } from '@/plot/plot.types';
-import { SeriesTheme } from '@/theme/chartTheme.types';
+import { AxisProps } from '@/axis/Axis.types';
+import { Plot } from '@/plot/Plot.types';
+import { SeriesTheme } from '@/theme/ChartTheme.types';
 
 export type Rect<T> = {
   left: T;
@@ -15,12 +15,6 @@ export type Margin<T> = Partial<Rect<T | undefined>>;
 export type Size = {
   height: number;
   width: number;
-};
-
-export type PlotDim = {
-  margin: Margin<number>;
-  rect: Rect<number>;
-  size: Size;
 };
 
 export type ChartPlugin = {
@@ -37,12 +31,6 @@ export type ChartProps = {
   seriesTheme: SeriesTheme;
   // graphics?: string | undefined;
   // plugins?: ChartPlugin[] | undefined;
-};
-
-export type ChartSurfaceProps = {
-  height: number;
-  width: number;
-  zIndex: number;
 };
 
 export interface ChartSurfaceRenderer {

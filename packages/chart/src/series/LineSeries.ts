@@ -1,7 +1,7 @@
 import { CkGraphics } from '@chartext/canvaskit';
 import { Canvas, Paint, Path } from 'canvaskit-wasm';
-import { SeriesData } from '@/series/series.types';
-import { SeriesDisplay, SeriesDisplayProps, sortedSeriesData } from '@/series/seriesDisplay';
+import { SeriesData } from '@/series/Series.types';
+import { SeriesDisplay, SeriesDisplayProps, sortedSeriesData } from '@/series/SeriesDisplay';
 
 export class LineSeries implements SeriesDisplay {
   readonly #path: Path;

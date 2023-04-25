@@ -1,5 +1,5 @@
 import { Paint } from 'canvaskit-wasm';
-import { CkGraphics } from '@/ckGraphics';
+import { CkGraphics } from '@/CkGraphics';
 
 export type CkPaintSet = {
   fill: Paint;

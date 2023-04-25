@@ -10,7 +10,7 @@ import {
   min,
 } from 'date-fns';
 import { roundDate } from '@/data/dates';
-import { CoordDisplay, CoordDisplayProps } from '@/coord/coordDisplay';
+import { CoordDisplay, CoordDisplayProps } from '@/coord/CoordDisplay';
 import { DatePart, DateSpacing } from '@/data/dates.types';
 
 export class DateCoordDisplay extends CoordDisplay<Date> {

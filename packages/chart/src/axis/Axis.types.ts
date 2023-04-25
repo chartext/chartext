@@ -1,4 +1,4 @@
-import { AxisTheme } from '@/theme/chartTheme.types';
+import { AxisTheme } from '@/theme/ChartTheme.types';
 
 export type TickInterval = 1 | 2 | 3 | 5 | 10;
 

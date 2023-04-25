@@ -1,8 +1,7 @@
+import { CkGraphics } from '@/CkGraphics';
+import { useCkGraphics } from '@/CkGraphicsProvider';
 import { Canvas, Surface, WebGPUCanvasContext } from 'canvaskit-wasm';
-import { PropsWithChildren, useEffect, useRef, useState } from 'react';
-import { CkGraphics } from '../ckGraphics';
-import { useCkGraphicsContext } from '@/components/CkGraphics.context';
-import { CkSurfaceContext } from '@/components/CkSurface.context';
+import { PropsWithChildren, createContext, useContext, useEffect, useRef, useState } from 'react';
 
 type CkSurfaceProps = {
   height: number;
@@ -28,6 +27,9 @@ function createSurface(ckGraphics: CkGraphics, canvas: HTMLCanvasElement): Surfa
   return CK.MakeWebGLCanvasSurface(canvas, CK.ColorSpace.SRGB) as Surface | null;
 }
 
+const CkSurfaceContext = createContext<Surface>({} as Surface);
+export const useCkSurface = () => useContext(CkSurfaceContext);
+
 const defaultCkSurfaceProps = {
   scale: window.devicePixelRatio,
   zIndex: 1,
@@ -42,7 +44,7 @@ export function CkSurface(props: PropsWithChildren<CkSurfaceProps>) {
     children,
   } = props;
 
-  const ckGraphics = useCkGraphicsContext();
+  const ckGraphics = useCkGraphics();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [surface, setSurface] = useState<Surface>();
 

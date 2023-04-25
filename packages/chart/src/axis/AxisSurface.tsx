@@ -1,20 +1,20 @@
 import { useChartContext } from '@/Chart.context';
-import { useChartDisplayContext } from '@/ChartDisplay.context';
-import { Axis } from '@/axis/axis';
-import { useChartThemeContext } from '@/theme/ChartTheme.context';
-import { CkGraphics, useCkGraphicsContext, useCkSurfaceContext } from '@chartext/canvaskit';
+import { useChartDisplay } from '@/ChartDisplayProvider';
+import { Axis } from '@/axis/Axis';
+import { useChartTheme } from '@/theme/ChartThemeProvider';
+import { CkGraphics, useCkGraphics, useCkSurface } from '@chartext/canvaskit';
 import { Canvas, Surface } from 'canvaskit-wasm';
 import { useLayoutEffect } from 'react';
 
 export function AxisSurface() {
-  const ckGraphics: CkGraphics = useCkGraphicsContext();
-  const surface: Surface | undefined = useCkSurfaceContext();
-  const { xDisplay, yDisplay, plotRect } = useChartDisplayContext();
+  const ckGraphics: CkGraphics = useCkGraphics();
+  const surface: Surface | undefined = useCkSurface();
+  const { xDisplay, yDisplay, plotRect } = useChartDisplay();
   const {
     axis: { left: leftAxisProps, bottom: bottomAxisProps },
   } = useChartContext();
 
-  const { paintRepository: paintRepository } = useChartThemeContext();
+  const { paintRepository: paintRepository } = useChartTheme();
 
   useLayoutEffect(() => {
     const leftAxis = leftAxisProps

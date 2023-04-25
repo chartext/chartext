@@ -1,10 +1,10 @@
 import { CkGraphics, CkPaintRepository } from '@chartext/canvaskit';
 import { Canvas, Paint, Paragraph, TextAlign } from 'canvaskit-wasm';
-import { ChartSurfaceRenderer, Rect } from '@/chart.types';
-import { AxisPosition } from '@/axis/axis.types';
-import { CoordDisplay } from '@/coord/coordDisplay';
-import { AxisTheme } from '@/theme/chartTheme.types';
-import { CoordType } from '@/coord/coord.types';
+import { ChartSurfaceRenderer, Rect } from '@/Chart.types';
+import { AxisPosition } from '@/axis/Axis.types';
+import { CoordDisplay } from '@/coord/CoordDisplay';
+import { AxisTheme } from '@/theme/ChartTheme.types';
+import { CoordType } from '@/coord/Coord.types';
 
 type AxisSurfaceRendererProps = {
   ckGraphics: CkGraphics;

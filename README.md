@@ -2,7 +2,7 @@
 
 React Skia Chart
 
-- [Project](https://github.com/orgs/chartext/projects/1)
+- [Project](https://github.com/orgs/chartext/projects/2)
 - [MIT License](./LICENSE)
 
 ## Packages
@@ -46,10 +46,10 @@ WIP
 
 | Command | Description |
 | - | - |
-| pnpm canvaskit:dist |  |
 | pnpm canvaskit:test | |
-| pnpm chart:dist | |
+| pnpm canvaskit:dist | |
 | pnpm chart:test | |
+| pnpm chart:dist | |
 | pnpm examples:chart | |
 
 ## [vscode](https://code.visualstudio.com/)

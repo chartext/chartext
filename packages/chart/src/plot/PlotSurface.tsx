@@ -1,12 +1,12 @@
-import { CkGraphics, useCkGraphicsContext, useCkSurfaceContext } from '@chartext/canvaskit';
+import { useChartDisplay } from '@/ChartDisplayProvider';
+import { CkGraphics, useCkGraphics, useCkSurface } from '@chartext/canvaskit';
 import { Canvas, Surface } from 'canvaskit-wasm';
 import { useLayoutEffect } from 'react';
-import { useChartDisplayContext } from '@/ChartDisplay.context';
 
 export function PlotSurface() {
-  const ckGraphics: CkGraphics = useCkGraphicsContext();
-  const surface: Surface = useCkSurfaceContext();
-  const { seriesDisplays } = useChartDisplayContext();
+  const ckGraphics: CkGraphics = useCkGraphics();
+  const surface: Surface = useCkSurface();
+  const { seriesDisplays } = useChartDisplay();
 
   const {
     CK: { TRANSPARENT },

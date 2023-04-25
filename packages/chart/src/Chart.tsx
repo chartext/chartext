@@ -1,15 +1,15 @@
-import { CkSurface } from '@chartext/canvaskit';
-import { lazy, Suspense, useMemo } from 'react';
 import { AxisSurface } from '@/axis/AxisSurface';
 import { ChartContext } from '@/Chart.context';
-import { ChartProps, Margin, Rect } from '@/chart.types';
-import { defaultAxisSurfaceProps, defaultChartProps, defaultSeriesTheme } from '@/chartDefaults';
+import { ChartProps, Margin, Rect } from '@/Chart.types';
+import { defaultAxisSurfaceProps, defaultChartProps, defaultSeriesTheme } from '@/ChartDefaults';
+import { ChartDisplayProvider } from '@/ChartDisplayProvider';
+import { ChartEmpty } from '@/ChartEmpty';
 import { ChartLoading } from '@/ChartLoading';
 import { PlotSurface } from '@/plot/PlotSurface';
-import { ChartThemeProvider } from '@/theme/ChartTheme.context';
-import { ChartDisplayProvider } from '@/ChartDisplay.context';
-import { AxisTheme } from '@/theme/chartTheme.types';
-import { ChartEmpty } from '@/ChartEmpty';
+import { AxisTheme } from '@/theme/ChartTheme.types';
+import { ChartThemeProvider } from '@/theme/ChartThemeProvider';
+import { CkSurface } from '@chartext/canvaskit';
+import { lazy, Suspense, useMemo } from 'react';
 
 const CkGraphicsProviderLazy = lazy(() =>
   import('@chartext/canvaskit').then(({ CkGraphicsProvider }) => ({

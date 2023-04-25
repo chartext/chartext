@@ -12,33 +12,30 @@
     "test": "pnpm -r test",
     "tsc": "pnpm -r tsc",
     "dist": "pnpm -r dist",
-
     "canvaskit:clean": "pnpm --filter @chartext/canvaskit clean",
     "canvaskit:test": "pnpm --filter @chartext/canvaskit test",
     "canvaskit:tsc": "pnpm --filter @chartext/canvaskit tsc",
     "canvaskit:dist": "pnpm --filter @chartext/canvaskit dist",
-
     "chart:clean": "pnpm --filter @chartext/chart clean",
     "chart:test": "pnpm --filter @chartext/chart test",
     "chart:tsc": "pnpm --filter @chartext/chart tsc",
     "chart:dist": "pnpm --filter @chartext/chart dist",
-
     "examples:chart": "pnpm --filter @examples/chart dev",
-
     "syncpack:fix-mismatches": "syncpack fix-mismatches",
     "syncpack:format": "syncpack format",
     "syncpack:list": "syncpack list",
-
     "lint": "eslint --cache \"**/*.{,ts,tsx}\"",
     "lint:fix": "eslint --cache --fix \"**/*.{ts,tsx}\""
   },
   "devDependencies": {
     "@alloc/fast-rimraf": "^1.0.8",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@tsconfig/vite-react": "^1.0.1",
     "@types/babel__core": "^7.20.0",
     "@types/react": "^18.0.32",
     "@types/react-dom": "^18.0.11",
+    "@types/testing-library__jest-dom": "^5.14.5",
     "@types/tinycolor2": "^1.4.3",
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.1",

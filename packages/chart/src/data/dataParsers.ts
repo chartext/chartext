@@ -1,4 +1,4 @@
-import { CoordType, CoordTypeName } from '@/coord/coord.types';
+import { CoordType, CoordTypeName } from '@/coord/Coord.types';
 
 export function parseCoord(coord: CoordType): CoordTypeName | null {
   switch (typeof coord) {

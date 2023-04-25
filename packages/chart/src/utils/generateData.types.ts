@@ -1,5 +1,5 @@
-import { CoordType } from '@/coord/coord.types';
-import { SeriesType } from '@/series/series.types';
+import { CoordType } from '../coord/Coord.types';
+import { SeriesType } from '../series/Series.types';
 
 export type DataType = 'int' | 'number' | 'currency' | 'date';
 

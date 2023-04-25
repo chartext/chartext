@@ -1,5 +1,5 @@
-import { CoordProps } from '@/coord/coord.types';
-import { Series } from '@/series/series.types';
+import { CoordProps } from '@/coord/Coord.types';
+import { Series } from '@/series/Series.types';
 
 export type Plot = {
   readonly xProps?: CoordProps;

@@ -1,12 +1,6 @@
-import { Rect } from '@/chart.types';
-import { AxisType, TickInterval } from '@/axis/axis.types';
-import { CoordType } from '@/coord/coord.types';
-
-export type CoordMeta = {
-  viewCoord: number;
-  value: CoordType;
-  displayValue?: string;
-};
+import { Rect } from '@/Chart.types';
+import { AxisType, TickInterval } from '@/axis/Axis.types';
+import { CoordType } from '@/coord/Coord.types';
 
 export type CoordDisplayProps<T extends CoordType> = {
   axisType: AxisType;

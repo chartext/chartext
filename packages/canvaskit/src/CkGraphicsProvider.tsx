@@ -1,12 +1,12 @@
+import { createContext, ReactElement, useContext, useEffect, useState } from 'react';
+import { CkGraphics } from '@/CkGraphics';
 import CanvasKitInit, { CanvasKit, FontMgr, Typeface } from 'canvaskit-wasm';
-import { useEffect, useState } from 'react';
-import { CkGraphics } from '../ckGraphics';
 
-export async function fontFetch(url: string): Promise<ArrayBuffer> {
+async function fontFetch(url: string): Promise<ArrayBuffer> {
   return fetch(url).then((response) => response.arrayBuffer());
 }
 
-export async function webGpu(CK: CanvasKit) {
+async function webGpu(CK: CanvasKit) {
   try {
     const adapter = await navigator.gpu.requestAdapter();
 
@@ -25,14 +25,19 @@ export async function webGpu(CK: CanvasKit) {
   return undefined;
 }
 
-export async function initCanvasKit(): Promise<CanvasKit> {
+async function initCanvasKit(): Promise<CanvasKit> {
   return CanvasKitInit({
     locateFile: (file: string) => `https://unpkg.com/canvaskit-wasm@0.38.0/bin/${file}`,
     // locateFile: () => CanvasKitWasm as string,
   }).then((CK: CanvasKit) => CK);
 }
 
-export function useCkGraphics(): CkGraphics | null {
+export const CkGraphicsContext = createContext<CkGraphics>({} as CkGraphics);
+export const useCkGraphics = () => useContext(CkGraphicsContext);
+
+export function CkGraphicsProvider(props: { children: ReactElement }) {
+  const { children } = props;
+
   const [ckGraphics, setCkGraphics] = useState<CkGraphics | null>(null);
 
   useEffect(() => {
@@ -67,5 +72,7 @@ export function useCkGraphics(): CkGraphics | null {
       });
   }, []);
 
-  return ckGraphics;
+  return ckGraphics ? (
+    <CkGraphicsContext.Provider value={ckGraphics}>{children}</CkGraphicsContext.Provider>
+  ) : null;
 }

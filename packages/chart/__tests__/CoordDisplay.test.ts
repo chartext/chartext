@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CoordDisplay } from '@/coord/coordDisplay';
+import { CoordDisplay } from '@/coord/CoordDisplay';
 import { generateData } from '@/utils/generateData';
 
 describe('CoordDisplay tests', () => {

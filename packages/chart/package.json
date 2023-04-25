@@ -21,9 +21,9 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "clean": "rimraf dist && rimraf build",
-    "tsc": "tsc -b",
+    "tsc": "pnpm clean tsc -b",
     "build": "pnpm tsc && vite build",
-    "test": "vitest run",
+    "test": "pnpm tsc && vitest run",
     "dist": "pnpm clean && vite build && tsc -b ./tsconfig.dist.json"
   },
   "peerDependencies": {

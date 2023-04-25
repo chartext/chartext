@@ -1,24 +1,24 @@
-import { CkPaintRepository, useCkGraphicsContext } from '@chartext/canvaskit';
+import { CkPaintRepository, useCkGraphics } from '@chartext/canvaskit';
 import { PropsWithChildren, createContext, useContext, useMemo } from 'react';
-import { AxisTheme, SeriesTheme } from '@/theme/chartTheme.types';
-import { Margin } from '@/chart.types';
+import { AxisTheme, SeriesTheme } from '@/theme/ChartTheme.types';
+import { Margin } from '@/Chart.types';
 
-export type ChartThemeContextProps = {
+type ChartThemeContextProps = {
   paintRepository: CkPaintRepository;
   axisThemes: Margin<AxisTheme>;
   seriesTheme: SeriesTheme;
 };
 
-export type ChartThemeProviderProps = {
+type ChartThemeProviderProps = {
   axisThemes: Margin<AxisTheme>;
   seriesTheme: SeriesTheme;
 };
 
 const ChartThemeContext = createContext<ChartThemeContextProps>({} as ChartThemeContextProps);
-export const useChartThemeContext = () => useContext(ChartThemeContext);
+export const useChartTheme = () => useContext(ChartThemeContext);
 
 export function ChartThemeProvider(props: PropsWithChildren<ChartThemeProviderProps>) {
-  const ckGraphics = useCkGraphicsContext();
+  const ckGraphics = useCkGraphics();
 
   const { axisThemes, seriesTheme, children } = props;
 
