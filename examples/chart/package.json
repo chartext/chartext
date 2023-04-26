@@ -16,6 +16,8 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "tsc": "tsc -b",
-    "dev": "vite --host 127.0.0.1"
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite --host 127.0.0.1 preview"
   }
 }

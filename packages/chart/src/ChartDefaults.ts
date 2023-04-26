@@ -4,11 +4,11 @@ import { SeriesTheme } from '@/theme/ChartTheme.types';
 
 const defaultSeriesTheme: SeriesTheme = {
   colors: [
-    '#007d79',
     '#33b1ff',
+    '#007d79',
+    '#8a3ffc',
     '#fa4d56',
     '#6fdc8c',
-    '#8a3ffc',
     '#ba4e00',
     '#bae6ff',
     '#d12771',

@@ -3,9 +3,7 @@ import { SeriesDisplay, SeriesDisplayProps } from '@/series/SeriesDisplay';
 
 export class ScatterSeries implements SeriesDisplay {
   readonly #viewCoords: [number, number][];
-
   readonly #paint: Paint;
-
   #isDeleted = false;
 
   constructor(props: SeriesDisplayProps) {

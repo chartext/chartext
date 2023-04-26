@@ -14,10 +14,10 @@ import { CoordDisplay, CoordDisplayProps } from '@/coord/CoordDisplay';
 import { DatePart, DateSpacing } from '@/data/dates.types';
 
 export class DateCoordDisplay extends CoordDisplay<Date> {
-  #min: number;
-  #max: number;
-  #spacing: number;
-  #datePart: DatePart;
+  readonly #min: number;
+  readonly #max: number;
+  readonly #spacing: number;
+  readonly #datePart: DatePart;
 
   constructor(props: CoordDisplayProps<Date>) {
     super(props);

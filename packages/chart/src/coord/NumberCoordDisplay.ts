@@ -4,9 +4,9 @@ import { CoordDisplay, CoordDisplayProps } from '@/coord/CoordDisplay';
  * @todo Chrome limitation Math.min and Math.max
  */
 export class NumberCoordDisplay extends CoordDisplay<number> {
-  #min: number;
-  #max: number;
-  #spacing: number;
+  readonly #min: number;
+  readonly #max: number;
+  readonly #spacing: number;
 
   constructor(props: CoordDisplayProps<number>) {
     super(props);

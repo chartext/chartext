@@ -5,9 +5,7 @@ import { SeriesDisplay, SeriesDisplayProps, sortedSeriesData } from '@/series/Se
 
 export class LineSeries implements SeriesDisplay {
   readonly #path: Path;
-
   readonly #paint: Paint;
-
   #isDeleted = false;
 
   constructor(props: SeriesDisplayProps) {
