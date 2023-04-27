@@ -1,12 +1,12 @@
-import { Rect } from '@/Chart.types';
 import { AxisType, TickInterval } from '@/axis/Axis.types';
 import { CoordType } from '@/coord/Coord.types';
+import { Rect } from '@/ChartLayout.types';
 
 export type CoordDisplayProps<T extends CoordType> = {
   axisType: AxisType;
   data: T[];
   plotRect: Rect<number>;
-  maxTicks?: number;
+  maxTicks: number;
 };
 
 export abstract class CoordDisplay<T extends CoordType> {
@@ -47,7 +47,7 @@ export abstract class CoordDisplay<T extends CoordType> {
     max: number,
     maxTicks: number,
   ): [min: number, max: number, spacing: number] {
-    const range = Math.abs(min - max);
+    const range = max - min;
     const niceRange = CoordDisplay.niceNum(range, false);
     const spacing = CoordDisplay.niceNum(niceRange / (maxTicks - 1), true);
     const niceMin = Math.floor(min / spacing) * spacing;

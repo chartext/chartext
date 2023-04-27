@@ -1,6 +1,7 @@
-import { CkGraphicsProvider } from '@/CkGraphicsProvider';
 import { render, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
+import { CkGraphicsProvider } from '@/CkGraphicsProvider';
+import '@testing-library/jest-dom';
 
 function CkGraphicsLoaded() {
   return <span>CkGraphics loaded</span>;

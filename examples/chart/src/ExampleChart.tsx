@@ -1,9 +1,9 @@
-import { ExampleChartContext } from '@/ExampleChart.context';
-import { Sidebar } from '@/components/Sidebar';
 import { Chart, Plot } from '@chartext/chart';
 import { Group, MantineProvider } from '@mantine/core';
 import { useViewportSize } from '@mantine/hooks';
 import { useState } from 'react';
+import { Sidebar } from '@/components/Sidebar';
+import { ExampleChartContext } from '@/ExampleChart.context';
 
 const sidebarWidth = 175;
 

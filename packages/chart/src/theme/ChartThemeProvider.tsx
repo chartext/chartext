@@ -1,7 +1,8 @@
 import { CkPaintRepository, useCkGraphics } from '@chartext/canvaskit';
 import { PropsWithChildren, createContext, useContext, useMemo } from 'react';
-import { AxisTheme, SeriesTheme } from '@/theme/ChartTheme.types';
-import { Margin } from '@/Chart.types';
+import { AxisTheme } from '@/axis/Axis.types';
+import { SeriesTheme } from '@/series/Series.types';
+import { Margin } from '@/ChartLayout.types';
 
 type ChartThemeContextProps = {
   paintRepository: CkPaintRepository;

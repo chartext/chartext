@@ -1,11 +1,11 @@
-import { useExampleChartContext } from '@/ExampleChart.context';
-import { CoordControl, CoordControlValues } from '@/components/CoordControl';
-import { SeriesControl, SeriesControlValues } from '@/components/SeriesControl';
 import { generatePlot, randomInt } from '@chartext/chart';
 import { Button, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useCallback } from 'react';
 import { FaChartLine } from 'react-icons/fa';
+import { SeriesControl, SeriesControlValues } from '@/components/SeriesControl';
+import { CoordControl, CoordControlValues } from '@/components/CoordControl';
+import { useExampleChartContext } from '@/ExampleChart.context';
 
 type RandomPlotFormProps = {
   xCoord: CoordControlValues;

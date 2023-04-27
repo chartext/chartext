@@ -1,42 +1,37 @@
-import { Canvas, Paint } from 'canvaskit-wasm';
-import { SeriesDisplay, SeriesDisplayProps } from '@/series/SeriesDisplay';
+import { Paint } from 'canvaskit-wasm';
+import {
+  SeriesData,
+  SeriesDrawProps,
+  SeriesDrawer,
+  SeriesDrawerProps,
+} from '@/series/Series.types';
 
-export class ScatterSeries implements SeriesDisplay {
-  readonly #viewCoords: [number, number][];
+export class ScatterSeries implements SeriesDrawer {
   readonly #paint: Paint;
-  #isDeleted = false;
+  readonly #data: SeriesData;
 
-  constructor(props: SeriesDisplayProps) {
+  constructor(props: SeriesDrawerProps) {
     const {
       series: { data },
       paintSet: { fill },
-      xDisplay,
-      yDisplay,
     } = props;
 
     this.#paint = fill;
+    this.#data = data;
+  }
 
-    this.#viewCoords = data.map((xy) => {
-      const { x: xValue, y: yValue } = xy;
+  draw(props: SeriesDrawProps): void {
+    const { surface, xDisplay, yDisplay } = props;
 
-      const x = xDisplay.getViewCoord(xValue);
-      const y = yDisplay.getViewCoord(yValue);
+    surface.requestAnimationFrame((canvas) => {
+      this.#data.forEach((xy) => {
+        const { x: xValue, y: yValue } = xy;
 
-      return [x, y];
+        const x = xDisplay.getViewCoord(xValue);
+        const y = yDisplay.getViewCoord(yValue);
+
+        canvas.drawCircle(x, y, 1.5, this.#paint);
+      });
     });
-  }
-
-  draw(canvas: Canvas): void {
-    this.#viewCoords.forEach(([x, y]) => {
-      canvas.drawCircle(x, y, 2, this.#paint);
-    });
-  }
-
-  delete(): void {
-    this.#isDeleted = true;
-  }
-
-  get isDeleted() {
-    return this.#isDeleted;
   }
 }

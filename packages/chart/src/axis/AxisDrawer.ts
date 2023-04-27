@@ -1,20 +1,27 @@
 import { CkGraphics, CkPaintRepository } from '@chartext/canvaskit';
 import { Canvas, Paint, Paragraph, TextAlign } from 'canvaskit-wasm';
-import { ChartSurfaceRenderer, Rect } from '@/Chart.types';
-import { AxisPosition } from '@/axis/Axis.types';
-import { CoordDisplay } from '@/coord/CoordDisplay';
-import { AxisTheme } from '@/theme/ChartTheme.types';
+import { Rect } from '@/ChartLayout.types';
+import { AxisPosition, AxisTheme } from '@/axis/Axis.types';
 import { CoordType } from '@/coord/Coord.types';
+import { CoordDisplay } from '@/coord/CoordDisplay';
+
+type AxisDrawProps = {
+  canvas: Canvas;
+  plotRect: Rect<number>;
+  tickParagraph: Paragraph;
+  paint: Paint;
+  value: CoordType;
+};
 
 type AxisSurfaceRendererProps = {
   ckGraphics: CkGraphics;
   coordDisplay: CoordDisplay<CoordType>;
-  fontSize: number;
   paintRepository: CkPaintRepository;
   position: AxisPosition;
   theme: AxisTheme;
 };
-export class Axis implements ChartSurfaceRenderer {
+
+export class AxisDrawer {
   readonly #coordDisplay: CoordDisplay<CoordType>;
   readonly #fontSize: number;
   readonly #position: AxisPosition;
@@ -26,12 +33,11 @@ export class Axis implements ChartSurfaceRenderer {
 
   constructor(props: AxisSurfaceRendererProps) {
     const {
-      fontSize,
       position,
       paintRepository,
       ckGraphics,
       coordDisplay,
-      theme: { tickColor, zeroTickColor },
+      theme: { fontSize, tickColor, zeroTickColor },
     } = props;
 
     const {
@@ -78,61 +84,75 @@ export class Axis implements ChartSurfaceRenderer {
     }
   }
 
+  private drawLeft(props: AxisDrawProps) {
+    const { canvas, paint, plotRect, tickParagraph, value } = props;
+
+    const y = this.#coordDisplay.valueToViewCoord(value, plotRect);
+    const x0 = plotRect.left - 7;
+
+    canvas.drawLine(x0, y, plotRect.right, y, paint);
+
+    CkGraphics.drawParagraph({
+      canvas,
+      paragraph: tickParagraph,
+      width: x0 - 5,
+      x: 0,
+      y: y - Math.round(this.#fontSize / 2),
+    });
+  }
+
+  private drawBottom(props: AxisDrawProps) {
+    const { canvas, paint, plotRect, tickParagraph, value } = props;
+
+    const x = this.#coordDisplay.valueToViewCoord(value, plotRect);
+    const y1 = plotRect.bottom + 7;
+
+    canvas.drawLine(x, plotRect.top, x, y1, paint);
+
+    // @todo width is a hack. need to find the paragraph width
+
+    CkGraphics.drawParagraph({
+      canvas,
+      paragraph: tickParagraph,
+      width: 30,
+      x: x - 15,
+      y: y1 + 5,
+    });
+  }
+
   draw(canvas: Canvas, plotRect: Rect<number>) {
-    if (this.isDeleted) return;
+    if (this.#isDeleted) return;
 
     this.#tickParagraphs.forEach(([value, tickParagraph]) => {
       const paint: Paint = value === 0 ? this.#zeroTickPaint : this.#tickPaint;
 
+      const axisDrawProps: AxisDrawProps = {
+        canvas,
+        paint,
+        plotRect,
+        tickParagraph,
+        value,
+      };
+
       switch (this.#position) {
         case 'left':
-          {
-            const y = this.#coordDisplay.valueToViewCoord(value, plotRect);
-            const x0 = plotRect.left - 7;
-
-            canvas.drawLine(x0, y, plotRect.right, y, paint);
-
-            CkGraphics.drawParagraph({
-              canvas,
-              paragraph: tickParagraph,
-              width: x0 - 5,
-              x: 0,
-              y: y - Math.round(this.#fontSize / 2),
-            });
-          }
+          this.drawLeft(axisDrawProps);
           break;
         case 'bottom':
-          {
-            const x = this.#coordDisplay.valueToViewCoord(value, plotRect);
-            const y1 = plotRect.bottom + 7;
-
-            canvas.drawLine(x, plotRect.top, x, y1, paint);
-
-            // @todo width is a hack. need to find the paragraph width
-
-            CkGraphics.drawParagraph({
-              canvas,
-              paragraph: tickParagraph,
-              width: 30,
-              x: x - 15,
-              y: y1 + 5,
-            });
-          }
+          this.drawBottom(axisDrawProps);
           break;
         case 'top':
         case 'right':
           throw new Error('AxisPosition is not implemented', { cause: this.#position });
-        default:
-          throw new Error('Invalid position', { cause: this.#position });
       }
     });
   }
 
-  public get isDeleted() {
+  get isDeleted(): boolean {
     return this.#isDeleted;
   }
 
-  delete() {
+  delete(): void {
     this.#isDeleted = true;
     this.#tickParagraphs.forEach(([, p]) => CkGraphics.delete(p));
   }

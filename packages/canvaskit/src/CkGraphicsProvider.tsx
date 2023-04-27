@@ -1,6 +1,6 @@
 import { createContext, ReactElement, useContext, useEffect, useState } from 'react';
-import { CkGraphics } from '@/CkGraphics';
 import CanvasKitInit, { CanvasKit, FontMgr, Typeface } from 'canvaskit-wasm';
+import { CkGraphics } from '@/CkGraphics';
 
 async function fontFetch(url: string): Promise<ArrayBuffer> {
   return fetch(url).then((response) => response.arrayBuffer());

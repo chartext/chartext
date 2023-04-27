@@ -1,0 +1,56 @@
+extends:
+  - eslint:recommended
+  - plugin:import/recommended
+  - plugin:import/typescript
+  - plugin:@typescript-eslint/recommended
+  - plugin:@typescript-eslint/strict
+  - plugin:react/recommended
+  - plugin:react/jsx-runtime
+  - plugin:react-hooks/recommended
+  - plugin:prettier/recommended
+parser: '@typescript-eslint/parser'
+parserOptions:
+  EXPERIMENTAL_useSourceOfProjectReferenceRedirect: true
+  project:
+    - examples/*/tsconfig.json
+    - packages/*/tsconfig.json
+env:
+  browser: true
+  es6: true
+  node: true
+settings:
+  react:
+    version: 'detect'
+  import/parsers:
+    '@typescript-eslint/parser':
+      - .ts
+      - .tsx
+  import/resolver:
+    typescript:
+      alwaysTryTypes: true
+      project:
+        - examples/*/tsconfig.json
+        - packages/*/tsconfig.json
+rules:
+  import/no-cycle: error
+  import/no-default-export: error
+  import/no-extraneous-dependencies: error
+  import/no-relative-packages: error
+  import/order: error
+overrides:
+  - files:
+      - examples/**/*.{ts,tsx}
+      - packages/**/*.{ts,tsx}
+    rules:
+      '@typescript-eslint/consistent-type-definitions': off
+  - files:
+      - examples/**/*.test.{ts,tsx}
+      - packages/**/*.test.{ts,tsx}
+    rules:
+      import/no-extraneous-dependencies: off
+  - files:
+      - vite.config.ts
+    rules:
+      import/no-default-export: off
+      import/no-extraneous-dependencies: off
+

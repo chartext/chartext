@@ -1,17 +1,15 @@
-import { Rect } from '@/Chart.types';
+import { describe, it } from 'vitest';
+import { Rect } from '@/ChartLayout.types';
 import { CoordDisplay } from '@/coord/CoordDisplay';
 import { NumberCoordDisplay } from '@/coord/NumberCoordDisplay';
 import { generateIntData } from '@/utils/generateData';
-import { describe, it } from 'vitest';
 
 describe('NumberCoordDisplay', () => {
   it('Logs number displays', () => {
     const data: number[] = generateIntData(-323, 678, 100);
 
-    const minValue = Math.min(...data);
-    const maxValue = Math.max(...data);
-
-    const [min, max, spacing] = CoordDisplay.roundedMinMax(minValue, maxValue, 10);
+    const xMaxTicks = 10;
+    const yMaxTicks = 20;
 
     const plotRect: Rect<number> = {
       top: 0,
@@ -24,18 +22,17 @@ describe('NumberCoordDisplay', () => {
       axisType: 'x',
       data,
       plotRect,
+      maxTicks: xMaxTicks,
     });
 
     const yDisplay = new NumberCoordDisplay({
       axisType: 'y',
       data,
       plotRect,
+      maxTicks: yMaxTicks,
     });
 
     console.log({
-      min,
-      max,
-      spacing,
       xDisplay,
       yDisplay,
     });

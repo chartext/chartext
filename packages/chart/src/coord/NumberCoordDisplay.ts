@@ -13,7 +13,7 @@ export class NumberCoordDisplay extends CoordDisplay<number> {
 
     this.toNumber = this.toNumber.bind(this);
 
-    const { data, maxTicks = 10 } = props;
+    const { data, maxTicks } = props;
 
     const minValue = Math.min(...data);
     const maxValue = Math.max(...data);

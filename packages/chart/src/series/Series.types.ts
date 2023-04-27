@@ -1,4 +1,7 @@
+import { CkGraphics, CkPaintSet } from '@chartext/canvaskit';
+import { Paint, Surface } from 'canvaskit-wasm';
 import { CoordType, XY } from '@/coord/Coord.types';
+import { CoordDisplay } from '@/coord/CoordDisplay';
 
 export type BoxData<O extends CoordType> = {
   readonly one: O;
@@ -12,8 +15,6 @@ export type BoxData<O extends CoordType> = {
 
 export type SeriesData = XY[];
 
-// export type SeriesDataConfig = (Partial<XY> | undefined)[];
-
 export type SeriesType = 'line' | 'scatter' | 'box' | 'area' | 'bar';
 
 export type Series = {
@@ -21,3 +22,28 @@ export type Series = {
   readonly name: string;
   readonly data: SeriesData;
 };
+
+export type SeriesTheme = {
+  colors: string[];
+};
+
+export type SeriesPaint = {
+  fillPaint: Paint;
+  strokePaint: Paint;
+};
+
+export type SeriesDrawerProps = {
+  paintSet: CkPaintSet;
+  series: Series;
+};
+
+export type SeriesDrawProps = {
+  surface: Surface;
+  ckGraphics: CkGraphics;
+  xDisplay: CoordDisplay<CoordType>;
+  yDisplay: CoordDisplay<CoordType>;
+};
+
+export interface SeriesDrawer {
+  draw(props: SeriesDrawProps): void;
+}

@@ -1,41 +1,43 @@
-import { useChartContext } from '@/Chart.context';
-import { useChartDisplay } from '@/ChartDisplayProvider';
-import { Axis } from '@/axis/Axis';
-import { useChartTheme } from '@/theme/ChartThemeProvider';
 import { CkGraphics, useCkGraphics, useCkSurface } from '@chartext/canvaskit';
 import { Canvas, Surface } from 'canvaskit-wasm';
 import { useLayoutEffect } from 'react';
+import { useChartContext } from '@/ChartProvider';
+import { AxisDrawer } from '@/axis/AxisDrawer';
+import { usePlotDisplay } from '@/plot/PlotDisplayProvider';
+import { useChartTheme } from '@/theme/ChartThemeProvider';
 
 export function AxisSurface() {
   const ckGraphics: CkGraphics = useCkGraphics();
   const surface: Surface | undefined = useCkSurface();
-  const { xDisplay, yDisplay, plotRect } = useChartDisplay();
+  const { xDisplay, yDisplay } = usePlotDisplay();
   const {
+    plotRect,
     axis: { left: leftAxisProps, bottom: bottomAxisProps },
   } = useChartContext();
 
-  const { paintRepository: paintRepository } = useChartTheme();
+  const {
+    paintRepository: paintRepository,
+    axisThemes: { left: leftTheme, bottom: bottomTheme },
+  } = useChartTheme();
 
   useLayoutEffect(() => {
-    const leftAxis = leftAxisProps
-      ? new Axis({
+    const leftAxis = leftTheme
+      ? new AxisDrawer({
           ckGraphics,
           coordDisplay: yDisplay,
-          fontSize: leftAxisProps.fontSize!,
           paintRepository,
           position: 'left',
-          theme: leftAxisProps.theme!,
+          theme: leftTheme,
         })
       : null;
 
-    const bottomAxis = bottomAxisProps
-      ? new Axis({
+    const bottomAxis = bottomTheme
+      ? new AxisDrawer({
           ckGraphics,
           coordDisplay: xDisplay,
-          fontSize: bottomAxisProps.fontSize!,
           paintRepository,
           position: 'bottom',
-          theme: bottomAxisProps.theme!,
+          theme: bottomTheme,
         })
       : null;
 
@@ -55,15 +57,17 @@ export function AxisSurface() {
       bottomAxis?.delete();
     };
   }, [
-    surface,
-    ckGraphics.CK.TRANSPARENT,
-    plotRect,
-    leftAxisProps,
-    yDisplay,
-    ckGraphics,
     bottomAxisProps,
-    xDisplay,
+    bottomTheme,
+    ckGraphics,
+    ckGraphics.CK.TRANSPARENT,
+    leftAxisProps,
+    leftTheme,
     paintRepository,
+    plotRect,
+    surface,
+    xDisplay,
+    yDisplay,
   ]);
 
   return null;

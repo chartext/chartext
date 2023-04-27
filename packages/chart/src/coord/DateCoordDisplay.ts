@@ -24,7 +24,7 @@ export class DateCoordDisplay extends CoordDisplay<Date> {
 
     this.toNumber = this.toNumber.bind(this);
 
-    const { data: dates, maxTicks = 10 } = props;
+    const { data: dates, maxTicks } = props;
 
     const minDate = min(dates);
     const maxDate = max(dates);

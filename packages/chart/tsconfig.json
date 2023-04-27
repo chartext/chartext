@@ -12,5 +12,6 @@
   "references": [
     { "path": "../canvaskit" },
   ],
-  "include": ["src", "__tests__", "vite.config.ts"]
+  "include": ["src", "__tests__", "vite.config.ts"],
+  "exclude": ["node_modules"]
 }

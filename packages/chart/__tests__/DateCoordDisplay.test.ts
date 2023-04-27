@@ -1,9 +1,9 @@
-import { Rect } from '@/Chart.types';
+import { max, min } from 'date-fns';
+import { describe, it } from 'vitest';
+import { Rect } from '@/ChartLayout.types';
 import { DateCoordDisplay } from '@/coord/DateCoordDisplay';
 import { roundDate } from '@/data/dates';
 import { generateDateData } from '@/utils/generateData';
-import { max, min } from 'date-fns';
-import { describe, it } from 'vitest';
 
 describe('DateCoordDisplay', () => {
   it('min max test', () => {
@@ -37,12 +37,14 @@ describe('DateCoordDisplay', () => {
       data: dates,
       axisType: 'x',
       plotRect,
+      maxTicks: 10,
     });
 
     const yDateDisplay = new DateCoordDisplay({
       data: dates,
       axisType: 'y',
       plotRect,
+      maxTicks: 10,
     });
 
     console.log({

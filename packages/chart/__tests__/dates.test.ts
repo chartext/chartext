@@ -1,7 +1,7 @@
+import { describe, expect, it } from 'vitest';
 import { roundDate } from '@/data/dates';
 import { DatePart } from '@/data/dates.types';
 import { randomDate } from '@/utils/random';
-import { describe, expect, it } from 'vitest';
 
 function randomDates(
   datePart: DatePart,

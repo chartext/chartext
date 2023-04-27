@@ -1,6 +1,7 @@
-import { ChartProps, Margin } from '@/Chart.types';
+import { ChartProps } from '@/Chart.types';
+import { Margin } from '@/ChartLayout.types';
 import { AxisProps } from '@/axis/Axis.types';
-import { SeriesTheme } from '@/theme/ChartTheme.types';
+import { SeriesTheme } from '@/series/Series.types';
 
 const defaultSeriesTheme: SeriesTheme = {
   colors: [
@@ -22,10 +23,10 @@ const defaultSeriesTheme: SeriesTheme = {
 };
 
 const defaultAxisProps: Omit<AxisProps, 'position'> = {
-  fontSize: 12,
   showZero: true,
   size: 50,
   theme: {
+    fontSize: 12,
     tickColor: 'rgb(131, 131, 131)',
     zeroTickColor: 'rgb(197, 197, 197)',
   },
@@ -49,6 +50,7 @@ const defaultChartProps: ChartProps = {
   backgroundColor: 'rgb(30, 30, 30)',
   seriesTheme: defaultSeriesTheme,
   axis: defaultAxisSurfaceProps,
+  plot: undefined,
 };
 
 export { defaultSeriesTheme, defaultAxisProps, defaultAxisSurfaceProps, defaultChartProps };

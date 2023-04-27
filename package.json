@@ -24,8 +24,8 @@
     "syncpack:fix-mismatches": "syncpack fix-mismatches",
     "syncpack:format": "syncpack format",
     "syncpack:list": "syncpack list",
-    "lint": "eslint packages/*/src --ext .ts,.tsx --config .eslintrc.cjs",
-    "prepare": "husky install"
+    "lint": "eslint --cache --ext .ts,.tsx, --config .eslintrc.yml examples/* packages/*",
+    "lint:fix": "pnpm lint --fix"
   },
   "devDependencies": {
     "@alloc/fast-rimraf": "^1.0.8",
@@ -46,7 +46,6 @@
     "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-no-relative-import-paths": "^1.5.2",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",

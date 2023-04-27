@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
+    "bezier",
     "canvaskit",
     "chartext",
     "embind",
@@ -13,6 +14,7 @@
     "tinycolor",
     "treeshake",
     "tsbuildinfo",
+    "vite",
     "webgpu"
   ],
   "typescript.preferences.importModuleSpecifier": "non-relative",

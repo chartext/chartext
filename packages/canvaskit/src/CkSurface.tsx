@@ -1,7 +1,7 @@
-import { CkGraphics } from '@/CkGraphics';
-import { useCkGraphics } from '@/CkGraphicsProvider';
 import { Canvas, Surface, WebGPUCanvasContext } from 'canvaskit-wasm';
 import { PropsWithChildren, createContext, useContext, useEffect, useRef, useState } from 'react';
+import { CkGraphics } from '@/CkGraphics';
+import { useCkGraphics } from '@/CkGraphicsProvider';
 
 type CkSurfaceProps = {
   height: number;

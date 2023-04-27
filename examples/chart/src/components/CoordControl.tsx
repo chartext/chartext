@@ -1,4 +1,3 @@
-import { NumberRangeControl } from '@/components/NumberRangeControl';
 import { CoordRange, CoordType } from '@chartext/chart';
 import {
   NumberInputProps,
@@ -7,6 +6,7 @@ import {
   Stack,
   Text,
 } from '@mantine/core';
+import { NumberRangeControl } from '@/components/NumberRangeControl';
 
 export type CoordControlValues = {
   coordType: CoordType;
