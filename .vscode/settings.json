@@ -1,22 +1,4 @@
 {
-  "cSpell.words": [
-    "bezier",
-    "canvaskit",
-    "chartext",
-    "embind",
-    "mantine",
-    "preinstall",
-    "quantiles",
-    "roboto",
-    "skia",
-    "syncpack",
-    "threaddot",
-    "tinycolor",
-    "treeshake",
-    "tsbuildinfo",
-    "vite",
-    "webgpu"
-  ],
   "typescript.preferences.importModuleSpecifier": "non-relative",
-  "eslint.packageManager": "pnpm"
+  "eslint.packageManager": "pnpm",
 }

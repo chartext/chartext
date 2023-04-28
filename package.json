@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@alloc/fast-rimraf": "^1.0.8",
+    "@cspell/eslint-plugin": "^6.31.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@tsconfig/vite-react": "^1.0.1",
@@ -53,7 +54,6 @@
     "happy-dom": "^9.1.0",
     "husky": "^8.0.0",
     "lint-staged": "^13.2.1",
-    "prettier": "2.8.7",
     "syncpack": "^9.8.4",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.0.3",
