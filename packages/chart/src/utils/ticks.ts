@@ -5,7 +5,7 @@ function niceNum(range: number, round: boolean): number {
   const tickInterval = (() => {
     if (round) {
       if (fraction < 1.5) return 1;
-      if (fraction < 2) return 3;
+      if (fraction < 3) return 2;
       if (fraction < 7) return 5;
     } else {
       if (fraction <= 1) return 1;
@@ -14,6 +14,12 @@ function niceNum(range: number, round: boolean): number {
     }
     return 10;
   })();
+
+  console.log({
+    exponent,
+    fraction,
+    tickInterval,
+  });
 
   return tickInterval * 10 ** exponent;
 }
@@ -28,6 +34,14 @@ export function numberTicks(
   const spacing = niceNum(niceRange / (maxTicks - 1), true);
   const niceMin = Math.floor(min / spacing) * spacing;
   const niceMax = Math.ceil(max / spacing) * spacing;
+
+  console.log({
+    range,
+    niceRange,
+    spacing,
+    niceMin,
+    niceMax,
+  });
 
   return [niceMin, niceMax, spacing];
 }
