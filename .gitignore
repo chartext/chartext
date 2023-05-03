@@ -8,16 +8,9 @@ build
 # misc
 .DS_Store
 .gitconfig
-.vitest
-
+.eslintcache
 *.log*
 
 # app config
 .idea
 .vscode/launch.json
-
-# build
-tsconfig.tsbuildinfo
-tsconfig.dist.tsbuildinfo
-
-.eslintcache

@@ -21,14 +21,18 @@ export class ScatterSeries implements SeriesDrawer {
   }
 
   draw(props: SeriesDrawProps): void {
-    const { surface, xDisplay, yDisplay } = props;
+    const {
+      seriesSurfaceRect,
+      surface,
+      xyCoordLayout: { xCoordLayout, yCoordLayout },
+    } = props;
 
     surface.requestAnimationFrame((canvas) => {
       this.#data.forEach((xy) => {
         const { x: xValue, y: yValue } = xy;
 
-        const x = xDisplay.getViewCoord(xValue);
-        const y = yDisplay.getViewCoord(yValue);
+        const x = xCoordLayout.getScreenCoord(xValue, seriesSurfaceRect);
+        const y = yCoordLayout.getScreenCoord(yValue, seriesSurfaceRect);
 
         canvas.drawCircle(x, y, 1.5, this.#paint);
       });

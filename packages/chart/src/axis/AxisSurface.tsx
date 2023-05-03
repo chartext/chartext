@@ -1,73 +1,61 @@
 import { CkGraphics, useCkGraphics, useCkSurface } from '@chartext/canvaskit';
 import { Canvas, Surface } from 'canvaskit-wasm';
 import { useLayoutEffect } from 'react';
-import { useChartContext } from '@/ChartProvider';
-import { AxisDrawer } from '@/axis/AxisDrawer';
-import { usePlotDisplay } from '@/plot/PlotDisplayProvider';
-import { useChartTheme } from '@/theme/ChartThemeProvider';
+import { Axis } from '@/axis/Axis';
+import { XAxis } from '@/axis/XAxis';
+import { YAxis } from '@/axis/YAxis';
+import { useChartContext } from '@/context/ChartProvider';
 
 export function AxisSurface() {
   const ckGraphics: CkGraphics = useCkGraphics();
-  const surface: Surface | undefined = useCkSurface();
-  const { xDisplay, yDisplay } = usePlotDisplay();
+  const surface: Surface = useCkSurface();
   const {
-    plotRect,
-    axis: { left: leftAxisProps, bottom: bottomAxisProps },
+    paintRepository,
+    seriesSurfaceRect,
+    xyAxisProps: { xAxisProps, yAxisProps },
+    xyCoordLayout: { xCoordLayout, yCoordLayout },
   } = useChartContext();
 
-  const {
-    paintRepository: paintRepository,
-    axisThemes: { left: leftTheme, bottom: bottomTheme },
-  } = useChartTheme();
-
   useLayoutEffect(() => {
-    const leftAxis = leftTheme
-      ? new AxisDrawer({
-          ckGraphics,
-          coordDisplay: yDisplay,
-          paintRepository,
-          position: 'left',
-          theme: leftTheme,
-        })
-      : null;
+    const xAxis: Axis = new XAxis(
+      xAxisProps,
+      ckGraphics,
+      xCoordLayout,
+      paintRepository,
+    );
 
-    const bottomAxis = bottomTheme
-      ? new AxisDrawer({
-          ckGraphics,
-          coordDisplay: xDisplay,
-          paintRepository,
-          position: 'bottom',
-          theme: bottomTheme,
-        })
-      : null;
+    const yAxis: Axis = new YAxis(
+      yAxisProps,
+      ckGraphics,
+      yCoordLayout,
+      paintRepository,
+    );
 
     surface.requestAnimationFrame((canvas: Canvas) => {
       canvas.clear(ckGraphics.CK.TRANSPARENT);
-      if (!leftAxis?.isDeleted) {
-        leftAxis?.draw(canvas, plotRect);
+      if (!xAxis.isDeleted) {
+        xAxis.draw(canvas, seriesSurfaceRect);
       }
 
-      if (!bottomAxis?.isDeleted) {
-        bottomAxis?.draw(canvas, plotRect);
+      if (!yAxis.isDeleted) {
+        yAxis.draw(canvas, seriesSurfaceRect);
       }
     });
 
     return () => {
-      leftAxis?.delete();
-      bottomAxis?.delete();
+      xAxis.delete();
+      yAxis.delete();
     };
   }, [
-    bottomAxisProps,
-    bottomTheme,
     ckGraphics,
     ckGraphics.CK.TRANSPARENT,
-    leftAxisProps,
-    leftTheme,
     paintRepository,
-    plotRect,
+    seriesSurfaceRect,
     surface,
-    xDisplay,
-    yDisplay,
+    xAxisProps,
+    xCoordLayout,
+    yAxisProps,
+    yCoordLayout,
   ]);
 
   return null;

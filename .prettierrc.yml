@@ -1,8 +1,3 @@
-bracketSameLine: false
-endOfLine: auto
-jsxSingleQuote: false
-printWidth: 100
 singleAttributePerLine: true
 singleQuote: true
-tabWidth: 2
 trailingComma: all

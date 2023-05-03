@@ -1,17 +1,25 @@
-export type TickInterval = 1 | 2 | 3 | 5 | 10;
+import { Position } from '@/layout/ChartLayout.types';
 
-export type AxisType = 'x' | 'y';
-
-export type AxisPosition = 'top' | 'right' | 'bottom' | 'left';
-
-export type AxisTheme = {
-  tickColor: string;
-  zeroTickColor: string;
-  fontSize: number;
-};
+export type XAxisPosition = Omit<Position, 'left' | 'right' | 'center'>;
+export type YAxisPosition = Omit<Position, 'top' | 'bottom' | 'center'>;
 
 export type AxisProps = {
+  fontSize: number;
   size: number;
   showZero: boolean;
-  theme: AxisTheme;
+  tickColor: string;
+  zeroTickColor: string;
+};
+
+export type XAxisProps = AxisProps & {
+  position: XAxisPosition;
+};
+
+export type YAxisProps = AxisProps & {
+  position: YAxisPosition;
+};
+
+export type XYAxisProps = {
+  xAxisProps: XAxisProps;
+  yAxisProps: YAxisProps;
 };

@@ -1,7 +1,8 @@
 import { CkGraphics, CkPaintSet } from '@chartext/canvaskit';
 import { Paint, Surface } from 'canvaskit-wasm';
-import { CoordType, XY } from '@/coord/Coord.types';
-import { CoordDisplay } from '@/coord/CoordDisplay';
+import { CoordProps, CoordType, XY } from '@/coord/Coord.types';
+import { XYCoordLayout } from '@/coord/CoordLayout';
+import { RectLayout } from '@/layout/ChartLayout.types';
 
 export type BoxData<O extends CoordType> = {
   readonly one: O;
@@ -24,26 +25,32 @@ export type Series = {
 };
 
 export type SeriesTheme = {
-  colors: string[];
+  readonly colors: string[];
 };
 
 export type SeriesPaint = {
-  fillPaint: Paint;
-  strokePaint: Paint;
+  readonly fillPaint: Paint;
+  readonly strokePaint: Paint;
 };
 
 export type SeriesDrawerProps = {
-  paintSet: CkPaintSet;
-  series: Series;
+  readonly paintSet: CkPaintSet;
+  readonly series: Series;
 };
 
 export type SeriesDrawProps = {
-  surface: Surface;
-  ckGraphics: CkGraphics;
-  xDisplay: CoordDisplay<CoordType>;
-  yDisplay: CoordDisplay<CoordType>;
+  readonly surface: Surface;
+  readonly ckGraphics: CkGraphics;
+  readonly seriesSurfaceRect: RectLayout;
+  readonly xyCoordLayout: XYCoordLayout;
 };
 
 export interface SeriesDrawer {
   draw(props: SeriesDrawProps): void;
 }
+
+export type Plot = {
+  readonly xProps?: CoordProps;
+  readonly yProps?: CoordProps;
+  readonly series: Series[];
+};

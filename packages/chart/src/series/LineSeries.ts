@@ -20,7 +20,12 @@ export class LineSeries implements SeriesDrawer {
   }
 
   draw(props: SeriesDrawProps) {
-    const { surface, ckGraphics, xDisplay, yDisplay } = props;
+    const {
+      seriesSurfaceRect,
+      surface,
+      ckGraphics,
+      xyCoordLayout: { xCoordLayout, yCoordLayout },
+    } = props;
 
     const startXY = this.#data[0];
 
@@ -28,8 +33,8 @@ export class LineSeries implements SeriesDrawer {
       const path = ckGraphics.createPath();
 
       const { x: startXValue, y: startYValue } = startXY;
-      const x0 = xDisplay.getViewCoord(startXValue);
-      const y0 = yDisplay.getViewCoord(startYValue);
+      const x0 = xCoordLayout.getScreenCoord(startXValue, seriesSurfaceRect);
+      const y0 = yCoordLayout.getScreenCoord(startYValue, seriesSurfaceRect);
 
       path.moveTo(x0, y0);
 
@@ -37,8 +42,8 @@ export class LineSeries implements SeriesDrawer {
         const { x: xValue, y: yValue } = xy;
 
         if (xValue && yValue) {
-          const x = xDisplay.getViewCoord(xValue);
-          const y = yDisplay.getViewCoord(yValue);
+          const x = xCoordLayout.getScreenCoord(xValue, seriesSurfaceRect);
+          const y = yCoordLayout.getScreenCoord(yValue, seriesSurfaceRect);
           path.lineTo(x, y);
         }
       });

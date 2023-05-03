@@ -7,8 +7,6 @@ extends:
   - plugin:react/recommended
   - plugin:react/jsx-runtime
   - plugin:react-hooks/recommended
-  - plugin:@cspell/recommended
-  - plugin:prettier/recommended
 parser: '@typescript-eslint/parser'
 parserOptions:
   EXPERIMENTAL_useSourceOfProjectReferenceRedirect: true
@@ -54,4 +52,3 @@ overrides:
     rules:
       import/no-default-export: off
       import/no-extraneous-dependencies: off
-

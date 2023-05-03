@@ -1,4 +1,17 @@
-import { isLeapYear, nextSaturday, previousSunday } from 'date-fns';
+import {
+  addDays,
+  addHours,
+  addMilliseconds,
+  addMinutes,
+  addMonths,
+  addQuarters,
+  addSeconds,
+  addWeeks,
+  addYears,
+  isLeapYear,
+  nextSaturday,
+  previousSunday,
+} from 'date-fns';
 import { DatePart, Months } from '@/data/dates.types';
 
 export function maxDayOfMonth(month: Months, year: number): 28 | 29 | 30 | 31 {
@@ -24,7 +37,11 @@ export function maxDayOfMonth(month: Months, year: number): 28 | 29 | 30 | 31 {
   }
 }
 
-export function roundDate(date: Date, datePart: DatePart, direction?: 'floor' | 'ceiling'): Date {
+export function roundDate(
+  date: Date,
+  datePart: DatePart,
+  direction?: 'floor' | 'ceiling',
+): Date {
   // const adjustment = direction === 'ceiling' ? 1 : 0;
 
   /* const seconds = (() => {
@@ -98,7 +115,12 @@ export function roundDate(date: Date, datePart: DatePart, direction?: 'floor' | 
         return direction === 'ceiling' ? 1 : 0;
       })();
 
-      return new Date(date.getFullYear(), date.getMonth(), date.getDate() + adjustment, 0);
+      return new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate() + adjustment,
+        0,
+      );
     }
     case 'week': {
       const adjustment = (() => {
@@ -113,5 +135,32 @@ export function roundDate(date: Date, datePart: DatePart, direction?: 'floor' | 
     }
     default:
       return date;
+  }
+}
+
+export function addDatePart(
+  date: Date,
+  datePart: DatePart,
+  amount: number,
+): Date {
+  switch (datePart) {
+    case 'year':
+      return addYears(date, amount);
+    case 'quarter':
+      return addQuarters(date, amount);
+    case 'month':
+      return addMonths(date, amount);
+    case 'week':
+      return addWeeks(date, amount);
+    case 'dayOfMonth':
+      return addDays(date, amount);
+    case 'hour':
+      return addHours(date, amount);
+    case 'minute':
+      return addMinutes(date, amount);
+    case 'second':
+      return addSeconds(date, amount);
+    case 'millisecond':
+      return addMilliseconds(date, amount);
   }
 }

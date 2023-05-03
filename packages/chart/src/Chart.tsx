@@ -1,16 +1,12 @@
 import { CkSurface } from '@chartext/canvaskit';
-import { Suspense, lazy, useMemo } from 'react';
-import { ChartProps } from '@/Chart.types';
-import { defaultAxisSurfaceProps, defaultChartProps, defaultSeriesTheme } from '@/ChartDefaults';
+import { Suspense, lazy } from 'react';
+import { PartialChartProps } from '@/Chart.types';
+import { defaultChartProps } from '@/ChartDefaults';
 import { ChartEmpty } from '@/ChartEmpty';
-import { Margin } from '@/ChartLayout.types';
 import { ChartLoading } from '@/ChartLoading';
-import { ChartProvider } from '@/ChartProvider';
-import { AxisTheme } from '@/axis/Axis.types';
 import { AxisSurface } from '@/axis/AxisSurface';
-import { PlotDisplayProvider } from '@/plot/PlotDisplayProvider';
-import { PlotSurface } from '@/plot/PlotSurface';
-import { ChartThemeProvider } from '@/theme/ChartThemeProvider';
+import { ChartProvider } from '@/context/ChartProvider';
+import { SeriesSurface } from '@/series/SeriesSurface';
 
 const CkGraphicsProviderLazy = lazy(() =>
   import('@chartext/canvaskit').then(({ CkGraphicsProvider }) => ({
@@ -18,68 +14,59 @@ const CkGraphicsProviderLazy = lazy(() =>
   })),
 );
 
-export function Chart(props: Partial<ChartProps>) {
-  const {
-    axis = defaultAxisSurfaceProps,
-    backgroundColor,
-    plot,
-    seriesTheme = defaultSeriesTheme,
-  } = props;
+export function Chart(props: PartialChartProps) {
+  const { xAxis, yAxis, plot } = props;
 
-  const axisThemes: Margin<AxisTheme> = useMemo(
-    () => ({
-      left: axis.left?.theme,
-      right: axis.right?.theme,
-      top: axis.top?.theme,
-      bottom: axis.bottom?.theme,
-    }),
-    [axis.bottom?.theme, axis.left?.theme, axis.right?.theme, axis.top?.theme],
-  );
+  const seriesColors: string[] =
+    props.seriesColors ?? defaultChartProps.seriesColors;
 
-  const chartProps: ChartProps = useMemo(
-    () => ({
-      ...defaultChartProps,
-      ...props,
-    }),
-    [props],
-  );
+  const backgroundColor =
+    props.backgroundColor ?? defaultChartProps.backgroundColor;
 
-  const {
-    size: { height, width },
-  } = chartProps;
+  const size = props.size ?? defaultChartProps.size;
+
+  const { height, width, scale } = size;
 
   return (
     <Suspense fallback={<ChartLoading />}>
       <CkGraphicsProviderLazy>
-        <ChartThemeProvider
-          axisThemes={axisThemes}
-          seriesTheme={seriesTheme}
-        >
-          <ChartProvider {...chartProps}>
-            <div style={{ height, width, backgroundColor, margin: 0 }}>
-              {plot ? (
-                <PlotDisplayProvider plot={plot}>
-                  <CkSurface
-                    height={height}
-                    width={width}
-                    zIndex={1}
-                  >
-                    <AxisSurface />
-                  </CkSurface>
-                  <CkSurface
-                    height={height}
-                    width={width}
-                    zIndex={2}
-                  >
-                    <PlotSurface plot={plot} />
-                  </CkSurface>
-                </PlotDisplayProvider>
-              ) : (
-                <ChartEmpty />
-              )}
-            </div>
-          </ChartProvider>
-        </ChartThemeProvider>
+        <div style={{ height, width, backgroundColor, margin: 0 }}>
+          {plot ? (
+            <ChartProvider
+              backgroundColor={backgroundColor}
+              plot={plot}
+              seriesColors={seriesColors}
+              size={size}
+              xAxis={{
+                ...defaultChartProps.xAxis,
+                ...xAxis,
+              }}
+              yAxis={{
+                ...defaultChartProps.yAxis,
+                ...yAxis,
+              }}
+            >
+              <CkSurface
+                height={height}
+                width={width}
+                scale={scale}
+                zIndex={1}
+              >
+                <AxisSurface />
+              </CkSurface>
+              <CkSurface
+                height={height}
+                width={width}
+                scale={scale}
+                zIndex={1}
+              >
+                <SeriesSurface />
+              </CkSurface>
+            </ChartProvider>
+          ) : (
+            <ChartEmpty />
+          )}
+        </div>
       </CkGraphicsProviderLazy>
     </Suspense>
   );

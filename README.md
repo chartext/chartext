@@ -7,16 +7,16 @@ React Skia Chart
 
 ## Packages
 
-| Package | Description |
-| - | - |
-| [@chartext/canvaskit](./packages/canvaskit/) | |
-| [@chartext/chart](./packages/chart/) | |
+| Package                                      | Description |
+| -------------------------------------------- | ----------- |
+| [@chartext/canvaskit](./packages/canvaskit/) |             |
+| [@chartext/chart](./packages/chart/)         |             |
 
 ## Examples
 
-| Example | Command | Description |
-| - | - | - |
-| [examples/chart](./examples/chart/) | `pnpm examples:chart` |  |
+| Example                             | Command               | Description |
+| ----------------------------------- | --------------------- | ----------- |
+| [examples/chart](./examples/chart/) | `pnpm examples:chart` |             |
 
 ## Plugins
 
@@ -44,13 +44,13 @@ WIP
 
 ### Scripts
 
-| Command | Description |
-| - | - |
-| pnpm canvaskit:test | |
-| pnpm canvaskit:dist | |
-| pnpm chart:test | |
-| pnpm chart:dist | |
-| pnpm examples:chart | |
+| Command             | Description |
+| ------------------- | ----------- |
+| pnpm canvaskit:test |             |
+| pnpm canvaskit:dist |             |
+| pnpm chart:test     |             |
+| pnpm chart:dist     |             |
+| pnpm examples:chart |             |
 
 ## [vscode](https://code.visualstudio.com/)
 
@@ -59,7 +59,9 @@ Use (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>) to open vscode's command
 ### Extensions
 
 See [.vscode/extensions.json](.vscode/extensions.json)
-- [EditorConfig for VS Code](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
+
+- [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker)
+- [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 - [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml)
 
@@ -73,6 +75,7 @@ See [.vscode/extensions.json](.vscode/extensions.json)
 - [Template String Converter](https://marketplace.visualstudio.com/items?itemName=meganrogge.template-string-converter)
 
 ## References
+
 - [canvaskit-wasm](https://github.com/google/skia/tree/main/modules/canvaskit)
 - [date-fns](https://github.com/date-fns/date-fns)
 - [eslint](https://github.com/eslint/eslint)

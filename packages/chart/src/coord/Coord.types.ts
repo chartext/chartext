@@ -15,3 +15,5 @@ export type XY = {
   x: CoordType;
   y: CoordType;
 };
+
+export type CoordParser<T extends CoordType> = (t: T) => number;

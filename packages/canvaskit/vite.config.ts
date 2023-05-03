@@ -1,9 +1,15 @@
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import dts from 'vite-plugin-dts';
 
 export default defineConfig({
-  plugins: [tsconfigPaths()],
+  plugins: [
+    tsconfigPaths(),
+    dts({
+      rollupTypes: true,
+    }),
+  ],
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
@@ -11,7 +17,13 @@ export default defineConfig({
       fileName: 'index',
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'react/jsx-runtime', 'canvaskit-wasm', 'tinycolor2'],
+      external: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        'canvaskit-wasm',
+        'tinycolor2',
+      ],
       treeshake: 'smallest',
       output: {
         globals: {

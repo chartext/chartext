@@ -1,14 +1,9 @@
-# dependencies
-node_modules
-
-# production
-dist
-
-# misc
 .DS_Store
+.eslintcache
 .gitconfig
-.vitest
-
-# app config
 .idea
 .vscode
+build
+dist
+node_modules
+pnpm-lock.yaml

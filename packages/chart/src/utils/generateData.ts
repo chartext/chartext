@@ -1,19 +1,33 @@
 import { CoordType, XY } from '@/coord/Coord.types';
 import { parseCoord } from '@/data/dataParsers';
-import { Plot } from '@/plot/Plot.types';
-import { Series } from '@/series/Series.types';
-import { RandomSeriesConfig, RandomSeriesProps } from '@/utils/generateData.types';
+import { Plot, Series } from '@/series/Series.types';
+import {
+  RandomSeriesConfig,
+  RandomSeriesProps,
+} from '@/utils/generateData.types';
 import { randomDate, randomInt, randomNumber } from '@/utils/random';
 
-export function generateIntData(min: number, max: number, dataCount: number): number[] {
+export function generateIntData(
+  min: number,
+  max: number,
+  dataCount: number,
+): number[] {
   return Array.from({ length: dataCount }, () => randomInt(min, max));
 }
 
-export function generateDateData(min: Date, max: Date, dataCount: number): Date[] {
+export function generateDateData(
+  min: Date,
+  max: Date,
+  dataCount: number,
+): Date[] {
   return Array.from({ length: dataCount }, () => randomDate(min, max));
 }
 
-export function generateData<T extends CoordType>(min: T, max: T, dataCount: number): T[] {
+export function generateData<T extends CoordType>(
+  min: T,
+  max: T,
+  dataCount: number,
+): T[] {
   const coordType = parseCoord(min);
 
   switch (coordType) {
@@ -26,7 +40,9 @@ export function generateData<T extends CoordType>(min: T, max: T, dataCount: num
         randomNumber(min as number, max as number),
       ) as T[];
     case 'date':
-      return Array.from({ length: dataCount }, () => randomDate(min as Date, max as Date)) as T[];
+      return Array.from({ length: dataCount }, () =>
+        randomDate(min as Date, max as Date),
+      ) as T[];
   }
 
   return [];
@@ -46,7 +62,9 @@ export function generateSeries<X extends CoordType, Y extends CoordType>(
   const xData: CoordType[] = generateData(xMin, xMax, dataCount);
   const yData: CoordType[] = generateData(yMin, yMax, dataCount);
 
-  const data: XY[] = xData.map((x, xDataIndex): XY => ({ x, y: yData[xDataIndex] ?? 0 }));
+  const data: XY[] = xData.map(
+    (x, xDataIndex): XY => ({ x, y: yData[xDataIndex] ?? 0 }),
+  );
 
   return {
     type,
