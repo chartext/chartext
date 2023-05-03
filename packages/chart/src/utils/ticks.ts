@@ -15,12 +15,6 @@ function niceNum(range: number, round: boolean): number {
     return 10;
   })();
 
-  console.log({
-    exponent,
-    fraction,
-    tickInterval,
-  });
-
   return tickInterval * 10 ** exponent;
 }
 
@@ -34,14 +28,6 @@ export function numberTicks(
   const spacing = niceNum(niceRange / (maxTicks - 1), true);
   const niceMin = Math.floor(min / spacing) * spacing;
   const niceMax = Math.ceil(max / spacing) * spacing;
-
-  console.log({
-    range,
-    niceRange,
-    spacing,
-    niceMin,
-    niceMax,
-  });
 
   return [niceMin, niceMax, spacing];
 }
