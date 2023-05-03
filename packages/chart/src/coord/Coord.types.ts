@@ -1,4 +1,4 @@
-import { DatePart } from '@/data/dates.types';
+import { DatePart } from '@/utils/dates.types';
 
 export type CoordType = number | string | Date;
 

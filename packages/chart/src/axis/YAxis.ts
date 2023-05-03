@@ -13,12 +13,51 @@ export class YAxis extends Axis {
     coordLayout: CoordLayout<CoordType>,
     paintRepository: CkPaintRepository,
   ) {
+    const { labelColor, labelFontSize } = axisProps;
+
     const textAlign: TextAlign =
       axisProps.position === 'left'
         ? ckGraphics.CK.TextAlign.Right
         : ckGraphics.CK.TextAlign.Left;
 
-    super(axisProps, ckGraphics, coordLayout, paintRepository, textAlign);
+    const labelParagraph = ckGraphics.createParagraph({
+      text: coordLayout.label,
+      fontSize: labelFontSize,
+      color: labelColor,
+      textAlign: ckGraphics.CK.TextAlign.Center,
+    });
+
+    super(
+      axisProps,
+      ckGraphics,
+      coordLayout,
+      labelParagraph,
+      paintRepository,
+      textAlign,
+    );
+  }
+
+  protected override drawLabel(
+    canvas: Canvas,
+    seriesSurfaceRect: RectLayout,
+  ): void {
+    const height = seriesSurfaceRect.bottom - seriesSurfaceRect.top;
+    const width = seriesSurfaceRect.right - seriesSurfaceRect.left;
+
+    canvas.save();
+    canvas.rotate(-90, width / 2, height / 2);
+
+    const rotatedY = canvas.getLocalToDevice()[3] ?? 0;
+
+    CkGraphics.drawParagraph({
+      canvas,
+      paragraph: this.labelParagraph,
+      width: width,
+      x: 0,
+      y: (rotatedY / 2) * -1 + 20,
+    });
+
+    canvas.restore();
   }
 
   protected override drawTick(
@@ -38,7 +77,7 @@ export class YAxis extends Axis {
       paragraph: tickParagraph,
       width: x0 - 5,
       x: 0,
-      y: y - Math.round(this.fontSize / 2),
+      y: y - Math.round(this.tickFontSize / 2),
     });
   }
 }

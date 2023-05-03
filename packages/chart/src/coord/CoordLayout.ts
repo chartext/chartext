@@ -2,18 +2,27 @@ import { CoordType } from '@/coord/Coord.types';
 import { Direction, RectLayout } from '@/layout/ChartLayout.types';
 
 export abstract class CoordLayout<T extends CoordType> {
+  readonly #label: string;
   readonly #min: T;
   readonly #max: T;
   readonly #ticks: T[];
   readonly #direction: Direction;
 
-  protected constructor(min: T, max: T, ticks: T[], direction: Direction) {
+  protected constructor(
+    label: string,
+    min: T,
+    max: T,
+    ticks: T[],
+    direction: Direction,
+  ) {
+    this.#label = label;
     this.#min = min;
     this.#max = max;
     this.#ticks = ticks;
     this.#direction = direction;
   }
 
+  abstract format(value: T): string;
   protected abstract toNumber(value: T): number;
 
   getScreenCoord(value: T, seriesSurfaceRect: RectLayout): number {
@@ -55,6 +64,10 @@ export abstract class CoordLayout<T extends CoordType> {
         );
       }
     }
+  }
+
+  get label(): string {
+    return this.#label;
   }
 
   get min(): T {

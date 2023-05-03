@@ -1,5 +1,5 @@
 import { CoordType, XY } from '@/coord/Coord.types';
-import { parseCoord } from '@/data/dataParsers';
+import { parseCoord } from '@/utils/dataParsers';
 import { Plot, Series } from '@/series/Series.types';
 import {
   RandomSeriesConfig,

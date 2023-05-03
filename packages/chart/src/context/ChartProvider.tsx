@@ -1,11 +1,11 @@
 import { CkPaintRepository, useCkGraphics } from '@chartext/canvaskit';
 import { PropsWithChildren, createContext, useContext, useMemo } from 'react';
 import { ChartProps } from '@/Chart.types';
-import { XYAxisProps } from '@/axis/Axis.types';
+import { AxisProps, XYAxisProps } from '@/axis/Axis.types';
 import { CoordProps, CoordType, CoordTypeName } from '@/coord/Coord.types';
 import { CoordLayout, XYCoordLayout } from '@/coord/CoordLayout';
 import { NumberCoordLayout } from '@/coord/NumberCoordLayout';
-import { parseCoord } from '@/data/dataParsers';
+import { parseCoord } from '@/utils/dataParsers';
 import { Direction, RectLayout, Size } from '@/layout/ChartLayout.types';
 import { Plot } from '@/series/Series.types';
 
@@ -46,14 +46,19 @@ function buildCoordLayout(
       switch (parsedType) {
         case 'integer':
         case 'float':
-          return new NumberCoordLayout(values as number[], maxTicks, direction);
+          return new NumberCoordLayout(
+            values as number[],
+            maxTicks,
+            direction,
+            coordProps,
+          );
         /* case 'date':
-          return new DateCoordDisplay({
-            orientation,
-            data: values as Date[],
-            plotRect,
-            maxTicks: 10,
-          }); */
+          return new DateCoordLayout(
+            values as Date[],
+            maxTicks,
+            direction,
+            coordProps,
+          ); */
         default:
           console.error(`Type (${parsedType}) not supported.`);
           return null;
@@ -89,6 +94,13 @@ function buildXYCoordLayout(plot: Plot): XYCoordLayout | null {
     xCoordLayout,
     yCoordLayout,
   };
+}
+
+function addAxisPropColors(colors: Set<string>, axisProps: AxisProps) {
+  colors.add(axisProps.labelColor);
+  colors.add(axisProps.tickLabelColor);
+  colors.add(axisProps.tickColor);
+  colors.add(axisProps.tickZeroColor);
 }
 
 export function ChartProvider(props: PropsWithChildren<ChartProviderProps>) {
@@ -135,27 +147,16 @@ export function ChartProvider(props: PropsWithChildren<ChartProviderProps>) {
   }, [size, xAxisProps, yAxisProps]);
 
   const paintRepository = useMemo(() => {
-    const colors: string[] = [];
+    const colors: Set<string> = new Set<string>();
 
-    colors.push(backgroundColor);
+    colors.add(backgroundColor);
 
-    colors.push(...seriesColors);
+    seriesColors.forEach(colors.add, colors);
 
-    colors.push(xAxisProps.tickColor);
-    colors.push(xAxisProps.zeroTickColor);
-
-    colors.push(yAxisProps.tickColor);
-    colors.push(yAxisProps.zeroTickColor);
-    return new CkPaintRepository(ckGraphics, colors);
-  }, [
-    backgroundColor,
-    ckGraphics,
-    seriesColors,
-    xAxisProps.tickColor,
-    xAxisProps.zeroTickColor,
-    yAxisProps.tickColor,
-    yAxisProps.zeroTickColor,
-  ]);
+    addAxisPropColors(colors, xAxisProps);
+    addAxisPropColors(colors, yAxisProps);
+    return new CkPaintRepository(ckGraphics, [...colors]);
+  }, [backgroundColor, ckGraphics, seriesColors, xAxisProps, yAxisProps]);
 
   const xyCoordLayout = useMemo(() => buildXYCoordLayout(plot), [plot]);
 

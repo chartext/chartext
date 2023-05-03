@@ -64,10 +64,14 @@ export function SeriesSurface() {
     };
 
     surface.requestAnimationFrame((canvas: Canvas) => {
-      canvas.clear(TRANSPARENT);
-      seriesDrawers.forEach((seriesDrawer) =>
-        seriesDrawer.draw(seriesDrawProps),
-      );
+      try {
+        canvas.clear(TRANSPARENT);
+        seriesDrawers.forEach((seriesDrawer) =>
+          seriesDrawer.draw(seriesDrawProps),
+        );
+      } catch (e) {
+        //
+      }
     });
   }, [
     surface,

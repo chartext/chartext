@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { roundDate } from '@/data/dates';
-import { DatePart } from '@/data/dates.types';
+import { roundDate } from '@/utils/dates';
+import { DatePart } from '@/utils/dates.types';
 import { randomDate } from '@/utils/random';
 
 function randomDates(
@@ -27,7 +27,8 @@ function randomDates(
 describe('Dates test', () => {
   it('should round to the nearest [second]', () => {
     const datePart: DatePart = 'second';
-    const [testDate, floorDate, ceilingDate, roundedDate] = randomDates(datePart);
+    const [testDate, floorDate, ceilingDate, roundedDate] =
+      randomDates(datePart);
 
     expect(floorDate, `round ${datePart} [floor]`).toStrictEqual(
       new Date(
@@ -63,7 +64,8 @@ describe('Dates test', () => {
 
   it('should round to the nearest [minute]', () => {
     const datePart: DatePart = 'minute';
-    const [testDate, floorDate, ceilingDate, roundedDate] = randomDates(datePart);
+    const [testDate, floorDate, ceilingDate, roundedDate] =
+      randomDates(datePart);
 
     expect(floorDate, `round ${datePart} [floor]`).toStrictEqual(
       new Date(
@@ -96,7 +98,8 @@ describe('Dates test', () => {
 
   it('should round to the nearest [hour]', () => {
     const datePart: DatePart = 'hour';
-    const [testDate, floorDate, ceilingDate, roundedDate] = randomDates(datePart);
+    const [testDate, floorDate, ceilingDate, roundedDate] =
+      randomDates(datePart);
 
     expect(floorDate, `round ${datePart} [floor]`).toStrictEqual(
       new Date(
@@ -126,13 +129,18 @@ describe('Dates test', () => {
 
   it('should round to the nearest [dayOfMonth]', () => {
     const datePart: DatePart = 'dayOfMonth';
-    const [testDate, floorDate, ceilingDate, roundedDate] = randomDates(datePart);
+    const [testDate, floorDate, ceilingDate, roundedDate] =
+      randomDates(datePart);
 
     expect(floorDate, `round ${datePart} [floor]`).toStrictEqual(
       new Date(testDate.getFullYear(), testDate.getMonth(), testDate.getDate()),
     );
     expect(ceilingDate, `round ${datePart} [ceiling]`).toStrictEqual(
-      new Date(testDate.getFullYear(), testDate.getMonth(), testDate.getDate() + 1),
+      new Date(
+        testDate.getFullYear(),
+        testDate.getMonth(),
+        testDate.getDate() + 1,
+      ),
     );
     expect(roundedDate, `round ${datePart}`).toStrictEqual(
       new Date(

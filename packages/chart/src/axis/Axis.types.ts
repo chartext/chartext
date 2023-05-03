@@ -4,11 +4,14 @@ export type XAxisPosition = Omit<Position, 'left' | 'right' | 'center'>;
 export type YAxisPosition = Omit<Position, 'top' | 'bottom' | 'center'>;
 
 export type AxisProps = {
-  fontSize: number;
-  size: number;
+  labelColor: string;
+  labelFontSize: number;
   showZero: boolean;
+  size: number;
+  tickLabelColor: string;
   tickColor: string;
-  zeroTickColor: string;
+  tickFontSize: number;
+  tickZeroColor: string;
 };
 
 export type XAxisProps = AxisProps & {

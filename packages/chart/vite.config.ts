@@ -4,7 +4,14 @@ import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  plugins: [react(), tsconfigPaths()],
+  plugins: [
+    react(),
+    tsconfigPaths(),
+    /* dts({
+      // rollupTypes: true,
+      outputDir: 'dist/types',
+    }), */
+  ],
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
@@ -12,7 +19,13 @@ export default defineConfig({
       fileName: 'index',
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'react/jsx-runtime', '@chartext/canvaskit', 'tinycolor2'],
+      external: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        '@chartext/canvaskit',
+        'tinycolor2',
+      ],
       treeshake: 'smallest',
       output: {
         globals: {

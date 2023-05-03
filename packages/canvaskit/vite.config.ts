@@ -7,7 +7,8 @@ export default defineConfig({
   plugins: [
     tsconfigPaths(),
     dts({
-      rollupTypes: true,
+      // rollupTypes: true,
+      outputDir: 'dist/types',
     }),
   ],
   build: {

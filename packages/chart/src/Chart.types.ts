@@ -11,7 +11,11 @@ export type ChartProps = {
   seriesColors: string[];
 };
 
-export type PartialChartProps = Omit<Partial<ChartProps>, 'xAxis' | 'yAxis'> & {
-  xAxis: Partial<XAxisProps>;
-  yAxis: Partial<YAxisProps>;
+export type PartialChartProps = Omit<
+  Partial<ChartProps>,
+  'xAxis' | 'yAxis' | 'size'
+> & {
+  size?: Partial<Size>;
+  xAxis?: Partial<XAxisProps>;
+  yAxis?: Partial<YAxisProps>;
 };

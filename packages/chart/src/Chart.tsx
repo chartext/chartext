@@ -1,5 +1,5 @@
 import { CkSurface } from '@chartext/canvaskit';
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useMemo } from 'react';
 import { PartialChartProps } from '@/Chart.types';
 import { defaultChartProps } from '@/ChartDefaults';
 import { ChartEmpty } from '@/ChartEmpty';
@@ -7,6 +7,8 @@ import { ChartLoading } from '@/ChartLoading';
 import { AxisSurface } from '@/axis/AxisSurface';
 import { ChartProvider } from '@/context/ChartProvider';
 import { SeriesSurface } from '@/series/SeriesSurface';
+import { XAxisProps, YAxisProps } from '@/axis/Axis.types';
+import { Size } from '@/layout/ChartLayout.types';
 
 const CkGraphicsProviderLazy = lazy(() =>
   import('@chartext/canvaskit').then(({ CkGraphicsProvider }) => ({
@@ -15,50 +17,59 @@ const CkGraphicsProviderLazy = lazy(() =>
 );
 
 export function Chart(props: PartialChartProps) {
-  const { xAxis, yAxis, plot } = props;
+  const seriesColors: string[] = useMemo(
+    () => props.seriesColors ?? defaultChartProps.seriesColors,
+    [props.seriesColors],
+  );
 
-  const seriesColors: string[] =
-    props.seriesColors ?? defaultChartProps.seriesColors;
+  const backgroundColor = useMemo(
+    () => props.backgroundColor ?? defaultChartProps.backgroundColor,
+    [props.backgroundColor],
+  );
 
-  const backgroundColor =
-    props.backgroundColor ?? defaultChartProps.backgroundColor;
+  const xAxisProps: XAxisProps = useMemo(
+    () => ({
+      ...defaultChartProps.xAxis,
+      ...props.xAxis,
+    }),
+    [props.xAxis],
+  );
 
-  const size = props.size ?? defaultChartProps.size;
+  const yAxisProps: YAxisProps = useMemo(
+    () => ({
+      ...defaultChartProps.yAxis,
+      ...props.yAxis,
+    }),
+    [props.yAxis],
+  );
 
-  const { height, width, scale } = size;
+  const size: Size = useMemo(
+    () => ({ ...defaultChartProps.size, ...props.size }),
+    [props.size],
+  );
 
   return (
     <Suspense fallback={<ChartLoading />}>
       <CkGraphicsProviderLazy>
-        <div style={{ height, width, backgroundColor, margin: 0 }}>
-          {plot ? (
+        <div style={{ ...size, backgroundColor, margin: 0 }}>
+          {props.plot ? (
             <ChartProvider
               backgroundColor={backgroundColor}
-              plot={plot}
+              plot={props.plot}
               seriesColors={seriesColors}
               size={size}
-              xAxis={{
-                ...defaultChartProps.xAxis,
-                ...xAxis,
-              }}
-              yAxis={{
-                ...defaultChartProps.yAxis,
-                ...yAxis,
-              }}
+              xAxis={xAxisProps}
+              yAxis={yAxisProps}
             >
               <CkSurface
-                height={height}
-                width={width}
-                scale={scale}
+                {...size}
                 zIndex={1}
               >
                 <AxisSurface />
               </CkSurface>
               <CkSurface
-                height={height}
-                width={width}
-                scale={scale}
-                zIndex={1}
+                {...size}
+                zIndex={2}
               >
                 <SeriesSurface />
               </CkSurface>

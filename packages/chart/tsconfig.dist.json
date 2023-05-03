@@ -3,10 +3,8 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist/types",
-    "emitDeclarationOnly": true,
+    "emitDeclarationOnly": true
   },
-  "references": [
-    { "path": "../canvaskit" },
-  ],
-  "include": ["src"],
+  "references": [{ "path": "../canvaskit" }],
+  "include": ["src"]
 }

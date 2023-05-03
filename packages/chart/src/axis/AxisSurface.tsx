@@ -32,13 +32,17 @@ export function AxisSurface() {
     );
 
     surface.requestAnimationFrame((canvas: Canvas) => {
-      canvas.clear(ckGraphics.CK.TRANSPARENT);
-      if (!xAxis.isDeleted) {
-        xAxis.draw(canvas, seriesSurfaceRect);
-      }
+      try {
+        canvas.clear(ckGraphics.CK.TRANSPARENT);
+        if (!xAxis.isDeleted) {
+          xAxis.draw(canvas, seriesSurfaceRect);
+        }
 
-      if (!yAxis.isDeleted) {
-        yAxis.draw(canvas, seriesSurfaceRect);
+        if (!yAxis.isDeleted) {
+          yAxis.draw(canvas, seriesSurfaceRect);
+        }
+      } catch (e) {
+        //
       }
     });
 

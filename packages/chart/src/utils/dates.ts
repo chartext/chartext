@@ -12,7 +12,7 @@ import {
   nextSaturday,
   previousSunday,
 } from 'date-fns';
-import { DatePart, Months } from '@/data/dates.types';
+import { DatePart, Months } from '@/utils/dates.types';
 
 export function maxDayOfMonth(month: Months, year: number): 28 | 29 | 30 | 31 {
   switch (month) {

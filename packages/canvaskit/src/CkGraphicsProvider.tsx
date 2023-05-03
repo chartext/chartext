@@ -1,4 +1,10 @@
-import { createContext, ReactElement, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  ReactElement,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import CanvasKitInit, { CanvasKit, FontMgr, Typeface } from 'canvaskit-wasm';
 import { CkGraphics } from '@/CkGraphics';
 
@@ -20,14 +26,15 @@ async function webGpu(CK: CanvasKit) {
     }
   } catch (ex) {
     // eslint-disable-next-line no-console
-    console.log('webGpu', ex);
+    // console.log('webGpu', ex);
   }
   return undefined;
 }
 
 async function initCanvasKit(): Promise<CanvasKit> {
   return CanvasKitInit({
-    locateFile: (file: string) => `https://unpkg.com/canvaskit-wasm@0.38.0/bin/${file}`,
+    locateFile: (file: string) =>
+      `https://unpkg.com/canvaskit-wasm@0.38.0/bin/${file}`,
     // locateFile: () => CanvasKitWasm as string,
   }).then((CK: CanvasKit) => CK);
 }
@@ -49,7 +56,8 @@ export function CkGraphicsProvider(props: { children: ReactElement }) {
     Promise.all([canvasKitInit, fontFetchPromise])
       .then(([CK, fontData]: [CanvasKit, ArrayBuffer]) => {
         const fontMgr: FontMgr | null = CK.FontMgr.FromData(fontData);
-        const robotoTypeface: Typeface | null = CK.Typeface.MakeFreeTypeFaceFromData(fontData);
+        const robotoTypeface: Typeface | null =
+          CK.Typeface.MakeFreeTypeFaceFromData(fontData);
 
         if (!fontMgr || !robotoTypeface) {
           throw new Error('Failed to load font.');
@@ -61,7 +69,9 @@ export function CkGraphicsProvider(props: { children: ReactElement }) {
 
         webGpu(CK)
           .then((gpuDeviceContext) => {
-            setCkGraphics(new CkGraphics(CK, fontMgr, typefaces, gpuDeviceContext));
+            setCkGraphics(
+              new CkGraphics(CK, fontMgr, typefaces, gpuDeviceContext),
+            );
           })
           .catch(() => {
             setCkGraphics(null);
@@ -73,6 +83,8 @@ export function CkGraphicsProvider(props: { children: ReactElement }) {
   }, []);
 
   return ckGraphics ? (
-    <CkGraphicsContext.Provider value={ckGraphics}>{children}</CkGraphicsContext.Provider>
+    <CkGraphicsContext.Provider value={ckGraphics}>
+      {children}
+    </CkGraphicsContext.Provider>
   ) : null;
 }

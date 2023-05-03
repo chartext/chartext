@@ -20,10 +20,13 @@ const defaultSeriesColors: string[] = [
 
 const defaultAxisProps: AxisProps = {
   showZero: true,
-  size: 50,
-  fontSize: 12,
-  tickColor: 'rgb(131, 131, 131)',
-  zeroTickColor: 'rgb(197, 197, 197)',
+  size: 75,
+  labelFontSize: 13,
+  labelColor: 'rgb(198, 198, 198)',
+  tickLabelColor: 'rgb(198, 198, 198)',
+  tickFontSize: 12,
+  tickColor: 'rgb(64, 64, 64)',
+  tickZeroColor: 'rgb(112, 112, 112)',
 };
 
 const defaultXAxisProps: XAxisProps = {
