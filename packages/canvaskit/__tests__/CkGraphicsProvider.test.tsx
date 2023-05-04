@@ -15,6 +15,8 @@ describe('CkGraphicsProvider test', () => {
       </CkGraphicsProvider>,
     );
 
-    await waitFor(() => expect(getByText('CkGraphics loaded')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(getByText('CkGraphics loaded')).toBeInTheDocument(),
+    );
   });
 });

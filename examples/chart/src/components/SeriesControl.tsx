@@ -1,4 +1,10 @@
-import { Group, NumberInput, NumberInputProps, Stack, Text } from '@mantine/core';
+import {
+  Group,
+  NumberInput,
+  NumberInputProps,
+  Stack,
+  Text,
+} from '@mantine/core';
 
 type SeriesControlProps = {
   label: string;

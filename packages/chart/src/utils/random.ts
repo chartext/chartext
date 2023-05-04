@@ -9,5 +9,7 @@ export function randomInt(min: number, max: number) {
 }
 
 export function randomDate(min: Date, max: Date): Date {
-  return new Date(min.getTime() + Math.random() * (max.getTime() - min.getTime()));
+  return new Date(
+    min.getTime() + Math.random() * (max.getTime() - min.getTime()),
+  );
 }

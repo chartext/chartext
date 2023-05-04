@@ -1,8 +1,21 @@
-import { Canvas, Paint, PaintStyle, Paragraph, ParagraphStyle, Typeface } from 'canvaskit-wasm';
+import {
+  Canvas,
+  Paint,
+  PaintStyle,
+  Paragraph,
+  ParagraphStyle,
+  Typeface,
+} from 'canvaskit-wasm';
 
 export type CkRect = [left: number, top: number, right: number, bottom: number];
 
-export type CkDrawLineParams = [x0: number, x1: number, y0: number, y1: number, paint: Paint];
+export type CkDrawLineParams = [
+  x0: number,
+  x1: number,
+  y0: number,
+  y1: number,
+  paint: Paint,
+];
 
 export type CkPaintProps = {
   color?: string | undefined;

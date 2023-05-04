@@ -6,8 +6,8 @@
     "tsBuildInfoFile": "build/.tsbuildinfo",
     "esModuleInterop": true,
     "paths": {
-      "@/*": ["src/*"],
-    },
+      "@/*": ["src/*"]
+    }
   },
   "include": ["src", "__tests__", "vite.config.ts"]
 }

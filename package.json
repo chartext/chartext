@@ -21,7 +21,8 @@
     "syncpack:list": "syncpack list",
     "lint:check": "eslint --cache --ext .ts,.tsx --ignore-path .eslintignore --config .eslintrc.yml examples/* packages/*",
     "lint:fix": "pnpm lint --fix",
-    "prettier:check": "prettier --debug-check --ignore-unknown **/*"
+    "prettier:check": "prettier --debug-check --ignore-unknown **/*",
+    "prettier:fix": "prettier --write --ignore-unknown **/*"
   },
   "devDependencies": {
     "@alloc/fast-rimraf": "^1.0.8",
