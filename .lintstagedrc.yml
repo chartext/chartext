@@ -1,2 +1,2 @@
-'*.{ts,tsx}': pnpm lint
+'*.{ts,tsx}': pnpm lint:check
 '**/*': prettier --write --ignore-unknown
