@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  cache-and-install:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -45,12 +45,8 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install
-  build:
-    needs: cache-and-install
-    runs-on: ubuntu-latest
+        run: pnpm Install
 
-    steps:
       - name: Build
         run: pnpm examples:chart:build
 
@@ -72,8 +68,10 @@ jobs:
     environment:
       name: github-pages
       #url: ${{ steps.deployment.outputs.page_url }}
+
     runs-on: ubuntu-latest
+
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v2
