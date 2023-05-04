@@ -8,7 +8,7 @@ import { useChartContext } from '@/context/ChartProvider';
 
 export function AxisSurface() {
   const ckGraphics: CkGraphics = useCkGraphics();
-  const surface: Surface = useCkSurface();
+  const surface: Surface | null = useCkSurface();
   const {
     paintRepository,
     seriesSurfaceRect,
@@ -31,7 +31,7 @@ export function AxisSurface() {
       paintRepository,
     );
 
-    surface.requestAnimationFrame((canvas: Canvas) => {
+    surface?.requestAnimationFrame((canvas: Canvas) => {
       try {
         canvas.clear(ckGraphics.CK.TRANSPARENT);
         if (!xAxis.isDeleted) {
@@ -42,7 +42,7 @@ export function AxisSurface() {
           yAxis.draw(canvas, seriesSurfaceRect);
         }
       } catch (e) {
-        //
+        // console.error(e);
       }
     });
 

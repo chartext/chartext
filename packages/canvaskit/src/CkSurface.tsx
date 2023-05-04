@@ -1,5 +1,12 @@
-import { Canvas, Surface, WebGPUCanvasContext } from 'canvaskit-wasm';
-import { PropsWithChildren, createContext, useContext, useEffect, useRef, useState } from 'react';
+import { Canvas, Surface } from 'canvaskit-wasm';
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { CkGraphics } from '@/CkGraphics';
 import { useCkGraphics } from '@/CkGraphicsProvider';
 
@@ -10,24 +17,7 @@ type CkSurfaceProps = {
   zIndex?: number;
 };
 
-function createSurface(ckGraphics: CkGraphics, canvas: HTMLCanvasElement): Surface | null {
-  const { CK, gpuDeviceContext } = ckGraphics;
-
-  if (gpuDeviceContext) {
-    const gpuCanvasContext: WebGPUCanvasContext | null = CK.MakeGPUCanvasContext(
-      gpuDeviceContext,
-      canvas,
-    );
-
-    if (gpuCanvasContext) {
-      return CK.MakeGPUCanvasSurface(gpuCanvasContext, CK.ColorSpace.SRGB) as Surface | null;
-    }
-  }
-
-  return CK.MakeWebGLCanvasSurface(canvas, CK.ColorSpace.SRGB) as Surface | null;
-}
-
-const CkSurfaceContext = createContext<Surface>({} as Surface);
+const CkSurfaceContext = createContext<Surface | null>(null);
 export const useCkSurface = () => useContext(CkSurfaceContext);
 
 const defaultCkSurfaceProps = {
@@ -46,13 +36,13 @@ export function CkSurface(props: PropsWithChildren<CkSurfaceProps>) {
 
   const ckGraphics = useCkGraphics();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [surface, setSurface] = useState<Surface>();
+  const [surface, setSurface] = useState<Surface | null>(null);
 
   useEffect(() => {
     if (canvasRef.current) {
       const { current: canvas } = canvasRef;
 
-      const draftSurface: Surface | null = createSurface(ckGraphics, canvas);
+      const draftSurface: Surface | null = ckGraphics.createSurface(canvas);
 
       if (draftSurface && !draftSurface.isDeleted()) {
         const ckCanvas: Canvas = draftSurface.getCanvas();
@@ -61,6 +51,7 @@ export function CkSurface(props: PropsWithChildren<CkSurfaceProps>) {
       }
       return () => {
         CkGraphics.delete(draftSurface);
+        setSurface(null);
       };
     }
 
@@ -78,7 +69,9 @@ export function CkSurface(props: PropsWithChildren<CkSurfaceProps>) {
         style={{ height, width, zIndex, position: 'absolute' }}
       />
       {surface ? (
-        <CkSurfaceContext.Provider value={surface}>{children}</CkSurfaceContext.Provider>
+        <CkSurfaceContext.Provider value={surface}>
+          {children}
+        </CkSurfaceContext.Provider>
       ) : null}
     </>
   );

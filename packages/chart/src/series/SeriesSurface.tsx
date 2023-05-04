@@ -30,7 +30,7 @@ function buildSeriesDrawer(
 
 export function SeriesSurface() {
   const ckGraphics: CkGraphics = useCkGraphics();
-  const surface: Surface = useCkSurface();
+  const surface: Surface | null = useCkSurface();
   const {
     paintRepository,
     plot,
@@ -56,14 +56,14 @@ export function SeriesSurface() {
       return buildSeriesDrawer(seriesDrawerProps, series.type);
     });
 
-    const seriesDrawProps: SeriesDrawProps = {
-      surface,
-      ckGraphics,
-      seriesSurfaceRect,
-      xyCoordLayout,
-    };
+    surface?.requestAnimationFrame((canvas: Canvas) => {
+      const seriesDrawProps: SeriesDrawProps = {
+        surface,
+        ckGraphics,
+        seriesSurfaceRect,
+        xyCoordLayout,
+      };
 
-    surface.requestAnimationFrame((canvas: Canvas) => {
       try {
         canvas.clear(TRANSPARENT);
         seriesDrawers.forEach((seriesDrawer) =>

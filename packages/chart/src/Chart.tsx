@@ -4,11 +4,11 @@ import { PartialChartProps } from '@/Chart.types';
 import { defaultChartProps } from '@/ChartDefaults';
 import { ChartEmpty } from '@/ChartEmpty';
 import { ChartLoading } from '@/ChartLoading';
+import { XAxisProps, YAxisProps } from '@/axis/Axis.types';
 import { AxisSurface } from '@/axis/AxisSurface';
 import { ChartProvider } from '@/context/ChartProvider';
-import { SeriesSurface } from '@/series/SeriesSurface';
-import { XAxisProps, YAxisProps } from '@/axis/Axis.types';
 import { Size } from '@/layout/ChartLayout.types';
+import { SeriesSurface } from '@/series/SeriesSurface';
 
 const CkGraphicsProviderLazy = lazy(() =>
   import('@chartext/canvaskit').then(({ CkGraphicsProvider }) => ({

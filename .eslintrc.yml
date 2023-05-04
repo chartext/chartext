@@ -31,6 +31,8 @@ settings:
         - examples/*/tsconfig.json
         - packages/*/tsconfig.json
 rules:
+  no-console: error
+  # import
   import/no-cycle: error
   import/no-default-export: error
   import/no-extraneous-dependencies: error
@@ -46,6 +48,7 @@ overrides:
       - examples/**/*.test.{ts,tsx}
       - packages/**/*.test.{ts,tsx}
     rules:
+      no-console: off
       import/no-extraneous-dependencies: off
   - files:
       - vite.config.ts

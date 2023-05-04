@@ -60,6 +60,7 @@ function buildCoordLayout(
             coordProps,
           ); */
         default:
+          // eslint-disable-next-line no-console
           console.error(`Type (${parsedType}) not supported.`);
           return null;
       }

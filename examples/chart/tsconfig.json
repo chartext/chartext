@@ -5,11 +5,9 @@
     "outDir": "build",
     "paths": {
       "@/*": ["src/*"],
-      "@chartext/chart": ["../../packages/chart/src"],
+      "@chartext/chart": ["../../packages/chart/src"]
     }
   },
-  "references": [
-    { "path": "../../packages/chart" },
-  ],
-  "include": ["src", "vite.config.ts"],
+  "references": [{ "path": "../../packages/chart" }],
+  "include": ["src", "vite.config.ts"]
 }

@@ -1,6 +1,9 @@
 import { differenceInSeconds, differenceInYears } from 'date-fns';
 import { DatePart } from '@/utils/dates.types';
 
+/**
+ * https://stackoverflow.com/questions/8506881/nice-label-algorithm-for-charts-with-minimum-ticks/16363437
+ */
 function niceNum(range: number, round: boolean): number {
   const exponent = Math.floor(Math.log10(range));
   const fraction = range / 10 ** exponent;

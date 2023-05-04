@@ -2,25 +2,20 @@
 
 React Skia Chart
 
-- [Project](https://github.com/orgs/chartext/projects/2)
-- [MIT License](./LICENSE)
+[Chart Example](https://chartext.github.io/chartext/)
 
 ## Packages
 
-| Package                                      | Description |
-| -------------------------------------------- | ----------- |
-| [@chartext/canvaskit](./packages/canvaskit/) |             |
-| [@chartext/chart](./packages/chart/)         |             |
+| Package                                      | Description             |
+| -------------------------------------------- | ----------------------- |
+| [@chartext/canvaskit](./packages/canvaskit/) | React canvaskit library |
+| [@chartext/chart](./packages/chart/)         | React canvaskit chart   |
 
 ## Examples
 
-| Example                             | Command               | Description |
-| ----------------------------------- | --------------------- | ----------- |
-| [examples/chart](./examples/chart/) | `pnpm examples:chart` |             |
-
-## Plugins
-
-WIP
+| Example                             | Command                   | Description                                                                       |
+| ----------------------------------- | ------------------------- | --------------------------------------------------------------------------------- |
+| [examples/chart](./examples/chart/) | `pnpm examples:chart dev` | [Chart Example](https://chartext.github.io/chartext/) with randomized number data |
 
 ## Contributing
 
@@ -39,18 +34,19 @@ WIP
 
 ### Running locally
 
-1. Run `pnpm examples:chart`
-2. Open up a browser and go to [http://127.0.0.1:5173/](http://127.0.0.1:5173/)
+1. Run `pnpm examples:chart dev`
+2. Open up a browser and go to [http://127.0.0.1:5173/chartext](http://127.0.0.1:5173/chartext)
 
 ### Scripts
 
-| Command             | Description |
-| ------------------- | ----------- |
-| pnpm canvaskit:test |             |
-| pnpm canvaskit:dist |             |
-| pnpm chart:test     |             |
-| pnpm chart:dist     |             |
-| pnpm examples:chart |             |
+| Command             | Description                                                                                  |
+| ------------------- | -------------------------------------------------------------------------------------------- |
+| pnpm canvaskit      | Alias to run scripts from [packages/canvaskit/package.json](packages/canvaskit/package.json) |
+| pnpm chart          | Alias to run scripts from [packages/chart/package.json](packages/chart/package.json)         |
+| pnpm examples:chart | Alias to run scripts from [examples/chart/package.json](examples/chart/package.json)         |
+| lint                | Lints the entire project                                                                     |
+| lint:fix            | Lints and auto-fixes the entire project                                                      |
+| prettier:check      | Runs prettier to check formatting                                                            |
 
 ## [vscode](https://code.visualstudio.com/)
 

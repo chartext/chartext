@@ -7,6 +7,8 @@ import {
   Paragraph,
   ParagraphBuilder,
   Path,
+  Surface,
+  WebGPUCanvasContext,
   WebGPUDeviceContext,
 } from 'canvaskit-wasm';
 import tinycolor, { Instance as Color } from 'tinycolor2';
@@ -50,7 +52,10 @@ export class CkGraphics {
       textAlign,
     });
 
-    const pBuilder: ParagraphBuilder = this.CK.ParagraphBuilder.Make(pStyle, this.fontMgr);
+    const pBuilder: ParagraphBuilder = this.CK.ParagraphBuilder.Make(
+      pStyle,
+      this.fontMgr,
+    );
 
     try {
       pBuilder.addText(text);
@@ -87,7 +92,11 @@ export class CkGraphics {
   }
 
   createPaint(props?: CkPaintProps): Paint {
-    const { color = '#000', style = this.CK.PaintStyle.Stroke, strokeWidth = 1.0 } = props ?? {};
+    const {
+      color = '#000',
+      style = this.CK.PaintStyle.Stroke,
+      strokeWidth = 1.0,
+    } = props ?? {};
 
     const paint = new this.CK.Paint();
     paint.setAntiAlias(true);
@@ -111,7 +120,30 @@ export class CkGraphics {
     return new this.CK.Font(this.typefaces[family], size);
   }
 
-  static delete<T extends EmbindObject<T>>(...objects: (EmbindObject<T> | null)[]) {
+  createSurface(canvas: HTMLCanvasElement): Surface | null {
+    const { CK, gpuDeviceContext } = this;
+
+    if (gpuDeviceContext) {
+      const gpuCanvasContext: WebGPUCanvasContext | null =
+        CK.MakeGPUCanvasContext(gpuDeviceContext, canvas);
+
+      if (gpuCanvasContext) {
+        return CK.MakeGPUCanvasSurface(
+          gpuCanvasContext,
+          CK.ColorSpace.SRGB,
+        ) as Surface | null;
+      }
+    }
+
+    return CK.MakeWebGLCanvasSurface(
+      canvas,
+      CK.ColorSpace.SRGB,
+    ) as Surface | null;
+  }
+
+  static delete<T extends EmbindObject<T>>(
+    ...objects: (EmbindObject<T> | null)[]
+  ) {
     objects.forEach((obj) => obj?.delete());
   }
 }

@@ -37,7 +37,7 @@ export function CoordControl(props: CoordControlProps) {
         fullWidth
         data={[
           { label: 'number', value: 'number' },
-          { label: 'date', value: 'date' },
+          //{ label: 'date', value: 'date' },
         ]}
         {...coordTypeProps}
       />
