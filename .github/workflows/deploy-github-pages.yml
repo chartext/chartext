@@ -20,15 +20,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Single deploy job since we're just deploying
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
@@ -38,12 +36,17 @@ jobs:
         run: pnpm install
       - name: Build
         run: pnpm examples:chart dist
+  deploy:
+    environment:
+      name: github-pages
+      #url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          # Upload dist repository
           path: './examples/chart/dist'
       - name: Deploy to GitHub Pages
         id: deployment
