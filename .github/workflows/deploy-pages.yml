@@ -1,10 +1,6 @@
 name: Deploy pages
 
 on:
-  push:
-    branches:
-      - main
-
   workflow_dispatch:
 
 concurrency:

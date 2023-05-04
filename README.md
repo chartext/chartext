@@ -1,5 +1,7 @@
 # chartext
 
+[![Check formatting](https://github.com/chartext/chartext/actions/workflows/check-formatting.yml/badge.svg?label=Linting&logo=github)](https://github.com/chartext/chartext/actions/workflows/check-formatting.yml) [![Check linting](https://github.com/chartext/chartext/actions/workflows/check-linting.yml/badge.svg)](https://github.com/chartext/chartext/actions/workflows/check-linting.yml) [![Deploy pages](https://github.com/chartext/chartext/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/chartext/chartext/actions/workflows/deploy-pages.yml)
+
 React Skia Chart
 
 [Chart Example](https://chartext.github.io/chartext/)
