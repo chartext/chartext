@@ -27,9 +27,9 @@ React Skia Chart
 const series: Series[] = generateSeriesArr([
   {
     xRange: { min: -100, max: 100 },
-    yRange: yCoord.range,
-    type: { min: -100, max: 100 },
-    count: 2,
+    yRange: { min: -100, max: 100 },
+    type: 'line',
+    count: 5,
     dataCount: 100,
   },
 ]);
