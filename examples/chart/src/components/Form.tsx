@@ -1,7 +1,7 @@
-import { Series, generateSeriesArr, randomInt } from '@chartext/chart';
+import { Series, generateSeriesArr } from '@chartext/chart';
 import { Button, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { FaChartLine } from 'react-icons/fa';
 import { SeriesControl, SeriesControlValues } from '@/components/SeriesControl';
 import { CoordControl, CoordControlValues } from '@/components/CoordControl';
@@ -20,20 +20,20 @@ type SidebarProps = {
   padding?: number;
 };
 
-function randomCoordValues(): CoordControlValues {
+function initialCoordValues(): CoordControlValues {
   return {
     coordType: 'number',
     range: {
-      min: randomInt(-100, -1),
-      max: randomInt(0, 100),
+      min: -1000,
+      max: 1000,
     },
   };
 }
 
-function randomSeriesValues(): SeriesControlValues {
+function initialSeriesValues(): SeriesControlValues {
   return {
-    count: randomInt(1, 5),
-    dataCount: randomInt(10, 100),
+    count: 4,
+    dataCount: 50,
   };
 }
 
@@ -43,10 +43,10 @@ export function Form(props: SidebarProps) {
 
   const form = useForm<RandomSeriesFormProps>({
     initialValues: {
-      xCoord: randomCoordValues(),
-      yCoord: randomCoordValues(),
-      lineSeries: randomSeriesValues(),
-      scatterSeries: randomSeriesValues(),
+      xCoord: initialCoordValues(),
+      yCoord: initialCoordValues(),
+      lineSeries: initialSeriesValues(),
+      scatterSeries: initialSeriesValues(),
     },
   });
 
@@ -74,6 +74,15 @@ export function Form(props: SidebarProps) {
     },
     [setSeries],
   );
+
+  useEffect(() => {
+    onSubmit({
+      xCoord: initialCoordValues(),
+      yCoord: initialCoordValues(),
+      lineSeries: initialSeriesValues(),
+      scatterSeries: initialSeriesValues(),
+    });
+  }, [onSubmit]);
 
   return (
     <form onSubmit={form.onSubmit(onSubmit)}>
