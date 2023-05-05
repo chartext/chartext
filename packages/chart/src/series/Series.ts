@@ -1,6 +1,7 @@
-import { Series, SeriesData } from '@/series/Series.types';
+import { XY } from '@/coord/Coord.types';
+import { Series } from '@/series/Series.types';
 
-export function sortedSeriesData(series: Series): SeriesData {
+export function sortedSeriesData(series: Series): XY[] {
   return series.data.sort((xy1, xy2) => {
     const x1 = xy1.x;
     const x2 = xy2.x;

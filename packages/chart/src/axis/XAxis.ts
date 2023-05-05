@@ -6,27 +6,29 @@ import { CoordType } from '@/coord/Coord.types';
 import { CoordLayout } from '@/coord/CoordLayout';
 import { RectLayout } from '@/layout/ChartLayout.types';
 
-export class XAxis extends Axis {
+export class XAxis<X extends CoordType> extends Axis<X> {
   constructor(
     axisProps: XAxisProps,
     ckGraphics: CkGraphics,
-    coordLayout: CoordLayout<CoordType>,
+    coordLayout: CoordLayout<X>,
     paintRepository: CkPaintRepository,
   ) {
     const { labelColor, labelFontSize } = axisProps;
 
-    const labelParagraph = ckGraphics.createParagraph({
-      text: coordLayout.label,
-      fontSize: labelFontSize,
-      color: labelColor,
-      textAlign: ckGraphics.CK.TextAlign.Center,
-    });
+    const labelParagraph = axisProps.label
+      ? ckGraphics.createParagraph({
+          text: axisProps.label,
+          fontSize: labelFontSize,
+          color: labelColor,
+          textAlign: ckGraphics.CK.TextAlign.Center,
+        })
+      : null;
 
     super(
-      axisProps,
       ckGraphics,
       coordLayout,
       labelParagraph,
+      axisProps,
       paintRepository,
       ckGraphics.CK.TextAlign.Center,
     );
@@ -36,13 +38,15 @@ export class XAxis extends Axis {
     canvas: Canvas,
     seriesSurfaceRect: RectLayout,
   ): void {
-    CkGraphics.drawParagraph({
-      canvas,
-      paragraph: this.labelParagraph,
-      width: seriesSurfaceRect.right - seriesSurfaceRect.left,
-      x: seriesSurfaceRect.left,
-      y: seriesSurfaceRect.bottom + this.tickFontSize + 25,
-    });
+    if (this.labelParagraph) {
+      CkGraphics.drawParagraph({
+        canvas,
+        paragraph: this.labelParagraph,
+        width: seriesSurfaceRect.right - seriesSurfaceRect.left,
+        x: seriesSurfaceRect.left,
+        y: seriesSurfaceRect.bottom + this.tickFontSize + 25,
+      });
+    }
   }
 
   protected override drawTick(
@@ -50,7 +54,7 @@ export class XAxis extends Axis {
     paint: Paint,
     seriesSurfaceRect: RectLayout,
     paragraph: Paragraph,
-    value: CoordType,
+    value: X,
     spacing: number,
   ) {
     const x = this.coordLayout.getScreenCoord(value, seriesSurfaceRect);

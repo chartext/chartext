@@ -32,6 +32,7 @@ settings:
         - packages/*/tsconfig.json
 rules:
   no-console: error
+  '@typescript-eslint/no-unused-vars': error
   # import
   import/no-cycle: error
   import/no-default-export: error

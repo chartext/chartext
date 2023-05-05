@@ -1,14 +1,14 @@
 import { Paint } from 'canvaskit-wasm';
 import {
-  SeriesData,
   SeriesDrawProps,
   SeriesDrawer,
   SeriesDrawerProps,
 } from '@/series/Series.types';
+import { XY } from '@/coord/Coord.types';
 
 export class ScatterSeries implements SeriesDrawer {
   readonly #paint: Paint;
-  readonly #data: SeriesData;
+  readonly #data: XY[];
 
   constructor(props: SeriesDrawerProps) {
     const {

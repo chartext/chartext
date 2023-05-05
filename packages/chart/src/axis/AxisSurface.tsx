@@ -1,10 +1,10 @@
 import { CkGraphics, useCkGraphics, useCkSurface } from '@chartext/canvaskit';
 import { Canvas, Surface } from 'canvaskit-wasm';
 import { useLayoutEffect } from 'react';
-import { Axis } from '@/axis/Axis';
 import { XAxis } from '@/axis/XAxis';
 import { YAxis } from '@/axis/YAxis';
 import { useChartContext } from '@/context/ChartProvider';
+import { CoordType } from '@/coord/Coord.types';
 
 export function AxisSurface() {
   const ckGraphics: CkGraphics = useCkGraphics();
@@ -17,14 +17,14 @@ export function AxisSurface() {
   } = useChartContext();
 
   useLayoutEffect(() => {
-    const xAxis: Axis = new XAxis(
+    const xAxis: XAxis<CoordType> = new XAxis<CoordType>(
       xAxisProps,
       ckGraphics,
       xCoordLayout,
       paintRepository,
     );
 
-    const yAxis: Axis = new YAxis(
+    const yAxis: YAxis<CoordType> = new YAxis<CoordType>(
       yAxisProps,
       ckGraphics,
       yCoordLayout,

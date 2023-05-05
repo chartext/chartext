@@ -1,16 +1,14 @@
-import { CoordProps } from '@/coord/Coord.types';
+import { CoordFormatter } from '@/coord/Coord.types';
 import { CoordLayout } from '@/coord/CoordLayout';
 import { Direction } from '@/layout/ChartLayout.types';
 import { numberTicks } from '@/utils/ticks';
 
-export class NumberCoordLayout extends CoordLayout<number> {
-  readonly #formatter: Intl.NumberFormat;
-
+export class NumberCoordLayout extends CoordLayout<number | bigint> {
   constructor(
     values: number[],
     maxTicks: number,
     direction: Direction,
-    coordProps?: CoordProps,
+    formatter?: CoordFormatter<number | bigint>,
   ) {
     const min = Math.min(...values);
     const max = Math.max(...values);
@@ -23,17 +21,16 @@ export class NumberCoordLayout extends CoordLayout<number> {
       ticks.push(value);
     }
 
-    const name = coordProps?.name ?? 'Number';
-
-    super(name, roundedMin, roundedMax, ticks, direction);
-
-    this.#formatter = Intl.NumberFormat('en', {
-      notation: 'compact',
-    });
-  }
-
-  override format(value: number): string {
-    return this.#formatter.format(value);
+    super(
+      roundedMin,
+      roundedMax,
+      ticks,
+      direction,
+      formatter ??
+        new Intl.NumberFormat('en', {
+          notation: 'compact',
+        }),
+    );
   }
 
   override toNumber(value: number): number {

@@ -52,14 +52,16 @@ export function Chart(props: PartialChartProps) {
     <Suspense fallback={<ChartLoading />}>
       <CkGraphicsProviderLazy>
         <div style={{ ...size, backgroundColor, margin: 0 }}>
-          {props.plot ? (
+          {props.series && props.series.length > 0 ? (
             <ChartProvider
               backgroundColor={backgroundColor}
-              plot={props.plot}
+              series={props.series}
               seriesColors={seriesColors}
               size={size}
-              xAxis={xAxisProps}
-              yAxis={yAxisProps}
+              xAxisProps={xAxisProps}
+              yAxisProps={yAxisProps}
+              xConfig={props.x}
+              yConfig={props.y}
             >
               <CkSurface
                 {...size}

@@ -1,6 +1,8 @@
 import { CoordType, CoordTypeName } from '@/coord/Coord.types';
 
-export function parseCoord(coord: CoordType): CoordTypeName | null {
+export function parseCoord<T extends CoordType>(
+  coord: T,
+): CoordTypeName | null {
   switch (typeof coord) {
     case 'string': {
       const date = Date.parse(coord);

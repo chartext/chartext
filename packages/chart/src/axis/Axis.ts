@@ -5,25 +5,25 @@ import { CoordType } from '@/coord/Coord.types';
 import { CoordLayout } from '@/coord/CoordLayout';
 import { RectLayout } from '@/layout/ChartLayout.types';
 
-type TickParagraph = {
-  value: CoordType;
+type TickParagraph<C extends CoordType> = {
+  value: C;
   paragraph: Paragraph;
 };
 
-export abstract class Axis {
+export abstract class Axis<C extends CoordType> {
   protected readonly labelFontSize: number;
   protected readonly tickFontSize: number;
   readonly #tickPaint: Paint;
-  readonly #tickParagraphs: TickParagraph[];
+  readonly #tickParagraphs: TickParagraph<C>[];
   readonly #zeroTickPaint: Paint;
 
   #isDeleted = false;
 
   protected constructor(
-    axisProps: XAxisProps | YAxisProps,
     protected readonly ckGraphics: CkGraphics,
-    protected readonly coordLayout: CoordLayout<CoordType>,
-    protected readonly labelParagraph: Paragraph,
+    protected readonly coordLayout: CoordLayout<C>,
+    protected readonly labelParagraph: Paragraph | null,
+    axisProps: XAxisProps | YAxisProps,
     paintRepository: CkPaintRepository,
     textAlign: TextAlign,
   ) {
@@ -35,7 +35,7 @@ export abstract class Axis {
       tickZeroColor,
     } = axisProps;
 
-    const { ticks } = coordLayout;
+    const { ticks, formatter } = coordLayout;
 
     this.labelFontSize = labelFontSize;
     this.tickFontSize = tickFontSize;
@@ -47,7 +47,7 @@ export abstract class Axis {
 
     ticks.forEach((value) => {
       const paragraph = ckGraphics.createParagraph({
-        text: coordLayout.format(value),
+        text: formatter.format(value),
         fontSize: tickFontSize,
         color: tickLabelColor,
         textAlign,
@@ -65,7 +65,7 @@ export abstract class Axis {
     paint: Paint,
     seriesSurfaceRect: RectLayout,
     tickParagraph: Paragraph,
-    value: CoordType,
+    value: C,
     spacing: number,
   ): void;
 

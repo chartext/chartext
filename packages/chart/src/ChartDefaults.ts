@@ -49,7 +49,7 @@ const defaultChartProps: ChartProps = {
   seriesColors: defaultSeriesColors,
   xAxis: defaultXAxisProps,
   yAxis: defaultYAxisProps,
-  plot: undefined,
+  series: [],
 };
 
 export { defaultChartProps };

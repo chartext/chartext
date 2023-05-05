@@ -33,7 +33,7 @@ export function SeriesSurface() {
   const surface: Surface | null = useCkSurface();
   const {
     paintRepository,
-    plot,
+    series,
     seriesSurfaceRect,
     seriesColors,
     xyCoordLayout,
@@ -45,7 +45,7 @@ export function SeriesSurface() {
     } = ckGraphics;
     const seriesColorsLength = seriesColors.length;
 
-    const seriesDrawers = plot.series.map((series, index) => {
+    const seriesDrawers = series.map((series, index) => {
       const seriesColor = seriesColors[index % seriesColorsLength];
       const paintSet = paintRepository.getPaintSet(seriesColor ?? '');
       const seriesDrawerProps: SeriesDrawerProps = {
@@ -79,8 +79,8 @@ export function SeriesSurface() {
     seriesSurfaceRect,
     seriesColors,
     paintRepository,
-    plot.series,
     xyCoordLayout,
+    series,
   ]);
 
   return null;

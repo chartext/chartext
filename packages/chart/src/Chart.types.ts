@@ -1,21 +1,26 @@
 import { XAxisProps, YAxisProps } from '@/axis/Axis.types';
+import { CoordConfig } from '@/coord/Coord.types';
 import { Size } from '@/layout/ChartLayout.types';
-import { Plot } from '@/series/Series.types';
+import { Series } from '@/series/Series.types';
 
 export type ChartProps = {
   size: Size;
-  plot: Plot | undefined;
+  series: Series[];
   xAxis: XAxisProps;
   yAxis: YAxisProps;
+  xConfig?: CoordConfig | undefined;
+  yConfig?: CoordConfig | undefined;
   backgroundColor: string;
   seriesColors: string[];
 };
 
 export type PartialChartProps = Omit<
   Partial<ChartProps>,
-  'xAxis' | 'yAxis' | 'size'
+  'xAxis' | 'yAxis' | 'size' | 'xConfig' | 'yConfig'
 > & {
   size?: Partial<Size>;
   xAxis?: Partial<XAxisProps>;
   yAxis?: Partial<YAxisProps>;
+  x?: CoordConfig;
+  y?: CoordConfig;
 };

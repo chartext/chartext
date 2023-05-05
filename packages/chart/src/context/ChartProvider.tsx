@@ -1,68 +1,82 @@
 import { CkPaintRepository, useCkGraphics } from '@chartext/canvaskit';
 import { PropsWithChildren, createContext, useContext, useMemo } from 'react';
 import { ChartProps } from '@/Chart.types';
-import { AxisProps, XYAxisProps } from '@/axis/Axis.types';
-import { CoordProps, CoordType, CoordTypeName } from '@/coord/Coord.types';
+import {
+  AxisProps,
+  XAxisProps,
+  XYAxisProps,
+  YAxisProps,
+} from '@/axis/Axis.types';
+import {
+  CoordConfig,
+  CoordFormatter,
+  CoordParser,
+  CoordType,
+  CoordTypeName,
+} from '@/coord/Coord.types';
 import { CoordLayout, XYCoordLayout } from '@/coord/CoordLayout';
 import { NumberCoordLayout } from '@/coord/NumberCoordLayout';
-import { parseCoord } from '@/utils/dataParsers';
 import { Direction, RectLayout, Size } from '@/layout/ChartLayout.types';
-import { Plot } from '@/series/Series.types';
+import { parseCoord } from '@/utils/dataParsers';
+import { Series } from '@/series/Series.types';
 
 export type ChartContextProps = {
   paintRepository: CkPaintRepository;
-  plot: Plot;
+  series: Series[];
   seriesColors: string[];
   seriesSurfaceRect: RectLayout;
   size: Size;
   xyAxisProps: XYAxisProps;
-  xyCoordLayout: XYCoordLayout;
+  xyCoordLayout: XYCoordLayout<CoordType, CoordType>;
 };
 
-export type ChartProviderProps = Omit<ChartProps, 'plot'> & {
-  plot: Plot;
+export type ChartProviderProps = Omit<ChartProps, 'xAxis' | 'yAxis'> & {
+  xAxisProps: XAxisProps;
+  yAxisProps: YAxisProps;
 };
 
-export const ChartContext = createContext<ChartContextProps>(
-  {} as ChartContextProps,
-);
+const ChartContext = createContext<ChartContextProps>({} as ChartContextProps);
 export const useChartContext = () => useContext(ChartContext);
 
 function buildCoordLayout(
   values: CoordType[],
   direction: Direction,
-  coordProps?: CoordProps,
+  parser?: CoordParser<CoordType>,
+  formatter?: CoordFormatter<CoordType>,
 ): CoordLayout<CoordType> | null {
-  const parser = coordProps?.parser;
-
-  const firstValue = values[0];
+  const firstValue: CoordType | undefined = values.find(Boolean);
   const maxTicks = 10;
 
   if (firstValue) {
-    const parsedVal = parser ? parser(firstValue) : firstValue;
-    const parsedType: CoordTypeName | null = parseCoord(parsedVal);
+    const parsedValue: CoordType = parser
+      ? parser.parse(firstValue)
+      : firstValue;
 
-    if (parsedType) {
-      switch (parsedType) {
-        case 'integer':
-        case 'float':
-          return new NumberCoordLayout(
-            values as number[],
-            maxTicks,
-            direction,
-            coordProps,
-          );
-        /* case 'date':
+    if (parsedValue) {
+      const parsedType: CoordTypeName | null = parseCoord(parsedValue);
+
+      if (parsedType) {
+        switch (parsedType) {
+          case 'integer':
+          case 'float':
+            return new NumberCoordLayout(
+              values as number[],
+              maxTicks,
+              direction,
+              formatter,
+            ) as CoordLayout<CoordType>;
+          /* case 'date':
           return new DateCoordLayout(
             values as Date[],
             maxTicks,
             direction,
             coordProps,
           ); */
-        default:
-          // eslint-disable-next-line no-console
-          console.error(`Type (${parsedType}) not supported.`);
-          return null;
+          default:
+            // eslint-disable-next-line no-console
+            console.error(`Type (${parsedType}) not supported.`);
+            return null;
+        }
       }
     }
   }
@@ -70,30 +84,48 @@ function buildCoordLayout(
   return null;
 }
 
-function buildXYCoordLayout(plot: Plot): XYCoordLayout | null {
-  const { series, xProps, yProps } = plot;
-
+function buildXYCoordLayout(
+  series: Series[],
+  xConfig?: CoordConfig,
+  yConfig?: CoordConfig,
+): XYCoordLayout<CoordType, CoordType> | null {
   const xValues: CoordType[] = [];
   const yValues: CoordType[] = [];
 
   series.forEach(({ data }) => {
     data.forEach(({ x, y }) => {
+      /* if ('x' in item) {
+        xValues.push((item as XY).x);
+      } else {
+        xValues.push(xProps.)
+      } */
+
       xValues.push(x);
       yValues.push(y);
     });
   });
 
-  const xCoordLayout = buildCoordLayout(xValues, 'horizontal', xProps);
+  const xCoordLayout = buildCoordLayout(
+    xValues,
+    'horizontal',
+    xConfig?.parser,
+    xConfig?.formatter,
+  );
 
   if (!xCoordLayout) return null;
 
-  const yCoordLayout = buildCoordLayout(yValues, 'vertical', yProps);
+  const yCoordLayout = buildCoordLayout(
+    yValues,
+    'vertical',
+    yConfig?.parser,
+    yConfig?.formatter,
+  );
 
   if (!yCoordLayout) return null;
 
   return {
-    xCoordLayout,
-    yCoordLayout,
+    xCoordLayout: xCoordLayout as CoordLayout<CoordType>,
+    yCoordLayout: yCoordLayout as CoordLayout<CoordType>,
   };
 }
 
@@ -107,11 +139,13 @@ function addAxisPropColors(colors: Set<string>, axisProps: AxisProps) {
 export function ChartProvider(props: PropsWithChildren<ChartProviderProps>) {
   const {
     backgroundColor,
-    plot,
+    series,
     seriesColors,
     size,
-    xAxis: xAxisProps,
-    yAxis: yAxisProps,
+    xAxisProps,
+    yAxisProps,
+    xConfig,
+    yConfig,
     children,
   } = props;
 
@@ -136,14 +170,14 @@ export function ChartProvider(props: PropsWithChildren<ChartProviderProps>) {
     const rightMargin: number = yAxisPosition === 'right' ? yAxisSize : 25;
     const leftMargin: number = yAxisPosition === 'left' ? yAxisSize : 25;
 
-    const plotHeight: number = height - topMargin - bottomMargin;
-    const plotWidth: number = width - leftMargin - rightMargin;
+    const seriesSurfaceHeight: number = height - topMargin - bottomMargin;
+    const seriesSurfaceWidth: number = width - leftMargin - rightMargin;
 
     return {
       left: leftMargin,
-      right: leftMargin + plotWidth,
+      right: leftMargin + seriesSurfaceWidth,
       top: topMargin,
-      bottom: topMargin + plotHeight,
+      bottom: topMargin + seriesSurfaceHeight,
     };
   }, [size, xAxisProps, yAxisProps]);
 
@@ -159,13 +193,16 @@ export function ChartProvider(props: PropsWithChildren<ChartProviderProps>) {
     return new CkPaintRepository(ckGraphics, [...colors]);
   }, [backgroundColor, ckGraphics, seriesColors, xAxisProps, yAxisProps]);
 
-  const xyCoordLayout = useMemo(() => buildXYCoordLayout(plot), [plot]);
+  const xyCoordLayout = useMemo(
+    () => buildXYCoordLayout(series, xConfig, yConfig),
+    [series, xConfig, yConfig],
+  );
 
   return xyCoordLayout ? (
     <ChartContext.Provider
       value={{
         paintRepository,
-        plot,
+        series,
         seriesColors,
         seriesSurfaceRect,
         size,

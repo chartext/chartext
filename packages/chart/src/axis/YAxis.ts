@@ -6,11 +6,11 @@ import { CoordType } from '@/coord/Coord.types';
 import { CoordLayout } from '@/coord/CoordLayout';
 import { RectLayout } from '@/layout/ChartLayout.types';
 
-export class YAxis extends Axis {
+export class YAxis<Y extends CoordType> extends Axis<Y> {
   constructor(
     axisProps: YAxisProps,
     ckGraphics: CkGraphics,
-    coordLayout: CoordLayout<CoordType>,
+    coordLayout: CoordLayout<Y>,
     paintRepository: CkPaintRepository,
   ) {
     const { labelColor, labelFontSize } = axisProps;
@@ -20,18 +20,20 @@ export class YAxis extends Axis {
         ? ckGraphics.CK.TextAlign.Right
         : ckGraphics.CK.TextAlign.Left;
 
-    const labelParagraph = ckGraphics.createParagraph({
-      text: coordLayout.label,
-      fontSize: labelFontSize,
-      color: labelColor,
-      textAlign: ckGraphics.CK.TextAlign.Center,
-    });
+    const labelParagraph = axisProps.label
+      ? ckGraphics.createParagraph({
+          text: axisProps.label,
+          fontSize: labelFontSize,
+          color: labelColor,
+          textAlign: ckGraphics.CK.TextAlign.Center,
+        })
+      : null;
 
     super(
-      axisProps,
       ckGraphics,
       coordLayout,
       labelParagraph,
+      axisProps,
       paintRepository,
       textAlign,
     );
@@ -41,6 +43,8 @@ export class YAxis extends Axis {
     canvas: Canvas,
     seriesSurfaceRect: RectLayout,
   ): void {
+    if (!this.labelParagraph) return;
+
     const height = seriesSurfaceRect.bottom - seriesSurfaceRect.top;
     const width = seriesSurfaceRect.right - seriesSurfaceRect.left;
 
@@ -65,7 +69,7 @@ export class YAxis extends Axis {
     paint: Paint,
     seriesSurfaceRect: RectLayout,
     tickParagraph: Paragraph,
-    value: CoordType,
+    value: Y,
   ) {
     const y = this.coordLayout.getScreenCoord(value, seriesSurfaceRect);
     const x0 = seriesSurfaceRect.left - 7;

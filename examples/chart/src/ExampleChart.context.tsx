@@ -1,9 +1,9 @@
-import { Plot } from '@chartext/chart';
+import { Series } from '@chartext/chart';
 import { createContext, useContext } from 'react';
 
 type ExampleChartContextProps = {
-  plot: Plot | undefined;
-  setPlot: (plot: Plot) => void;
+  series: Series[];
+  setSeries(series: Series[]): void;
 };
 
 export const ExampleChartContext = createContext<ExampleChartContextProps>(

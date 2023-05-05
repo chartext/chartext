@@ -31,11 +31,13 @@ export function NumberRangeControl(props: NumberRangeControlProps) {
         spacing={5}
       >
         <NumberInput
+          label="min"
           size="xs"
           hideControls
           {...minProps}
         />
         <NumberInput
+          label="max"
           size="xs"
           hideControls
           {...maxProps}

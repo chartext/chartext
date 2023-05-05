@@ -3,17 +3,16 @@ import { CoordLayout } from '@/coord/CoordLayout';
 import { Direction } from '@/layout/ChartLayout.types';
 import { dateTicks } from '@/utils/ticks';
 import { addDatePart } from '@/utils/dates';
-import { CoordProps } from '@/coord/Coord.types';
+import { DatePart } from '@/utils/dates.types';
 
 export class DateCoordLayout extends CoordLayout<Date> {
-  override format(value: Date): string {
-    throw new Error('Method not implemented.');
-  }
+  readonly #datePart: DatePart;
+
   constructor(
     values: Date[],
     maxTicks: number,
     direction: Direction,
-    coordProps?: CoordProps,
+    // coordFormatter?: CoordFormatter,
   ) {
     const minDate = min(values);
     const maxDate = max(values);
@@ -34,8 +33,24 @@ export class DateCoordLayout extends CoordLayout<Date> {
       ticks.push(tick);
     }
 
-    const name = coordProps?.name ?? 'Date';
-    super(name, roundedMin, roundedMax, ticks, direction);
+    const formatter = (() => {
+      switch (datePart) {
+        case 'year':
+        case 'quarter':
+        case 'month':
+        case 'week':
+        case 'dayOfMonth':
+        case 'hour':
+        case 'minute':
+        case 'second':
+        case 'millisecond':
+          return new Intl.DateTimeFormat('default', {});
+      }
+    })();
+
+    super(roundedMin, roundedMax, ticks, direction, formatter);
+
+    this.#datePart = datePart;
   }
 
   protected override toNumber(value: Date): number {

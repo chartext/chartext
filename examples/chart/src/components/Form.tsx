@@ -1,4 +1,4 @@
-import { generatePlot, randomInt } from '@chartext/chart';
+import { Series, generateSeriesArr, randomInt } from '@chartext/chart';
 import { Button, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useCallback } from 'react';
@@ -7,7 +7,7 @@ import { SeriesControl, SeriesControlValues } from '@/components/SeriesControl';
 import { CoordControl, CoordControlValues } from '@/components/CoordControl';
 import { useExampleChartContext } from '@/ExampleChart.context';
 
-type RandomPlotFormProps = {
+type RandomSeriesFormProps = {
   xCoord: CoordControlValues;
   yCoord: CoordControlValues;
   lineSeries: SeriesControlValues;
@@ -37,11 +37,11 @@ function randomSeriesValues(): SeriesControlValues {
   };
 }
 
-export function Sidebar(props: SidebarProps) {
+export function Form(props: SidebarProps) {
   const { height, width, padding = 10 } = props;
-  const { setPlot } = useExampleChartContext();
+  const { setSeries } = useExampleChartContext();
 
-  const form = useForm<RandomPlotFormProps>({
+  const form = useForm<RandomSeriesFormProps>({
     initialValues: {
       xCoord: randomCoordValues(),
       yCoord: randomCoordValues(),
@@ -51,9 +51,10 @@ export function Sidebar(props: SidebarProps) {
   });
 
   const onSubmit = useCallback(
-    (randomPlotFormProps: RandomPlotFormProps) => {
-      const { xCoord, yCoord, lineSeries, scatterSeries } = randomPlotFormProps;
-      const plot = generatePlot([
+    (randomSeriesFormProps: RandomSeriesFormProps) => {
+      const { xCoord, yCoord, lineSeries, scatterSeries } =
+        randomSeriesFormProps;
+      const series: Series[] = generateSeriesArr([
         {
           xRange: xCoord.range,
           yRange: yCoord.range,
@@ -69,9 +70,9 @@ export function Sidebar(props: SidebarProps) {
           dataCount: scatterSeries.dataCount,
         },
       ]);
-      setPlot(plot);
+      setSeries(series);
     },
-    [setPlot],
+    [setSeries],
   );
 
   return (

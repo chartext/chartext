@@ -1,6 +1,6 @@
 import { CoordType, XY } from '@/coord/Coord.types';
 import { parseCoord } from '@/utils/dataParsers';
-import { Plot, Series } from '@/series/Series.types';
+import { Series } from '@/series/Series.types';
 import {
   RandomSeriesConfig,
   RandomSeriesProps,
@@ -23,26 +23,26 @@ export function generateDateData(
   return Array.from({ length: dataCount }, () => randomDate(min, max));
 }
 
-export function generateData<T extends CoordType>(
-  min: T,
-  max: T,
+export function generateData<C extends CoordType>(
+  min: C,
+  max: C,
   dataCount: number,
-): T[] {
+): C[] {
   const coordType = parseCoord(min);
 
   switch (coordType) {
     case 'integer':
       return Array.from({ length: dataCount }, () =>
         randomInt(min as number, max as number),
-      ) as T[];
+      ) as C[];
     case 'float':
       return Array.from({ length: dataCount }, () =>
         randomNumber(min as number, max as number),
-      ) as T[];
+      ) as C[];
     case 'date':
       return Array.from({ length: dataCount }, () =>
         randomDate(min as Date, max as Date),
-      ) as T[];
+      ) as C[];
   }
 
   return [];
@@ -59,12 +59,18 @@ export function generateSeries<X extends CoordType, Y extends CoordType>(
     yRange: { min: yMin, max: yMax },
   } = props;
 
-  const xData: CoordType[] = generateData(xMin, xMax, dataCount);
-  const yData: CoordType[] = generateData(yMin, yMax, dataCount);
+  const xData: X[] = generateData<X>(xMin, xMax, dataCount);
+  const yData: Y[] = generateData<Y>(yMin, yMax, dataCount);
 
-  const data: XY[] = xData.map(
-    (x, xDataIndex): XY => ({ x, y: yData[xDataIndex] ?? 0 }),
-  );
+  const data: XY[] = xData
+    .map((x, xDataIndex): XY => {
+      const y = yData[xDataIndex];
+      if (y !== undefined) {
+        return { x, y };
+      }
+      throw new Error('y is undefined', { cause: yData });
+    })
+    .filter(Boolean);
 
   return {
     type,
@@ -73,9 +79,9 @@ export function generateSeries<X extends CoordType, Y extends CoordType>(
   };
 }
 
-export function generatePlot<X extends CoordType, Y extends CoordType>(
+export function generateSeriesArr<X extends CoordType, Y extends CoordType>(
   series: RandomSeriesConfig<X, Y>[],
-): Plot {
+): Series[] {
   const randomSeriesArr: Series[] = [];
 
   series.forEach((seriesConfig) => {
@@ -94,7 +100,5 @@ export function generatePlot<X extends CoordType, Y extends CoordType>(
     }
   });
 
-  return {
-    series: randomSeriesArr,
-  };
+  return randomSeriesArr;
 }

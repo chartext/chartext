@@ -4,6 +4,7 @@ export type XAxisPosition = Omit<Position, 'left' | 'right' | 'center'>;
 export type YAxisPosition = Omit<Position, 'top' | 'bottom' | 'center'>;
 
 export type AxisProps = {
+  label?: string;
   labelColor: string;
   labelFontSize: number;
   showZero: boolean;

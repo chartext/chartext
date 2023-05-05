@@ -34,12 +34,12 @@ export function SeriesControl(props: SeriesControlProps) {
         spacing={5}
       >
         <NumberInput
-          label="# Series"
+          label="# series"
           size="xs"
           {...seriesCountProps}
         />
         <NumberInput
-          label="# Data"
+          label="# data"
           size="xs"
           hideControls
           {...dataCountProps}

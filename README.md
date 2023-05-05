@@ -1,23 +1,50 @@
 # chartext
 
-[![Check formatting](https://github.com/chartext/chartext/actions/workflows/check-formatting.yml/badge.svg?label=Linting&logo=github)](https://github.com/chartext/chartext/actions/workflows/check-formatting.yml) [![Check linting](https://github.com/chartext/chartext/actions/workflows/check-linting.yml/badge.svg)](https://github.com/chartext/chartext/actions/workflows/check-linting.yml) [![Deploy pages](https://github.com/chartext/chartext/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/chartext/chartext/actions/workflows/deploy-pages.yml)
+[![Prettier](https://github.com/chartext/chartext/actions/workflows/check-formatting.yml/badge.svg?label=Linting&logo=github)](https://github.com/chartext/chartext/actions/workflows/check-formatting.yml) [![Linter](https://github.com/chartext/chartext/actions/workflows/check-linting.yml/badge.svg)](https://github.com/chartext/chartext/actions/workflows/check-linting.yml) [![Deploy Pages](https://github.com/chartext/chartext/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/chartext/chartext/actions/workflows/deploy-pages.yml)
 
 React Skia Chart
+
+🚧 Currently under development 🚧
 
 [Chart Example](https://chartext.github.io/chartext/)
 
 ## Packages
 
-| Package                                      | Description             |
-| -------------------------------------------- | ----------------------- |
-| [@chartext/canvaskit](./packages/canvaskit/) | React canvaskit library |
-| [@chartext/chart](./packages/chart/)         | React canvaskit chart   |
+| Package                                      | Description             | Defaults                                             |
+| -------------------------------------------- | ----------------------- | ---------------------------------------------------- |
+| [@chartext/canvaskit](./packages/canvaskit/) | React canvaskit library |                                                      |
+| [@chartext/chart](./packages/chart/)         | React canvaskit chart   | [ChartDefaults](packages/chart/src/ChartDefaults.ts) |
 
 ## Examples
 
 | Example                             | Command                   | Description                                                                       |
 | ----------------------------------- | ------------------------- | --------------------------------------------------------------------------------- |
 | [examples/chart](./examples/chart/) | `pnpm examples:chart dev` | [Chart Example](https://chartext.github.io/chartext/) with randomized number data |
+
+### Chart Snippet
+
+```tsx
+const series: Series[] = generateSeriesArr([
+  {
+    xRange: { min: -100, max: 100 },
+    yRange: yCoord.range,
+    type: { min: -100, max: 100 },
+    count: 2,
+    dataCount: 100,
+  },
+]);
+
+<Chart
+  size={{ height: 480, width: 640 }}
+  series={series}
+  xAxis={{
+    label: 'X Axis',
+  }}
+  yAxis={{
+    label: 'Y Axis',
+  }}
+/>;
+```
 
 ## Contributing
 
@@ -46,9 +73,10 @@ React Skia Chart
 | pnpm canvaskit      | Alias to run scripts from [packages/canvaskit/package.json](packages/canvaskit/package.json) |
 | pnpm chart          | Alias to run scripts from [packages/chart/package.json](packages/chart/package.json)         |
 | pnpm examples:chart | Alias to run scripts from [examples/chart/package.json](examples/chart/package.json)         |
-| lint                | Lints the entire project                                                                     |
-| lint:fix            | Lints and auto-fixes the entire project                                                      |
-| prettier:check      | Runs prettier to check formatting                                                            |
+| lint:check          | Runs ESLint to check for issues                                                              |
+| lint:fix            | Runs ESLint to fix as many issues as possible                                                |
+| prettier:check      | Runs Prettier to check formatting                                                            |
+| prettier:fix        | Runs Prettier to fix formatting                                                              |
 
 ## [vscode](https://code.visualstudio.com/)
 

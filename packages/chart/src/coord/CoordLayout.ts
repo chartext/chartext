@@ -1,31 +1,31 @@
-import { CoordType } from '@/coord/Coord.types';
+import { CoordFormatter, CoordType } from '@/coord/Coord.types';
 import { Direction, RectLayout } from '@/layout/ChartLayout.types';
 
-export abstract class CoordLayout<T extends CoordType> {
-  readonly #label: string;
-  readonly #min: T;
-  readonly #max: T;
-  readonly #ticks: T[];
+export abstract class CoordLayout<C extends CoordType> {
+  readonly #min: C;
+  readonly #max: C;
+  readonly #ticks: C[];
   readonly #direction: Direction;
+  readonly #formatter: CoordFormatter<C>;
+  readonly #valueToScreenMap: Map<C, number> = new Map<C, number>();
 
   protected constructor(
-    label: string,
-    min: T,
-    max: T,
-    ticks: T[],
+    min: C,
+    max: C,
+    ticks: C[],
     direction: Direction,
+    formatter: CoordFormatter<C>,
   ) {
-    this.#label = label;
     this.#min = min;
     this.#max = max;
     this.#ticks = ticks;
     this.#direction = direction;
+    this.#formatter = formatter;
   }
 
-  abstract format(value: T): string;
-  protected abstract toNumber(value: T): number;
+  protected abstract toNumber(value: C): number;
 
-  getScreenCoord(value: T, seriesSurfaceRect: RectLayout): number {
+  getScreenCoord(value: C, seriesSurfaceRect: RectLayout): number {
     return this.toScreenCoord(
       this.toNumber(value),
       this.toNumber(this.#min),
@@ -66,24 +66,24 @@ export abstract class CoordLayout<T extends CoordType> {
     }
   }
 
-  get label(): string {
-    return this.#label;
+  get formatter(): CoordFormatter<C> {
+    return this.#formatter;
   }
 
-  get min(): T {
+  get min(): C {
     return this.#min;
   }
 
-  get max(): T {
+  get max(): C {
     return this.#max;
   }
 
-  get ticks(): T[] {
+  get ticks(): C[] {
     return this.#ticks;
   }
 }
 
-export type XYCoordLayout = {
-  xCoordLayout: CoordLayout<CoordType>;
-  yCoordLayout: CoordLayout<CoordType>;
+export type XYCoordLayout<X extends CoordType, Y extends CoordType> = {
+  xCoordLayout: CoordLayout<X>;
+  yCoordLayout: CoordLayout<Y>;
 };

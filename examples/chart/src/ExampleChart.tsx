@@ -1,14 +1,14 @@
-import { Chart, Plot } from '@chartext/chart';
+import { Chart, Series } from '@chartext/chart';
 import { Group, MantineProvider } from '@mantine/core';
 import { useViewportSize } from '@mantine/hooks';
 import { useState } from 'react';
-import { Sidebar } from '@/components/Sidebar';
+import { Form } from '@/components/Form';
 import { ExampleChartContext } from '@/ExampleChart.context';
 
 const sidebarWidth = 175;
 
 export function ExampleChart() {
-  const [plot, setPlot] = useState<Plot>();
+  const [series, setSeries] = useState<Series[]>([]);
   const { height, width } = useViewportSize();
 
   return (
@@ -17,15 +17,21 @@ export function ExampleChart() {
       withGlobalStyles
       withNormalizeCSS
     >
-      <ExampleChartContext.Provider value={{ plot, setPlot }}>
+      <ExampleChartContext.Provider value={{ series, setSeries }}>
         <Group spacing={0}>
-          <Sidebar
+          <Form
             height={height}
             width={sidebarWidth}
           />
           <Chart
             size={{ height: height, width: width - sidebarWidth }}
-            plot={plot}
+            series={series}
+            xAxis={{
+              label: 'X Axis',
+            }}
+            yAxis={{
+              label: 'Y Axis',
+            }}
           />
         </Group>
       </ExampleChartContext.Provider>

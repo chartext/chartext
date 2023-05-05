@@ -68,11 +68,9 @@ export function CkSurface(props: PropsWithChildren<CkSurfaceProps>) {
         width={width * scale}
         style={{ height, width, zIndex, position: 'absolute' }}
       />
-      {surface ? (
-        <CkSurfaceContext.Provider value={surface}>
-          {children}
-        </CkSurfaceContext.Provider>
-      ) : null}
+      <CkSurfaceContext.Provider value={surface}>
+        {children}
+      </CkSurfaceContext.Provider>
     </>
   );
 }
