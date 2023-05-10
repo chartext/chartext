@@ -1,10 +1,10 @@
 import { CkSurface } from '@chartext/canvaskit';
 import { Suspense, lazy, useMemo } from 'react';
-import { PartialChartProps } from '@/Chart.types';
+import { ChartStyle, PartialChartProps } from '@/Chart.types';
 import { defaultChartProps } from '@/ChartDefaults';
 import { ChartEmpty } from '@/ChartEmpty';
 import { ChartLoading } from '@/ChartLoading';
-import { XAxisProps, YAxisProps } from '@/axis/Axis.types';
+import { XAxisConfig, YAxisConfig } from '@/axis/Axis.types';
 import { AxisSurface } from '@/axis/AxisSurface';
 import { ChartProvider } from '@/context/ChartProvider';
 import { Size } from '@/layout/ChartLayout.types';
@@ -17,17 +17,15 @@ const CkGraphicsProviderLazy = lazy(() =>
 );
 
 export function Chart(props: PartialChartProps) {
-  const seriesColors: string[] = useMemo(
-    () => props.seriesColors ?? defaultChartProps.seriesColors,
-    [props.seriesColors],
+  const style: ChartStyle = useMemo(
+    () => ({
+      ...props.style,
+      ...defaultChartProps.style,
+    }),
+    [props.style],
   );
 
-  const backgroundColor = useMemo(
-    () => props.backgroundColor ?? defaultChartProps.backgroundColor,
-    [props.backgroundColor],
-  );
-
-  const xAxisProps: XAxisProps = useMemo(
+  const xAxisConfig: XAxisConfig = useMemo(
     () => ({
       ...defaultChartProps.xAxis,
       ...props.xAxis,
@@ -35,7 +33,7 @@ export function Chart(props: PartialChartProps) {
     [props.xAxis],
   );
 
-  const yAxisProps: YAxisProps = useMemo(
+  const yAxisConfig: YAxisConfig = useMemo(
     () => ({
       ...defaultChartProps.yAxis,
       ...props.yAxis,
@@ -51,15 +49,16 @@ export function Chart(props: PartialChartProps) {
   return (
     <Suspense fallback={<ChartLoading />}>
       <CkGraphicsProviderLazy>
-        <div style={{ ...size, backgroundColor, margin: 0 }}>
+        <div
+          style={{ ...size, backgroundColor: style.backgroundColor, margin: 0 }}
+        >
           {props.series && props.series.length > 0 ? (
             <ChartProvider
-              backgroundColor={backgroundColor}
+              style={style}
               series={props.series}
-              seriesColors={seriesColors}
               size={size}
-              xAxisProps={xAxisProps}
-              yAxisProps={yAxisProps}
+              xAxisConfig={xAxisConfig}
+              yAxisConfig={yAxisConfig}
               xConfig={props.x}
               yConfig={props.y}
             >

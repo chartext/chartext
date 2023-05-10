@@ -1,15 +1,18 @@
 import { CkGraphics, CkPaintSet } from '@chartext/canvaskit';
 import { Paint, Surface } from 'canvaskit-wasm';
-import { CoordType, XY } from '@/coord/Coord.types';
-import { XYCoordLayout } from '@/coord/CoordLayout';
+import { CoordType, XY, XYTuple } from '@/coord/Coord.types';
 import { RectLayout } from '@/layout/ChartLayout.types';
+import { CoordLayout } from '@/coord/CoordLayout';
 
 export type SeriesType = 'line' | 'scatter' | 'box' | 'area' | 'bar';
 
-export type Series = {
-  readonly type: SeriesType;
+export type Series<
+  X extends CoordType = CoordType,
+  Y extends CoordType = CoordType,
+> = {
+  readonly seriesType: SeriesType;
   readonly name: string;
-  readonly data: XY[];
+  readonly data: XY<X, Y>[];
   // readonly data: (object | XY)[];
 };
 
@@ -30,8 +33,8 @@ export type SeriesDrawerProps = {
 export type SeriesDrawProps = {
   readonly surface: Surface;
   readonly ckGraphics: CkGraphics;
-  readonly seriesSurfaceRect: RectLayout;
-  readonly xyCoordLayout: XYCoordLayout<CoordType, CoordType>;
+  readonly seriesSurfaceLayout: RectLayout;
+  readonly xyCoordLayout: XYTuple<CoordLayout>;
 };
 
 export interface SeriesDrawer {

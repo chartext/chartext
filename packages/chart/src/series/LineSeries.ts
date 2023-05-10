@@ -21,10 +21,10 @@ export class LineSeries implements SeriesDrawer {
 
   draw(props: SeriesDrawProps) {
     const {
-      seriesSurfaceRect,
+      seriesSurfaceLayout,
       surface,
       ckGraphics,
-      xyCoordLayout: { xCoordLayout, yCoordLayout },
+      xyCoordLayout: [xLayout, yLayout],
     } = props;
 
     const path = ckGraphics.createPath();
@@ -34,14 +34,8 @@ export class LineSeries implements SeriesDrawer {
       surface.requestAnimationFrame((canvas) => {
         try {
           const { x: startXValue, y: startYValue } = startXY;
-          const x0 = xCoordLayout.getScreenCoord(
-            startXValue,
-            seriesSurfaceRect,
-          );
-          const y0 = yCoordLayout.getScreenCoord(
-            startYValue,
-            seriesSurfaceRect,
-          );
+          const x0 = xLayout.getSurfaceCoord(startXValue, seriesSurfaceLayout);
+          const y0 = yLayout.getSurfaceCoord(startYValue, seriesSurfaceLayout);
 
           path.moveTo(x0, y0);
           canvas.drawCircle(x0, y0, 1, this.#paint);
@@ -50,8 +44,8 @@ export class LineSeries implements SeriesDrawer {
             const { x: xValue, y: yValue } = xy;
 
             if (xValue && yValue) {
-              const x = xCoordLayout.getScreenCoord(xValue, seriesSurfaceRect);
-              const y = yCoordLayout.getScreenCoord(yValue, seriesSurfaceRect);
+              const x = xLayout.getSurfaceCoord(xValue, seriesSurfaceLayout);
+              const y = yLayout.getSurfaceCoord(yValue, seriesSurfaceLayout);
               path.lineTo(x, y);
               canvas.drawCircle(x, y, 1, this.#paint);
             }

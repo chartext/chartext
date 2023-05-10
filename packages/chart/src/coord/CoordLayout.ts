@@ -1,67 +1,47 @@
+import { AxisTickLayout } from '@/axis/Axis.types';
 import { CoordFormatter, CoordType } from '@/coord/Coord.types';
 import { Direction, RectLayout } from '@/layout/ChartLayout.types';
 
-export abstract class CoordLayout<C extends CoordType> {
-  readonly #min: C;
-  readonly #max: C;
-  readonly #ticks: C[];
+export abstract class CoordLayout<C extends CoordType = CoordType> {
+  readonly #min: number;
+  readonly #max: number;
+  readonly #diff: number;
   readonly #direction: Direction;
   readonly #formatter: CoordFormatter<C>;
-  readonly #valueToScreenMap: Map<C, number> = new Map<C, number>();
 
-  protected constructor(
-    min: C,
-    max: C,
-    ticks: C[],
+  constructor(
+    axisTickLayout: AxisTickLayout<C>,
     direction: Direction,
     formatter: CoordFormatter<C>,
   ) {
-    this.#min = min;
-    this.#max = max;
-    this.#ticks = ticks;
+    const { min, max } = axisTickLayout;
+
+    this.#min = this.toSurfaceValue(min);
+    this.#max = this.toSurfaceValue(max);
+
+    this.#diff = Math.abs(this.#max - this.#min);
     this.#direction = direction;
     this.#formatter = formatter;
   }
 
-  protected abstract toNumber(value: C): number;
+  protected abstract toSurfaceValue(value: C): number;
 
-  getScreenCoord(value: C, seriesSurfaceRect: RectLayout): number {
-    return this.toScreenCoord(
-      this.toNumber(value),
-      this.toNumber(this.#min),
-      this.toNumber(this.#max),
-      seriesSurfaceRect,
-    );
-  }
+  getSurfaceCoord(value: C | number, seriesSurfaceLayout: RectLayout): number {
+    const plotValue =
+      typeof value === 'number' ? value : this.toSurfaceValue(value);
 
-  protected toScreenCoord(
-    value: number,
-    minValue: number,
-    maxValue: number,
-    seriesSurfaceRect: RectLayout,
-  ): number {
     switch (this.#direction) {
       case 'horizontal': {
-        const { left: seriesSurfaceLeft, right: seriesSurfaceRight } =
-          seriesSurfaceRect;
-        const seriesSurfaceWidth = seriesSurfaceRight - seriesSurfaceLeft;
-        const diff = Math.abs(maxValue - minValue);
-        const scale = seriesSurfaceWidth / diff;
+        const { x0, width } = seriesSurfaceLayout;
+        const scale = width / this.#diff;
 
-        return Math.round(
-          seriesSurfaceLeft + Math.abs(value - minValue) * scale,
-        );
+        return Math.round(x0 + Math.abs(plotValue - this.#min) * scale);
       }
       case 'vertical': {
-        const { top: seriesSurfaceTop, bottom: seriesSurfaceBottom } =
-          seriesSurfaceRect;
-        const seriesSurfaceHeight = seriesSurfaceBottom - seriesSurfaceTop;
-        const diff = Math.abs(maxValue - minValue);
-        const scale = seriesSurfaceHeight / diff;
+        const { y0, height } = seriesSurfaceLayout;
+        const scale = height / this.#diff;
 
-        return Math.round(
-          seriesSurfaceTop + Math.abs(maxValue - value) * scale,
-        );
+        return Math.round(y0 + Math.abs(this.#max - plotValue) * scale);
       }
     }
   }
@@ -69,21 +49,4 @@ export abstract class CoordLayout<C extends CoordType> {
   get formatter(): CoordFormatter<C> {
     return this.#formatter;
   }
-
-  get min(): C {
-    return this.#min;
-  }
-
-  get max(): C {
-    return this.#max;
-  }
-
-  get ticks(): C[] {
-    return this.#ticks;
-  }
 }
-
-export type XYCoordLayout<X extends CoordType, Y extends CoordType> = {
-  xCoordLayout: CoordLayout<X>;
-  yCoordLayout: CoordLayout<Y>;
-};

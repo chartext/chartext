@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { roundDate } from '@/utils/dates';
-import { DatePart } from '@/utils/dates.types';
+import { roundDate, DatePart, maxDayOfMonth } from '@/utils/dates';
 import { randomDate } from '@/utils/random';
 
 function randomDates(
@@ -148,6 +147,44 @@ describe('Dates test', () => {
         testDate.getMonth(),
         testDate.getDate() + (testDate.getHours() < 12 ? 0 : 1),
       ),
+    );
+  });
+
+  it('should round to the nearest [month]', () => {
+    const datePart: DatePart = 'month';
+    const [testDate, floorDate, ceilingDate, roundedDate] =
+      randomDates(datePart);
+
+    expect(floorDate, `round ${datePart} [floor]`).toStrictEqual(
+      new Date(testDate.getFullYear(), testDate.getMonth()),
+    );
+    expect(ceilingDate, `round ${datePart} [ceiling]`).toStrictEqual(
+      new Date(testDate.getFullYear(), testDate.getMonth() + 1),
+    );
+    const maxDay = maxDayOfMonth(testDate.getFullYear(), testDate.getMonth());
+
+    expect(roundedDate, `round ${datePart}`).toStrictEqual(
+      new Date(
+        testDate.getFullYear(),
+        testDate.getMonth() + (testDate.getDate() < maxDay / 2 ? 0 : 1),
+      ),
+    );
+  });
+
+  it('should round to the nearest [year]', () => {
+    const datePart: DatePart = 'year';
+    const [testDate, floorDate, ceilingDate, roundedDate] =
+      randomDates(datePart);
+
+    expect(floorDate, `round ${datePart} [floor]`).toStrictEqual(
+      new Date(testDate.getFullYear(), 0),
+    );
+    expect(ceilingDate, `round ${datePart} [ceiling]`).toStrictEqual(
+      new Date(testDate.getFullYear() + 1, 0),
+    );
+
+    expect(roundedDate, `round ${datePart}`).toStrictEqual(
+      new Date(testDate.getFullYear() + (testDate.getMonth() < 6 ? 0 : 1), 0),
     );
   });
 });

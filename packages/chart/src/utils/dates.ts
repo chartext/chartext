@@ -12,10 +12,40 @@ import {
   nextSaturday,
   previousSunday,
 } from 'date-fns';
-import { DatePart, Months } from '@/utils/dates.types';
 
-export function maxDayOfMonth(month: Months, year: number): 28 | 29 | 30 | 31 {
-  switch (month) {
+export type DatePart =
+  | 'year'
+  | 'quarter'
+  | 'month'
+  | 'week'
+  | 'dayOfMonth'
+  | 'hour'
+  | 'minute'
+  | 'second'
+  | 'millisecond';
+
+export const Months = {
+  Jan: 0,
+  Feb: 1,
+  Mar: 2,
+  Apr: 3,
+  May: 4,
+  Jun: 5,
+  Jul: 6,
+  Aug: 7,
+  Sep: 8,
+  Oct: 9,
+  Nov: 10,
+  Dec: 11,
+} as const;
+
+export type DateSpacing = [datePart: DatePart, diff: number];
+
+export function maxDayOfMonth(
+  year: number,
+  monthIndex: number,
+): 28 | 29 | 30 | 31 {
+  switch (monthIndex) {
     case Months.Jan:
     case Months.Mar:
     case Months.May:
@@ -33,7 +63,7 @@ export function maxDayOfMonth(month: Months, year: number): 28 | 29 | 30 | 31 {
       return isLeapYear(new Date(year, Months.Feb, 1)) ? 29 : 28;
     }
     default:
-      throw new Error('Invalid month', { cause: month });
+      throw new Error(`Invalid monthIndex: ${monthIndex}`);
   }
 }
 
@@ -42,27 +72,12 @@ export function roundDate(
   datePart: DatePart,
   direction?: 'floor' | 'ceiling',
 ): Date {
-  // const adjustment = direction === 'ceiling' ? 1 : 0;
-
-  /* const seconds = (() => {
-    const dateSeconds = date.getSeconds();
-
-    if (datePart === 'seconds') {
-      return dateSeconds + (direction === 'floor' || date.getMilliseconds() < 500 ? 0 : 1);
-    }
-
-    return dateSeconds;
-  })(); */
-
   switch (datePart) {
     case 'second': {
-      const adjustment = (() => {
-        if (!direction) {
-          return date.getMilliseconds() < 500 ? 0 : 1;
-        }
-
-        return direction === 'ceiling' ? 1 : 0;
-      })();
+      const adjustment =
+        direction === 'floor' || (!direction && date.getMilliseconds() < 500)
+          ? 0
+          : 1;
 
       return new Date(
         date.getFullYear(),
@@ -74,14 +89,8 @@ export function roundDate(
       );
     }
     case 'minute': {
-      const adjustment = (() => {
-        if (!direction) {
-          return date.getSeconds() < 30 ? 0 : 1;
-        }
-
-        return direction === 'ceiling' ? 1 : 0;
-      })();
-
+      const adjustment =
+        direction === 'floor' || (!direction && date.getSeconds() < 30) ? 0 : 1;
       return new Date(
         date.getFullYear(),
         date.getMonth(),
@@ -91,14 +100,8 @@ export function roundDate(
       );
     }
     case 'hour': {
-      const adjustment = (() => {
-        if (!direction) {
-          return date.getMinutes() < 30 ? 0 : 1;
-        }
-
-        return direction === 'ceiling' ? 1 : 0;
-      })();
-
+      const adjustment =
+        direction === 'floor' || (!direction && date.getMinutes() < 30) ? 0 : 1;
       return new Date(
         date.getFullYear(),
         date.getMonth(),
@@ -107,14 +110,8 @@ export function roundDate(
       );
     }
     case 'dayOfMonth': {
-      const adjustment = (() => {
-        if (!direction) {
-          return date.getHours() < 12 ? 0 : 1;
-        }
-
-        return direction === 'ceiling' ? 1 : 0;
-      })();
-
+      const adjustment =
+        direction === 'floor' || (!direction && date.getHours() < 12) ? 0 : 1;
       return new Date(
         date.getFullYear(),
         date.getMonth(),
@@ -123,15 +120,38 @@ export function roundDate(
       );
     }
     case 'week': {
-      const adjustment = (() => {
-        if (!direction) {
-          return date.getDay() < 4 ? 0 : 1;
-        }
-
-        return direction === 'ceiling' ? 1 : 0;
-      })();
-
+      const adjustment =
+        direction === 'floor' || (!direction && date.getDay() < 4) ? 0 : 1;
       return adjustment === 0 ? previousSunday(date) : nextSaturday(date);
+    }
+    case 'month': {
+      const maxDay: number = maxDayOfMonth(date.getFullYear(), date.getMonth());
+      const adjustment =
+        direction === 'floor' || (!direction && date.getDate() < maxDay / 2)
+          ? 0
+          : 1;
+      return new Date(date.getFullYear(), date.getMonth() + adjustment);
+    }
+    case 'quarter': {
+      const month = date.getMonth();
+
+      let quarterMonth;
+
+      if (month === Months.Jan || month === Months.Dec)
+        quarterMonth = Months.Jan;
+      else if (month <= Months.Apr) quarterMonth = Months.Apr;
+      else if (month <= Months.Jul) quarterMonth = Months.Jul;
+      else quarterMonth = Months.Oct;
+
+      // const adjustment =
+      //   direction === 'floor' || (!direction && date.getMonth());
+
+      return new Date(date.getFullYear(), quarterMonth);
+    }
+    case 'year': {
+      const adjustment =
+        direction === 'floor' || (!direction && date.getMonth() < 6) ? 0 : 1;
+      return new Date(date.getFullYear() + adjustment, 0);
     }
     default:
       return date;

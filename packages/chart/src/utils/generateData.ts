@@ -1,5 +1,5 @@
 import { CoordType, XY } from '@/coord/Coord.types';
-import { parseCoord } from '@/utils/dataParsers';
+import { coordTypeName } from '@/utils/dataParsers';
 import { Series } from '@/series/Series.types';
 import {
   RandomSeriesConfig,
@@ -28,14 +28,14 @@ export function generateData<C extends CoordType>(
   max: C,
   dataCount: number,
 ): C[] {
-  const coordType = parseCoord(min);
+  const coordType = coordTypeName(min);
 
   switch (coordType) {
     case 'integer':
       return Array.from({ length: dataCount }, () =>
         randomInt(min as number, max as number),
       ) as C[];
-    case 'float':
+    case 'decimal':
       return Array.from({ length: dataCount }, () =>
         randomNumber(min as number, max as number),
       ) as C[];
@@ -50,7 +50,7 @@ export function generateData<C extends CoordType>(
 
 export function generateSeries<X extends CoordType, Y extends CoordType>(
   props: RandomSeriesProps<X, Y>,
-): Series {
+): Series<X, Y> {
   const {
     dataCount,
     index,
@@ -62,29 +62,24 @@ export function generateSeries<X extends CoordType, Y extends CoordType>(
   const xData: X[] = generateData<X>(xMin, xMax, dataCount);
   const yData: Y[] = generateData<Y>(yMin, yMax, dataCount);
 
-  const data: XY[] = xData
-    .map((x, xDataIndex): XY => {
-      const y = yData[xDataIndex];
-      if (y !== undefined) {
-        return { x, y };
-      }
-      throw new Error('y is undefined', { cause: yData });
-    })
-    .filter(Boolean);
+  const data: XY<X, Y>[] = xData.flatMap((x, xDataIndex): XY<X, Y>[] => {
+    const y = yData[xDataIndex];
+    return y === undefined ? [] : [{ x, y }];
+  });
 
   return {
-    type,
+    seriesType: type,
     name: `${type} series ${index} - [${dataCount}]`,
     data,
   };
 }
 
 export function generateSeriesArr<X extends CoordType, Y extends CoordType>(
-  series: RandomSeriesConfig<X, Y>[],
-): Series[] {
-  const randomSeriesArr: Series[] = [];
+  seriesConfigs: RandomSeriesConfig<X, Y>[],
+): Series<X, Y>[] {
+  const randomSeriesArr: Series<X, Y>[] = [];
 
-  series.forEach((seriesConfig) => {
+  seriesConfigs.forEach((seriesConfig) => {
     const { count, dataCount, type, xRange, yRange } = seriesConfig;
 
     for (let seriesIndex = 0; seriesIndex < count; seriesIndex += 1) {

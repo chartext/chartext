@@ -34,8 +34,8 @@ export function SeriesSurface() {
   const {
     paintRepository,
     series,
-    seriesSurfaceRect,
-    seriesColors,
+    seriesSurfaceLayout,
+    style: { seriesColors },
     xyCoordLayout,
   } = useChartContext();
 
@@ -53,14 +53,14 @@ export function SeriesSurface() {
         paintSet,
       };
 
-      return buildSeriesDrawer(seriesDrawerProps, series.type);
+      return buildSeriesDrawer(seriesDrawerProps, series.seriesType);
     });
 
     surface?.requestAnimationFrame((canvas: Canvas) => {
       const seriesDrawProps: SeriesDrawProps = {
         surface,
         ckGraphics,
-        seriesSurfaceRect,
+        seriesSurfaceLayout,
         xyCoordLayout,
       };
 
@@ -76,7 +76,7 @@ export function SeriesSurface() {
   }, [
     surface,
     ckGraphics,
-    seriesSurfaceRect,
+    seriesSurfaceLayout,
     seriesColors,
     paintRepository,
     xyCoordLayout,

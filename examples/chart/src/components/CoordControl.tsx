@@ -1,49 +1,54 @@
-import { CoordRange, CoordType } from '@chartext/chart';
+import { CoordRange } from '@chartext/chart';
+import { SegmentedControl, SegmentedControlProps, Stack } from '@mantine/core';
+import { useCallback, useState } from 'react';
 import {
-  NumberInputProps,
-  SegmentedControl,
-  SegmentedControlProps,
-  Stack,
-  Text,
-} from '@mantine/core';
-import { NumberRangeControl } from '@/components/NumberRangeControl';
+  RangeControl,
+  RangeControlProps,
+  RangeControlTypeName,
+} from '@/components/RangeControl';
+import { Label } from '@/components/Label';
 
 export type CoordControlValues = {
-  coordType: CoordType;
-  range: CoordRange<CoordType>;
+  typeName: RangeControlTypeName;
+  numberRange: CoordRange<number>;
+  dateRange: CoordRange<Date>;
 };
 
-type CoordControlProps = {
-  label: string;
+type CoordControlProps = Omit<RangeControlProps, 'typeName'> & {
   coordTypeProps: Omit<SegmentedControlProps, 'data'>;
-  minProps: NumberInputProps;
-  maxProps: NumberInputProps;
 };
 
 export function CoordControl(props: CoordControlProps) {
-  const { label, minProps, maxProps, coordTypeProps } = props;
+  const { label, numberRangeProps, dateRangeProps, coordTypeProps } = props;
+
+  const [rangeControlTypeName, setRangeControlTypeName] =
+    useState<RangeControlTypeName>('number');
+
+  const onChangeCallback = useCallback(
+    (value: string, props: Omit<SegmentedControlProps, 'data'>) => {
+      setRangeControlTypeName(value as RangeControlTypeName);
+      props.onChange?.(value);
+    },
+    [],
+  );
 
   return (
     <Stack spacing={5}>
-      <Text
-        align="center"
-        size="xs"
-        fw="bold"
-      >
-        {label}
-      </Text>
+      <Label label={label} />
       <SegmentedControl
+        {...coordTypeProps}
         size="xs"
         fullWidth
+        onChange={(value) => onChangeCallback(value, coordTypeProps)}
         data={[
           { label: 'number', value: 'number' },
-          //{ label: 'date', value: 'date' },
+          { label: 'date', value: 'date' },
         ]}
-        {...coordTypeProps}
       />
-      <NumberRangeControl
-        minProps={minProps}
-        maxProps={maxProps}
+      <RangeControl
+        typeName={rangeControlTypeName}
+        dateRangeProps={dateRangeProps}
+        numberRangeProps={numberRangeProps}
       />
     </Stack>
   );

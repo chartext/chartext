@@ -1,26 +1,32 @@
-import { XAxisProps, YAxisProps } from '@/axis/Axis.types';
+import { XAxisConfig, YAxisConfig } from '@/axis/Axis.types';
 import { CoordConfig } from '@/coord/Coord.types';
-import { Size } from '@/layout/ChartLayout.types';
+import { Margin, Size } from '@/layout/ChartLayout.types';
 import { Series } from '@/series/Series.types';
+
+export type ChartStyle = {
+  backgroundColor: string;
+  margin: Margin;
+  seriesColors: string[];
+};
 
 export type ChartProps = {
   size: Size;
   series: Series[];
-  xAxis: XAxisProps;
-  yAxis: YAxisProps;
+  xAxis: XAxisConfig;
+  yAxis: YAxisConfig;
   xConfig?: CoordConfig | undefined;
   yConfig?: CoordConfig | undefined;
-  backgroundColor: string;
-  seriesColors: string[];
+  style: ChartStyle;
 };
 
 export type PartialChartProps = Omit<
   Partial<ChartProps>,
-  'xAxis' | 'yAxis' | 'size' | 'xConfig' | 'yConfig'
+  'style' | 'xAxis' | 'yAxis' | 'size' | 'xConfig' | 'yConfig'
 > & {
   size?: Partial<Size>;
-  xAxis?: Partial<XAxisProps>;
-  yAxis?: Partial<YAxisProps>;
+  xAxis?: Partial<XAxisConfig>;
+  yAxis?: Partial<YAxisConfig>;
   x?: CoordConfig;
   y?: CoordConfig;
+  style?: Partial<ChartStyle>;
 };

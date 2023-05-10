@@ -1,6 +1,6 @@
 import { CoordType, CoordTypeName } from '@/coord/Coord.types';
 
-export function parseCoord<T extends CoordType>(
+export function coordTypeName<T extends CoordType = CoordType>(
   coord: T,
 ): CoordTypeName | null {
   switch (typeof coord) {
@@ -16,7 +16,7 @@ export function parseCoord<T extends CoordType>(
 
       const num = Number.parseFloat(coord);
       if (!Number.isNaN(num)) {
-        return 'float';
+        return 'decimal';
       }
 
       return 'string';
@@ -26,7 +26,7 @@ export function parseCoord<T extends CoordType>(
         return 'integer';
       }
 
-      return 'float';
+      return 'decimal';
     case 'object':
       if (coord instanceof Date) {
         return 'date';

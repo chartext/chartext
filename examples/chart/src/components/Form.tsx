@@ -1,6 +1,11 @@
-import { Series, generateSeriesArr } from '@chartext/chart';
+import {
+  CoordRange,
+  CoordType,
+  Series,
+  generateSeriesArr,
+} from '@chartext/chart';
 import { Button, Stack } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { UseFormReturnType, useForm } from '@mantine/form';
 import { useCallback, useEffect } from 'react';
 import { FaChartLine } from 'react-icons/fa';
 import { SeriesControl, SeriesControlValues } from '@/components/SeriesControl';
@@ -22,10 +27,14 @@ type SidebarProps = {
 
 function initialCoordValues(): CoordControlValues {
   return {
-    coordType: 'number',
-    range: {
+    typeName: 'number',
+    numberRange: {
       min: -1000,
       max: 1000,
+    },
+    dateRange: {
+      min: new Date('2020-01-01'),
+      max: new Date('2021-01-01'),
     },
   };
 }
@@ -35,6 +44,41 @@ function initialSeriesValues(): SeriesControlValues {
     count: 4,
     dataCount: 50,
   };
+}
+
+function FormCoordControl(props: {
+  coordName: 'x' | 'y';
+  form: UseFormReturnType<RandomSeriesFormProps>;
+}) {
+  const { coordName, form } = props;
+  return (
+    <CoordControl
+      label={coordName}
+      coordTypeProps={form.getInputProps(`${coordName}Coord.typeName`)}
+      dateRangeProps={{
+        minProps: form.getInputProps(`${coordName}Coord.dateRange.min`),
+        maxProps: form.getInputProps(`${coordName}Coord.dateRange.max`),
+      }}
+      numberRangeProps={{
+        minProps: form.getInputProps(`${coordName}Coord.numberRange.min`),
+        maxProps: form.getInputProps(`${coordName}Coord.numberRange.max`),
+      }}
+    />
+  );
+}
+
+function FormSeriesControl(props: {
+  seriesType: 'line' | 'scatter';
+  form: UseFormReturnType<RandomSeriesFormProps>;
+}) {
+  const { seriesType, form } = props;
+  return (
+    <SeriesControl
+      label={seriesType}
+      dataCountProps={form.getInputProps(`${seriesType}Series.dataCount`)}
+      seriesCountProps={form.getInputProps(`${seriesType}Series.count`)}
+    />
+  );
 }
 
 export function Form(props: SidebarProps) {
@@ -54,17 +98,23 @@ export function Form(props: SidebarProps) {
     (randomSeriesFormProps: RandomSeriesFormProps) => {
       const { xCoord, yCoord, lineSeries, scatterSeries } =
         randomSeriesFormProps;
+
+      const xRange: CoordRange<CoordType> =
+        xCoord.typeName === 'date' ? xCoord.dateRange : xCoord.numberRange;
+      const yRange: CoordRange<CoordType> =
+        yCoord.typeName === 'date' ? yCoord.dateRange : yCoord.numberRange;
+
       const series: Series[] = generateSeriesArr([
         {
-          xRange: xCoord.range,
-          yRange: yCoord.range,
+          xRange,
+          yRange,
           type: 'line',
           count: lineSeries.count,
           dataCount: lineSeries.dataCount,
         },
         {
-          xRange: xCoord.range,
-          yRange: yCoord.range,
+          xRange,
+          yRange,
           type: 'scatter',
           count: scatterSeries.count,
           dataCount: scatterSeries.dataCount,
@@ -92,27 +142,21 @@ export function Form(props: SidebarProps) {
         justify="flex-start"
         p={padding}
       >
-        <CoordControl
-          label="x"
-          minProps={form.getInputProps('xCoord.range.min')}
-          maxProps={form.getInputProps('xCoord.range.max')}
-          coordTypeProps={form.getInputProps('xCoord.coordType')}
+        <FormCoordControl
+          coordName="x"
+          form={form}
         />
-        <CoordControl
-          label="y"
-          minProps={form.getInputProps('yCoord.range.min')}
-          maxProps={form.getInputProps('yCoord.range.max')}
-          coordTypeProps={form.getInputProps('yCoord.coordType')}
+        <FormCoordControl
+          coordName="y"
+          form={form}
         />
-        <SeriesControl
-          label="line"
-          dataCountProps={form.getInputProps('lineSeries.dataCount')}
-          seriesCountProps={form.getInputProps('lineSeries.count')}
+        <FormSeriesControl
+          seriesType="line"
+          form={form}
         />
-        <SeriesControl
-          label="scatter"
-          dataCountProps={form.getInputProps('scatterSeries.dataCount')}
-          seriesCountProps={form.getInputProps('scatterSeries.count')}
+        <FormSeriesControl
+          seriesType="scatter"
+          form={form}
         />
         <Button
           variant="outline"

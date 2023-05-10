@@ -6,7 +6,9 @@ React Skia Chart
 
 🚧 Currently under development 🚧
 
-[Chart Example](https://chartext.github.io/chartext/)
+## Demo
+
+[Chart Demo](https://chartext.github.io/chartext/)
 
 ## Packages
 
@@ -17,9 +19,9 @@ React Skia Chart
 
 ## Examples
 
-| Example                             | Command                   | Description                                                                       |
-| ----------------------------------- | ------------------------- | --------------------------------------------------------------------------------- |
-| [examples/chart](./examples/chart/) | `pnpm examples:chart dev` | [Chart Example](https://chartext.github.io/chartext/) with randomized number data |
+| Example                             | Command                   |
+| ----------------------------------- | ------------------------- |
+| [examples/chart](./examples/chart/) | `pnpm examples:chart dev` |
 
 ### Chart Snippet
 
@@ -34,16 +36,18 @@ const series: Series[] = generateSeriesArr([
   },
 ]);
 
-<Chart
-  size={{ height: 480, width: 640 }}
-  series={series}
-  xAxis={{
-    label: 'X Axis',
-  }}
-  yAxis={{
-    label: 'Y Axis',
-  }}
-/>;
+return (
+  <Chart
+    size={{ height: 480, width: 640 }}
+    series={series}
+    xAxis={{
+      label: 'X Axis',
+    }}
+    yAxis={{
+      label: 'Y Axis',
+    }}
+  />
+);
 ```
 
 ## Contributing

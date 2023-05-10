@@ -31,7 +31,7 @@ settings:
         - examples/*/tsconfig.json
         - packages/*/tsconfig.json
 rules:
-  no-console: error
+  no-console: warn
   '@typescript-eslint/no-unused-vars': error
   # import
   import/no-cycle: error

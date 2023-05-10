@@ -11,23 +11,29 @@ export function AxisSurface() {
   const surface: Surface | null = useCkSurface();
   const {
     paintRepository,
-    seriesSurfaceRect,
-    xyAxisProps: { xAxisProps, yAxisProps },
-    xyCoordLayout: { xCoordLayout, yCoordLayout },
+    seriesSurfaceLayout,
+    style: { margin: chartMargin },
+    xyAxisConfig: [xAxisConfig, yAxisConfig],
+    xyAxisTickLayout: [xAxisTickLayout, yAxisTickLayout],
+    xyCoordLayout: [xLayout, yLayout],
   } = useChartContext();
 
   useLayoutEffect(() => {
     const xAxis: XAxis<CoordType> = new XAxis<CoordType>(
-      xAxisProps,
+      xAxisConfig,
+      xAxisTickLayout,
+      chartMargin,
       ckGraphics,
-      xCoordLayout,
+      xLayout,
       paintRepository,
     );
 
     const yAxis: YAxis<CoordType> = new YAxis<CoordType>(
-      yAxisProps,
+      yAxisConfig,
+      yAxisTickLayout,
+      chartMargin,
       ckGraphics,
-      yCoordLayout,
+      yLayout,
       paintRepository,
     );
 
@@ -35,11 +41,11 @@ export function AxisSurface() {
       try {
         canvas.clear(ckGraphics.CK.TRANSPARENT);
         if (!xAxis.isDeleted) {
-          xAxis.draw(canvas, seriesSurfaceRect);
+          xAxis.draw(canvas, seriesSurfaceLayout);
         }
 
         if (!yAxis.isDeleted) {
-          yAxis.draw(canvas, seriesSurfaceRect);
+          yAxis.draw(canvas, seriesSurfaceLayout);
         }
       } catch (e) {
         // console.error(e);
@@ -51,15 +57,18 @@ export function AxisSurface() {
       yAxis.delete();
     };
   }, [
+    chartMargin,
     ckGraphics,
     ckGraphics.CK.TRANSPARENT,
     paintRepository,
-    seriesSurfaceRect,
+    seriesSurfaceLayout,
     surface,
-    xAxisProps,
-    xCoordLayout,
-    yAxisProps,
-    yCoordLayout,
+    xAxisConfig,
+    xAxisTickLayout,
+    xLayout,
+    yAxisConfig,
+    yAxisTickLayout,
+    yLayout,
   ]);
 
   return null;

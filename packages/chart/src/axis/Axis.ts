@@ -1,12 +1,12 @@
 import { CkGraphics, CkPaintRepository } from '@chartext/canvaskit';
 import { Canvas, Paint, Paragraph, TextAlign } from 'canvaskit-wasm';
-import { XAxisProps, YAxisProps } from '@/axis/Axis.types';
+import { AxisTickLayout, XAxisConfig, YAxisConfig } from '@/axis/Axis.types';
 import { CoordType } from '@/coord/Coord.types';
 import { CoordLayout } from '@/coord/CoordLayout';
-import { RectLayout } from '@/layout/ChartLayout.types';
+import { Margin, RectLayout } from '@/layout/ChartLayout.types';
 
-type TickParagraph<C extends CoordType> = {
-  value: C;
+type TickParagraph = {
+  value: number;
   paragraph: Paragraph;
 };
 
@@ -14,16 +14,18 @@ export abstract class Axis<C extends CoordType> {
   protected readonly labelFontSize: number;
   protected readonly tickFontSize: number;
   readonly #tickPaint: Paint;
-  readonly #tickParagraphs: TickParagraph<C>[];
+  readonly #tickParagraphs: TickParagraph[];
   readonly #zeroTickPaint: Paint;
 
   #isDeleted = false;
 
   protected constructor(
+    protected readonly axisTickLayout: AxisTickLayout<C>,
+    protected readonly chartMargin: Margin,
     protected readonly ckGraphics: CkGraphics,
     protected readonly coordLayout: CoordLayout<C>,
     protected readonly labelParagraph: Paragraph | null,
-    axisProps: XAxisProps | YAxisProps,
+    axisConfig: XAxisConfig | YAxisConfig,
     paintRepository: CkPaintRepository,
     textAlign: TextAlign,
   ) {
@@ -33,9 +35,9 @@ export abstract class Axis<C extends CoordType> {
       tickLabelColor,
       tickColor,
       tickZeroColor,
-    } = axisProps;
+    } = axisConfig;
 
-    const { ticks, formatter } = coordLayout;
+    const { ticks } = axisTickLayout;
 
     this.labelFontSize = labelFontSize;
     this.tickFontSize = tickFontSize;
@@ -45,16 +47,16 @@ export abstract class Axis<C extends CoordType> {
 
     this.#tickParagraphs = [];
 
-    ticks.forEach((value) => {
+    ticks.forEach(({ plotValue, display }) => {
       const paragraph = ckGraphics.createParagraph({
-        text: formatter.format(value),
+        text: display,
         fontSize: tickFontSize,
         color: tickLabelColor,
         textAlign,
       });
 
       this.#tickParagraphs.push({
-        value,
+        value: plotValue,
         paragraph,
       });
     });
@@ -65,7 +67,7 @@ export abstract class Axis<C extends CoordType> {
     paint: Paint,
     seriesSurfaceRect: RectLayout,
     tickParagraph: Paragraph,
-    value: C,
+    value: number,
     spacing: number,
   ): void;
 
@@ -82,12 +84,12 @@ export abstract class Axis<C extends CoordType> {
 
     if (!firstTickParagraph || !secondTickParagraph) return;
 
-    const firstTickCoord = this.coordLayout.getScreenCoord(
+    const firstTickCoord = this.coordLayout.getSurfaceCoord(
       firstTickParagraph.value,
       seriesSurfaceRect,
     );
 
-    const secondTickCoord = this.coordLayout.getScreenCoord(
+    const secondTickCoord = this.coordLayout.getSurfaceCoord(
       secondTickParagraph.value,
       seriesSurfaceRect,
     );

@@ -1,5 +1,5 @@
-import { ChartProps } from '@/Chart.types';
-import { AxisProps, XAxisProps, YAxisProps } from '@/axis/Axis.types';
+import { ChartProps, ChartStyle } from '@/Chart.types';
+import { AxisConfig, XAxisConfig, YAxisConfig } from '@/axis/Axis.types';
 
 const defaultSeriesColors: string[] = [
   '#33b1ff',
@@ -18,7 +18,18 @@ const defaultSeriesColors: string[] = [
   '#08bdba',
 ];
 
-const defaultAxisProps: AxisProps = {
+const defaultChartStyle: ChartStyle = {
+  backgroundColor: 'rgb(30, 30, 30)',
+  margin: {
+    top: 25,
+    right: 25,
+    bottom: 25,
+    left: 25,
+  },
+  seriesColors: defaultSeriesColors,
+};
+
+const defaultAxisConfig: AxisConfig = {
   showZero: true,
   size: 75,
   labelFontSize: 13,
@@ -29,27 +40,29 @@ const defaultAxisProps: AxisProps = {
   tickZeroColor: 'rgb(112, 112, 112)',
 };
 
-const defaultXAxisProps: XAxisProps = {
-  ...defaultAxisProps,
+export const defaultNumberFormatter = new Intl.NumberFormat(undefined, {
+  notation: 'compact',
+  maximumFractionDigits: 1,
+});
+
+export const defaultXAxisConfig: XAxisConfig = {
+  ...defaultAxisConfig,
   position: 'bottom',
 };
 
-const defaultYAxisProps: YAxisProps = {
-  ...defaultAxisProps,
+export const defaultYAxisConfig: YAxisConfig = {
+  ...defaultAxisConfig,
   position: 'left',
 };
 
-const defaultChartProps: ChartProps = {
+export const defaultChartProps: ChartProps = {
   size: {
     height: window.innerHeight,
     width: window.innerWidth,
     scale: window.devicePixelRatio,
   },
-  backgroundColor: 'rgb(30, 30, 30)',
-  seriesColors: defaultSeriesColors,
-  xAxis: defaultXAxisProps,
-  yAxis: defaultYAxisProps,
   series: [],
+  style: defaultChartStyle,
+  xAxis: defaultXAxisConfig,
+  yAxis: defaultYAxisConfig,
 };
-
-export { defaultChartProps };

@@ -1,28 +1,30 @@
 import { CkGraphics, CkPaintRepository } from '@chartext/canvaskit';
 import { Canvas, Paint, Paragraph, TextAlign } from 'canvaskit-wasm';
 import { Axis } from '@/axis/Axis';
-import { YAxisProps } from '@/axis/Axis.types';
+import { AxisTickLayout, YAxisConfig } from '@/axis/Axis.types';
 import { CoordType } from '@/coord/Coord.types';
 import { CoordLayout } from '@/coord/CoordLayout';
-import { RectLayout } from '@/layout/ChartLayout.types';
+import { Margin, RectLayout } from '@/layout/ChartLayout.types';
 
 export class YAxis<Y extends CoordType> extends Axis<Y> {
   constructor(
-    axisProps: YAxisProps,
+    axisConfig: YAxisConfig,
+    axisTickLayout: AxisTickLayout<Y>,
+    chartMargin: Margin,
     ckGraphics: CkGraphics,
     coordLayout: CoordLayout<Y>,
     paintRepository: CkPaintRepository,
   ) {
-    const { labelColor, labelFontSize } = axisProps;
+    const { labelColor, labelFontSize } = axisConfig;
 
     const textAlign: TextAlign =
-      axisProps.position === 'left'
+      axisConfig.position === 'left'
         ? ckGraphics.CK.TextAlign.Right
         : ckGraphics.CK.TextAlign.Left;
 
-    const labelParagraph = axisProps.label
+    const labelParagraph = axisConfig.label
       ? ckGraphics.createParagraph({
-          text: axisProps.label,
+          text: axisConfig.label,
           fontSize: labelFontSize,
           color: labelColor,
           textAlign: ckGraphics.CK.TextAlign.Center,
@@ -30,10 +32,12 @@ export class YAxis<Y extends CoordType> extends Axis<Y> {
       : null;
 
     super(
+      axisTickLayout,
+      chartMargin,
       ckGraphics,
       coordLayout,
       labelParagraph,
-      axisProps,
+      axisConfig,
       paintRepository,
       textAlign,
     );
@@ -41,24 +45,23 @@ export class YAxis<Y extends CoordType> extends Axis<Y> {
 
   protected override drawLabel(
     canvas: Canvas,
-    seriesSurfaceRect: RectLayout,
+    seriesSurfaceLayout: RectLayout,
   ): void {
     if (!this.labelParagraph) return;
 
-    const height = seriesSurfaceRect.bottom - seriesSurfaceRect.top;
-    const width = seriesSurfaceRect.right - seriesSurfaceRect.left;
+    const { y0, height, width } = seriesSurfaceLayout;
+    const { left } = this.chartMargin;
 
     canvas.save();
-    canvas.rotate(-90, width / 2, height / 2);
-
-    const rotatedY = canvas.getLocalToDevice()[3] ?? 0;
+    canvas.translate(0, Math.round(height / 2));
+    canvas.rotate(-90, 0, 0);
 
     CkGraphics.drawParagraph({
       canvas,
       paragraph: this.labelParagraph,
       width: width,
-      x: 0,
-      y: (rotatedY / 2) * -1 + 20,
+      x: -1 * Math.round(width / 2) - y0,
+      y: left,
     });
 
     canvas.restore();
@@ -67,14 +70,14 @@ export class YAxis<Y extends CoordType> extends Axis<Y> {
   protected override drawTick(
     canvas: Canvas,
     paint: Paint,
-    seriesSurfaceRect: RectLayout,
+    seriesSurfaceLayout: RectLayout,
     tickParagraph: Paragraph,
-    value: Y,
+    value: number,
   ) {
-    const y = this.coordLayout.getScreenCoord(value, seriesSurfaceRect);
-    const x0 = seriesSurfaceRect.left - 7;
+    const { x0, x1 } = seriesSurfaceLayout;
+    const y = this.coordLayout.getSurfaceCoord(value, seriesSurfaceLayout);
 
-    canvas.drawLine(x0, y, seriesSurfaceRect.right, y, paint);
+    canvas.drawLine(x0 - 7, y, x1, y, paint);
 
     CkGraphics.drawParagraph({
       canvas,

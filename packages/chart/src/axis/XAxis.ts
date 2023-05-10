@@ -1,23 +1,25 @@
 import { CkGraphics, CkPaintRepository } from '@chartext/canvaskit';
 import { Canvas, Paint, Paragraph } from 'canvaskit-wasm';
 import { Axis } from '@/axis/Axis';
-import { XAxisProps } from '@/axis/Axis.types';
+import { AxisTickLayout, XAxisConfig } from '@/axis/Axis.types';
 import { CoordType } from '@/coord/Coord.types';
 import { CoordLayout } from '@/coord/CoordLayout';
-import { RectLayout } from '@/layout/ChartLayout.types';
+import { Margin, RectLayout } from '@/layout/ChartLayout.types';
 
 export class XAxis<X extends CoordType> extends Axis<X> {
   constructor(
-    axisProps: XAxisProps,
+    axisConfig: XAxisConfig,
+    axisTickLayout: AxisTickLayout<X>,
+    chartMargin: Margin,
     ckGraphics: CkGraphics,
     coordLayout: CoordLayout<X>,
     paintRepository: CkPaintRepository,
   ) {
-    const { labelColor, labelFontSize } = axisProps;
+    const { labelColor, labelFontSize } = axisConfig;
 
-    const labelParagraph = axisProps.label
+    const labelParagraph = axisConfig.label
       ? ckGraphics.createParagraph({
-          text: axisProps.label,
+          text: axisConfig.label,
           fontSize: labelFontSize,
           color: labelColor,
           textAlign: ckGraphics.CK.TextAlign.Center,
@@ -25,10 +27,12 @@ export class XAxis<X extends CoordType> extends Axis<X> {
       : null;
 
     super(
+      axisTickLayout,
+      chartMargin,
       ckGraphics,
       coordLayout,
       labelParagraph,
-      axisProps,
+      axisConfig,
       paintRepository,
       ckGraphics.CK.TextAlign.Center,
     );
@@ -42,9 +46,9 @@ export class XAxis<X extends CoordType> extends Axis<X> {
       CkGraphics.drawParagraph({
         canvas,
         paragraph: this.labelParagraph,
-        width: seriesSurfaceRect.right - seriesSurfaceRect.left,
-        x: seriesSurfaceRect.left,
-        y: seriesSurfaceRect.bottom + this.tickFontSize + 25,
+        width: seriesSurfaceRect.width,
+        x: seriesSurfaceRect.x0,
+        y: seriesSurfaceRect.y1 + this.tickFontSize + this.chartMargin.bottom,
       });
     }
   }
@@ -54,13 +58,13 @@ export class XAxis<X extends CoordType> extends Axis<X> {
     paint: Paint,
     seriesSurfaceRect: RectLayout,
     paragraph: Paragraph,
-    value: X,
+    value: number,
     spacing: number,
   ) {
-    const x = this.coordLayout.getScreenCoord(value, seriesSurfaceRect);
-    const y1 = seriesSurfaceRect.bottom + 7;
+    const x = this.coordLayout.getSurfaceCoord(value, seriesSurfaceRect);
+    const y1 = seriesSurfaceRect.y1 + 7;
 
-    canvas.drawLine(x, seriesSurfaceRect.top, x, y1, paint);
+    canvas.drawLine(x, seriesSurfaceRect.y0, x, y1, paint);
 
     CkGraphics.drawParagraph({
       canvas,
