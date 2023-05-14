@@ -105,7 +105,7 @@ importers:
   examples/chart:
     dependencies:
       '@chartext/chart':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/chart
       '@emotion/react':
         specifier: ^11.11.0
@@ -157,7 +157,7 @@ importers:
   packages/chart:
     dependencies:
       '@chartext/canvaskit':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../canvaskit
       bezier-js:
         specifier: ^6.1.3
