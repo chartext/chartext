@@ -25,6 +25,8 @@ React Skia Chart
 
 ### Chart Snippet
 
+See [ExampleChart.tsx](examples/chart/src/ExampleChart.tsx)
+
 ```tsx
 const series: Series[] = generateSeriesArr([
   {
@@ -38,7 +40,8 @@ const series: Series[] = generateSeriesArr([
 
 return (
   <Chart
-    size={{ height: 480, width: 640 }}
+    height={480}
+    width={640}
     series={series}
     xAxis={{
       label: 'X Axis',
@@ -91,6 +94,7 @@ Use (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>) to open vscode's command
 See [.vscode/extensions.json](.vscode/extensions.json)
 
 - [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker)
+- [GitHub Actions](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-github-actions)
 - [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 - [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml)
