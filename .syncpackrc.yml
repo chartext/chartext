@@ -1,0 +1,42 @@
+dependencyTypes:
+  - dev
+  - overrides
+  - peer
+  - pnpmOverrides
+  - prod
+  - resolutions
+# using the sort order from https://docs.npmjs.com/cli/v9/configuring-npm/package-json
+sortFirst:
+  - $schema
+  - name
+  - version
+  - description
+  - keywords
+  - homepage
+  - bugs
+  - license
+  - author
+  - contributors
+  - funding
+  - files
+  - main
+  - browser
+  - bin
+  - man
+  - directories
+  - repository
+  - scripts
+  - config
+  - dependencies
+  - devDependencies
+  - peerDependencies
+  - peerDependenciesMeta
+  - bundleDependencies
+  - optionalDependencies
+  - overrides
+  - engines
+  - os
+  - cpu
+  - private
+  - publishConfig
+  - workspaces

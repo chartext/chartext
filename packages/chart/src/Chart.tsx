@@ -1,6 +1,6 @@
 import { CkSurface } from '@chartext/canvaskit';
 import { Suspense, lazy, useMemo } from 'react';
-import { ChartStyle, PartialChartProps } from '@/Chart.types';
+import { ChartStyle, ChartConfig } from '@/Chart.types';
 import { defaultChartProps } from '@/ChartDefaults';
 import { ChartEmpty } from '@/ChartEmpty';
 import { ChartLoading } from '@/ChartLoading';
@@ -16,11 +16,11 @@ const CkGraphicsProviderLazy = lazy(() =>
   })),
 );
 
-export function Chart(props: PartialChartProps) {
+export function Chart(props: ChartConfig) {
   const style: ChartStyle = useMemo(
     () => ({
-      ...props.style,
       ...defaultChartProps.style,
+      ...props.style,
     }),
     [props.style],
   );
@@ -42,9 +42,14 @@ export function Chart(props: PartialChartProps) {
   );
 
   const size: Size = useMemo(
-    () => ({ ...defaultChartProps.size, ...props.size }),
-    [props.size],
+    () => ({
+      height: props.height ?? defaultChartProps.size.height,
+      width: props.width ?? defaultChartProps.size.width,
+    }),
+    [props.height, props.width],
   );
+
+  const scale = window.devicePixelRatio;
 
   return (
     <Suspense fallback={<ChartLoading />}>
@@ -64,12 +69,14 @@ export function Chart(props: PartialChartProps) {
             >
               <CkSurface
                 {...size}
+                scale={scale}
                 zIndex={1}
               >
                 <AxisSurface />
               </CkSurface>
               <CkSurface
                 {...size}
+                scale={scale}
                 zIndex={2}
               >
                 <SeriesSurface />

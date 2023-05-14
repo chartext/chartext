@@ -15,22 +15,32 @@ export class NumberTickLayout implements AxisTickLayout<number> {
     const min = Math.min(...values);
     const max = Math.max(...values);
 
-    const { niceNum } = NumberTickLayout;
+    const { calcSpacing } = NumberTickLayout;
 
-    const range = max - min;
-    const niceRange = niceNum(range, false);
-    const spacing = niceNum(niceRange / (maxTicks - 1), true);
-    this.#min = Math.floor(min / spacing) * spacing;
-    this.#max = Math.ceil(max / spacing) * spacing;
+    const spacing = calcSpacing(min, max, maxTicks);
+    const roundedMin = Math.floor(min / spacing) * spacing;
+    const roundedMax = Math.ceil(max / spacing) * spacing;
 
     const numberFormatter = formatter ?? defaultNumberFormatter;
 
-    for (let value = this.#min; value <= this.#max; value += spacing) {
+    for (let value = roundedMin; value <= roundedMax; value += spacing) {
       this.#ticks.push({
         plotValue: value,
         display: numberFormatter.format(value),
       });
     }
+
+    this.#min = roundedMin;
+    this.#max = roundedMax;
+  }
+
+  static calcSpacing(min: number, max: number, maxTicks: number): number {
+    const { niceNum } = NumberTickLayout;
+
+    const range = Math.abs(max - min);
+    const niceRange = niceNum(range, false);
+
+    return niceNum(niceRange / (maxTicks - 1), true);
   }
 
   /**

@@ -1,15 +1,48 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@chartext/canvaskit",
-  "version": "1.0.0",
-  "packageManager": "pnpm@8.4.0",
-  "type": "module",
+  "version": "0.0.1",
+  "description": "React canvaskit library",
+  "keywords": [
+    "canvaskit",
+    "react",
+    "skia"
+  ],
+  "bugs": "https://github.com/chartext/chartext/issues",
+  "license": "MIT",
+  "author": {
+    "name": "threaddot",
+    "email": "threaddot@users.noreply.github.com",
+    "url": "https://github.com/threaddot"
+  },
   "files": [
     "dist"
   ],
   "main": "./dist/index.umd.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/types/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chartext/chartext.git",
+    "directory": "packages/canvaskit"
+  },
+  "scripts": {
+    "build": "pnpm tsc && vite build",
+    "clean": "rimraf dist && rimraf build",
+    "dist": "pnpm clean && tsc -b ./tsconfig.dist.json && vite build",
+    "preinstall": "npx only-allow pnpm",
+    "test": "pnpm clean && vitest run",
+    "tsc": "pnpm clean && tsc -b"
+  },
+  "dependencies": {
+    "canvaskit-wasm": "^0.38.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tinycolor2": "^1.6.0"
+  },
+  "peerDependencies": {
+    "canvaskit-wasm": "^0.38.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
   "exports": {
     "import": {
       "default": "./dist/index.js",
@@ -20,20 +53,8 @@
       "types": "./dist/types/index.d.ts"
     }
   },
-  "scripts": {
-    "preinstall": "npx only-allow pnpm",
-    "clean": "rimraf dist && rimraf build",
-    "tsc": "pnpm clean && tsc -b",
-    "build": "pnpm tsc && vite build",
-    "test": "pnpm clean && vitest run",
-    "dist": "pnpm clean && tsc -b ./tsconfig.dist.json && vite build"
-  },
-  "peerDependencies": {
-    "canvaskit-wasm": "^0.38.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "dependencies": {
-    "tinycolor2": "^1.6.0"
-  }
+  "module": "./dist/index.js",
+  "packageManager": "pnpm@8.5.0",
+  "type": "module",
+  "types": "./dist/types/index.d.ts"
 }

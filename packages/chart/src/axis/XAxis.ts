@@ -22,7 +22,7 @@ export class XAxis<X extends CoordType> extends Axis<X> {
           text: axisConfig.label,
           fontSize: labelFontSize,
           color: labelColor,
-          textAlign: ckGraphics.CK.TextAlign.Center,
+          textAlign: ckGraphics.TextAlign.Center,
         })
       : null;
 
@@ -34,7 +34,7 @@ export class XAxis<X extends CoordType> extends Axis<X> {
       labelParagraph,
       axisConfig,
       paintRepository,
-      ckGraphics.CK.TextAlign.Center,
+      ckGraphics.TextAlign.Center,
     );
   }
 

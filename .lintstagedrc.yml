@@ -1,2 +1,3 @@
 '*.{ts,tsx}': pnpm lint:check
 '**/*': prettier --write --ignore-unknown
+'**/packages.json': pnpm syncpack:format

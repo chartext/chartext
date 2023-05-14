@@ -39,7 +39,7 @@ export function AxisSurface() {
 
     surface?.requestAnimationFrame((canvas: Canvas) => {
       try {
-        canvas.clear(ckGraphics.CK.TRANSPARENT);
+        canvas.clear(ckGraphics.TRANSPARENT);
         if (!xAxis.isDeleted) {
           xAxis.draw(canvas, seriesSurfaceLayout);
         }
@@ -59,7 +59,6 @@ export function AxisSurface() {
   }, [
     chartMargin,
     ckGraphics,
-    ckGraphics.CK.TRANSPARENT,
     paintRepository,
     seriesSurfaceLayout,
     surface,

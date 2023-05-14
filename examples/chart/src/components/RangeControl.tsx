@@ -1,5 +1,5 @@
 import { Group, NumberInput, NumberInputProps, Stack } from '@mantine/core';
-import { DatePickerInputProps, DateTimePicker } from '@mantine/dates';
+import { DatePickerInputProps, DatePickerInput } from '@mantine/dates';
 import { ReactElement } from 'react';
 import { Label } from '@/components/Label';
 
@@ -19,33 +19,45 @@ function minMaxControl(
     case 'date':
       return (
         <>
-          <DateTimePicker
-            label="min"
-            size="xs"
-            {...dateRangeProps.minProps}
-          />
-          <DateTimePicker
-            label="max"
-            size="xs"
-            {...dateRangeProps.maxProps}
-          />
+          <Group
+            spacing={5}
+            grow
+          >
+            <DatePickerInput
+              label="min"
+              size="xs"
+              valueFormat="MM/DD/YYYY"
+              {...dateRangeProps.minProps}
+            />
+            <DatePickerInput
+              label="max"
+              size="xs"
+              valueFormat="MM/DD/YYYY"
+              {...dateRangeProps.maxProps}
+            />
+          </Group>
         </>
       );
     case 'number':
       return (
         <>
-          <NumberInput
-            label="min"
-            size="xs"
-            hideControls
-            {...numberRangeProps.minProps}
-          />
-          <NumberInput
-            label="max"
-            size="xs"
-            hideControls
-            {...numberRangeProps.maxProps}
-          />
+          <Group
+            spacing={5}
+            grow
+          >
+            <NumberInput
+              label="min"
+              size="xs"
+              hideControls
+              {...numberRangeProps.minProps}
+            />
+            <NumberInput
+              label="max"
+              size="xs"
+              hideControls
+              {...numberRangeProps.maxProps}
+            />
+          </Group>
         </>
       );
   }
@@ -64,9 +76,7 @@ export function RangeControl(props: RangeControlProps) {
   return (
     <Stack spacing={0}>
       <Label label={label} />
-      <Group spacing={0}>
-        {minMaxControl(typeName, dateRangeProps, numberRangeProps)}
-      </Group>
+      {minMaxControl(typeName, dateRangeProps, numberRangeProps)}
     </Stack>
   );
 }

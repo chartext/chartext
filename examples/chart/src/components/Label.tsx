@@ -1,6 +1,6 @@
-import { Text } from '@mantine/core';
+import { Text, TextProps } from '@mantine/core';
 
-type LabelProps = {
+type LabelProps = TextProps & {
   label?: string | undefined;
 };
 
@@ -11,6 +11,7 @@ export function Label(props: LabelProps) {
       align="center"
       size="xs"
       fw="bold"
+      {...props}
     >
       {label}
     </Text>

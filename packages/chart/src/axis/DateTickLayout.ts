@@ -1,38 +1,99 @@
 import {
+  addDays,
   addMonths,
   addQuarters,
+  addYears,
+  differenceInDays,
   differenceInMonths,
   differenceInQuarters,
-  differenceInSeconds,
   max,
   min,
 } from 'date-fns';
 import { AxisTick, AxisTickLayout } from '@/axis/Axis.types';
 import { NumberTickLayout } from '@/axis/NumberTickLayout';
-import { CoordMinMax, NumberFormatter } from '@/coord/Coord.types';
+import { CoordMinMax, DateFormatter } from '@/coord/Coord.types';
 import { Months, roundDate } from '@/utils/dates';
 
-const monthFormatter = Intl.DateTimeFormat(undefined, {
+/* const minuteFormatter: DateFormatter = new Intl.DateTimeFormat(undefined, {
+  timeStyle: 'short',
+});
+
+const hourFormatter: DateFormatter = new Intl.DateTimeFormat(undefined, {
+  hour: 'numeric',
+}); */
+
+const dayOfMonthFormatter: DateFormatter = {
+  format(date: Date) {
+    return date.getDate().toString();
+  },
+};
+
+const monthFormatter: DateFormatter = new Intl.DateTimeFormat(undefined, {
   month: 'short',
 });
 
-const numberFormatter: NumberFormatter = {
-  format(value: number): string {
-    return value.toString();
+const yearFormatter: DateFormatter = {
+  format(date: Date) {
+    return date.getFullYear().toString();
+  },
+};
+
+const dateFormatter: DateFormatter = {
+  format(date: Date): string {
+    if (date.getMonth() === Months.Jan && date.getDate() === 1) {
+      return yearFormatter.format(date);
+    }
+
+    if (date.getDate() === 1) {
+      return monthFormatter.format(date);
+    }
+
+    return dayOfMonthFormatter.format(date);
   },
 };
 
 export class DateTickLayout implements AxisTickLayout<Date> {
   readonly #min: Date;
   readonly #max: Date;
-  readonly #ticks: AxisTick[] = [];
+  readonly #ticks: AxisTick[];
+
+  private static buildTicks(
+    minDate: Date,
+    maxDate: Date,
+    spacing: number,
+    nextDate: (date: Date, amount: number) => Date,
+  ): AxisTick[] {
+    const ticks: AxisTick[] = [];
+
+    for (
+      let tickDate = minDate;
+      tickDate <= maxDate;
+      tickDate = nextDate(tickDate, spacing)
+    ) {
+      ticks.push({
+        plotValue: tickDate.getTime(),
+        display: dateFormatter.format(tickDate),
+      });
+    }
+
+    const tickMaxDate = ticks.findLast(Boolean)?.plotValue;
+
+    if (tickMaxDate && tickMaxDate < maxDate.getTime()) {
+      ticks.push({
+        plotValue: maxDate.getTime(),
+        display: dateFormatter.format(maxDate),
+      });
+    }
+
+    return ticks;
+  }
 
   constructor(values: Date[] | CoordMinMax<Date>, maxTicks: number) {
     const minDate: Date = min(values);
     const maxDate: Date = max(values);
 
     // millisecond
-    const secondDiff = Math.abs(differenceInSeconds(minDate, maxDate));
+    /* const secondDiff = Math.abs(differenceInSeconds(minDate, maxDate));
 
     if (secondDiff < 120) {
       const numberTickLayout = new NumberTickLayout(
@@ -40,6 +101,28 @@ export class DateTickLayout implements AxisTickLayout<Date> {
         maxTicks,
         numberFormatter,
       );
+
+      const tickConfig = NumberTickLayout.tickConfig(
+        minDate.getMilliseconds(),
+        maxDate.getMilliseconds(),
+        maxTicks,
+      );
+      const numberToDate: NumberToDate = (ms: number) =>
+        new Date(
+          maxDate.getFullYear(),
+          maxDate.getMonth(),
+          maxDate.getDate(),
+          maxDate.getHours(),
+          maxDate.getMinutes(),
+          maxDate.getSeconds(),
+          ms,
+        );
+
+      const dateFormatter: DateFormatter = {
+        format(date: Date): string {},
+      };
+
+      this.#ticks = this.buildTicksFromNumbers(tickConfig, numberToDate);
 
       this.#min = new Date(
         minDate.getFullYear(),
@@ -77,12 +160,33 @@ export class DateTickLayout implements AxisTickLayout<Date> {
       });
 
       return;
-    }
+    } */
 
     // second
     // minute
     // hour
     // day
+    const { calcSpacing } = NumberTickLayout;
+    const { buildTicks } = DateTickLayout;
+
+    const dayDiff = Math.abs(differenceInDays(minDate, maxDate));
+
+    if (dayDiff <= 90) {
+      this.#min = roundDate(minDate, 'dayOfMonth', 'floor');
+      this.#max = roundDate(maxDate, 'dayOfMonth', 'ceiling');
+
+      const roundedDayDiff = Math.abs(differenceInDays(this.#min, this.#max));
+
+      if (dayDiff <= maxTicks) {
+        this.#ticks = buildTicks(this.#min, this.#max, 1, addDays);
+      } else {
+        const spacing = calcSpacing(0, roundedDayDiff, maxTicks);
+
+        this.#ticks = buildTicks(this.#min, this.#max, spacing, addDays);
+      }
+
+      return;
+    }
 
     // month
     const monthDiff = Math.abs(differenceInMonths(minDate, maxDate));
@@ -91,15 +195,7 @@ export class DateTickLayout implements AxisTickLayout<Date> {
       this.#min = roundDate(minDate, 'month', 'floor');
       this.#max = roundDate(maxDate, 'month', 'ceiling');
 
-      for (let tick = this.#min; tick <= this.#max; tick = addMonths(tick, 1)) {
-        this.ticks.push({
-          plotValue: tick.getTime(),
-          display:
-            tick.getMonth() === Months.Jan
-              ? tick.getFullYear().toString()
-              : monthFormatter.format(tick),
-        });
-      }
+      this.#ticks = buildTicks(this.#min, this.#max, 1, addMonths);
 
       return;
     }
@@ -111,39 +207,15 @@ export class DateTickLayout implements AxisTickLayout<Date> {
       this.#min = roundDate(minDate, 'quarter', 'floor');
       this.#max = roundDate(maxDate, 'quarter', 'ceiling');
 
-      for (
-        let tick = this.#min;
-        tick <= this.#max;
-        tick = addQuarters(tick, 1)
-      ) {
-        this.ticks.push({
-          plotValue: tick.getTime(),
-          display:
-            tick.getMonth() === Months.Jan
-              ? tick.getFullYear().toString()
-              : monthFormatter.format(tick),
-        });
-      }
+      this.#ticks = buildTicks(this.#min, this.#max, 1, addQuarters);
 
       return;
     }
 
-    // default year
-    const numberTickLayout = new NumberTickLayout(
-      [minDate.getFullYear(), maxDate.getFullYear()],
-      maxTicks,
-      numberFormatter,
-    );
-
     this.#min = roundDate(minDate, 'year');
     this.#max = roundDate(maxDate, 'year');
 
-    numberTickLayout.ticks.forEach(({ plotValue, display }) => {
-      this.#ticks.push({
-        plotValue: new Date(plotValue, Months.Jan).getTime(),
-        display,
-      });
-    });
+    this.#ticks = buildTicks(this.#min, this.#max, 1, addYears);
   }
 
   get min(): Date {

@@ -1,27 +1,42 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "private": true,
   "name": "@examples/chart",
-  "packageManager": "pnpm@8.4.0",
+  "version": "0.0.1",
+  "description": "Chart example",
+  "bugs": "https://github.com/chartext/chartext/issues",
+  "license": "MIT",
+  "author": {
+    "name": "threaddot",
+    "email": "threaddot@users.noreply.github.com",
+    "url": "https://github.com/threaddot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chartext/chartext.git",
+    "directory": "examples/chart"
+  },
+  "scripts": {
+    "build": "tsc -b && vite build",
+    "dev": "vite --host 127.0.0.1",
+    "preinstall": "npx only-allow pnpm",
+    "preview": "vite --host 127.0.0.1 preview",
+    "tsc": "tsc -b"
+  },
   "dependencies": {
-    "@chartext/chart": "*",
-    "@emotion/react": "^11.10.6",
-    "@mantine/core": "^6.0.8",
+    "@chartext/chart": "workspace:*",
+    "@emotion/react": "^11.11.0",
+    "@js-temporal/polyfill": "^0.4.3",
+    "@mantine/core": "^6.0.10",
     "@mantine/dates": "^6.0.10",
-    "@mantine/form": "^6.0.8",
-    "@mantine/hooks": "^6.0.8",
+    "@mantine/form": "^6.0.10",
+    "@mantine/hooks": "^6.0.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0"
   },
-  "scripts": {
-    "preinstall": "npx only-allow pnpm",
-    "tsc": "tsc -b",
-    "dev": "vite --host 127.0.0.1",
-    "build": "vite build",
-    "preview": "vite --host 127.0.0.1 preview"
-  },
   "devDependencies": {
     "@types/testing-library__jest-dom": "^5.14.5"
-  }
+  },
+  "private": true,
+  "packageManager": "pnpm@8.5.0"
 }

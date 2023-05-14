@@ -15,8 +15,8 @@ import tinycolor, { Instance as Color } from 'tinycolor2';
 import {
   CkDrawParagraphProps,
   CkFontProps,
-  CkPaintProps,
-  CkParagraphProps,
+  CkPaintProps as CkPaintParams,
+  CkParagraphProps as CkParagraphParams,
   CkTypeface,
 } from '@/CkGraphics.types';
 
@@ -34,14 +34,26 @@ export class CkGraphics {
     canvas.drawParagraph(paragraph, x, y);
   }
 
-  createParagraph(props: CkParagraphProps): Paragraph {
+  get TRANSPARENT() {
+    return this.CK.TRANSPARENT;
+  }
+
+  get TextAlign() {
+    return this.CK.TextAlign;
+  }
+
+  MakeImage(params: Parameters<CanvasKit['MakeImage']>) {
+    this.CK.MakeImage(...params);
+  }
+
+  createParagraph(params: CkParagraphParams): Paragraph {
     const {
       text,
       fontSize = 10,
       fontFamilies = ['Roboto'],
       textAlign = this.CK.TextAlign.Left,
       color = '#000',
-    } = props;
+    } = params;
 
     const pStyle = new this.CK.ParagraphStyle({
       textStyle: {
@@ -91,12 +103,12 @@ export class CkGraphics {
     );
   }
 
-  createPaint(props?: CkPaintProps): Paint {
+  createPaint(params?: CkPaintParams): Paint {
     const {
       color = '#000',
       style = this.CK.PaintStyle.Stroke,
       strokeWidth = 1.0,
-    } = props ?? {};
+    } = params ?? {};
 
     const paint = new this.CK.Paint();
     paint.setAntiAlias(true);
@@ -110,8 +122,8 @@ export class CkGraphics {
     return paint;
   }
 
-  createTextPaint(props?: CkPaintProps): Paint {
-    return this.createPaint({ ...props, style: this.CK.PaintStyle.Fill });
+  createTextPaint(params?: CkPaintParams): Paint {
+    return this.createPaint({ ...params, style: this.CK.PaintStyle.Fill });
   }
 
   createFont(props?: CkFontProps): Font {

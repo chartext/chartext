@@ -7,7 +7,6 @@ import {
   useRef,
   useState,
 } from 'react';
-import { CkGraphics } from '@/CkGraphics';
 import { useCkGraphics } from '@/CkGraphicsProvider';
 
 type CkSurfaceProps = {
@@ -50,7 +49,7 @@ export function CkSurface(props: PropsWithChildren<CkSurfaceProps>) {
         setSurface(draftSurface);
       }
       return () => {
-        CkGraphics.delete(draftSurface);
+        draftSurface?.deleteLater();
         setSurface(null);
       };
     }

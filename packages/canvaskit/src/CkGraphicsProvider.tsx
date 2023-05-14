@@ -34,7 +34,8 @@ async function webGpu(CK: CanvasKit) {
 async function initCanvasKit(): Promise<CanvasKit> {
   return CanvasKitInit({
     locateFile: (file: string) =>
-      `https://unpkg.com/canvaskit-wasm@0.38.0/bin/${file}`,
+      `https://unpkg.com/canvaskit-wasm@0.38.1/bin/${file}`,
+    // `node_modules/canvaskit-wasm/bin/${file}`,
     // locateFile: () => CanvasKitWasm as string,
   }).then((CK: CanvasKit) => CK);
 }

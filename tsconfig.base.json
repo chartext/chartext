@@ -2,7 +2,6 @@
   "$schema": "https://json.schemastore.org/tsconfig.json",
   "extends": "@tsconfig/vite-react/tsconfig.json",
   "compilerOptions": {
-    "moduleResolution": "bundler",
     "incremental": true,
     "composite": true,
     "noEmit": false,

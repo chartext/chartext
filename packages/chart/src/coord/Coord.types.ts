@@ -20,6 +20,7 @@ export type CoordPlotValue<C extends CoordType> = (coord: C) => number;
 export type CoordConfig = {
   formatter?: CoordFormatter;
   parser?: CoordParser<CoordType>;
+  key?: string;
 };
 
 export type XY<

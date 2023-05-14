@@ -9,7 +9,7 @@ export type ChartStyle = {
   seriesColors: string[];
 };
 
-export type ChartProps = {
+export type ChartProps = Readonly<{
   size: Size;
   series: Series[];
   xAxis: XAxisConfig;
@@ -17,16 +17,17 @@ export type ChartProps = {
   xConfig?: CoordConfig | undefined;
   yConfig?: CoordConfig | undefined;
   style: ChartStyle;
-};
+}>;
 
-export type PartialChartProps = Omit<
-  Partial<ChartProps>,
-  'style' | 'xAxis' | 'yAxis' | 'size' | 'xConfig' | 'yConfig'
-> & {
-  size?: Partial<Size>;
-  xAxis?: Partial<XAxisConfig>;
-  yAxis?: Partial<YAxisConfig>;
-  x?: CoordConfig;
-  y?: CoordConfig;
-  style?: Partial<ChartStyle>;
-};
+export type ChartConfig = Partial<
+  Omit<ChartProps, 'style' | 'xAxis' | 'yAxis' | 'size' | 'xConfig' | 'yConfig'>
+> &
+  Readonly<{
+    height?: number;
+    width?: number;
+    xAxis?: Partial<XAxisConfig>;
+    yAxis?: Partial<YAxisConfig>;
+    x?: CoordConfig;
+    y?: CoordConfig;
+    style?: Partial<ChartStyle>;
+  }>;

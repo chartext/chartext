@@ -6,7 +6,7 @@ import {
 } from '@chartext/chart';
 import { Button, Stack } from '@mantine/core';
 import { UseFormReturnType, useForm } from '@mantine/form';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useMemo } from 'react';
 import { FaChartLine } from 'react-icons/fa';
 import { SeriesControl, SeriesControlValues } from '@/components/SeriesControl';
 import { CoordControl, CoordControlValues } from '@/components/CoordControl';
@@ -19,32 +19,11 @@ type RandomSeriesFormProps = {
   scatterSeries: SeriesControlValues;
 };
 
-type SidebarProps = {
-  height: number;
-  width: number;
+type FormProps = {
+  w?: number;
   padding?: number;
+  onSubmit?: () => void;
 };
-
-function initialCoordValues(): CoordControlValues {
-  return {
-    typeName: 'number',
-    numberRange: {
-      min: -1000,
-      max: 1000,
-    },
-    dateRange: {
-      min: new Date('2020-01-01'),
-      max: new Date('2021-01-01'),
-    },
-  };
-}
-
-function initialSeriesValues(): SeriesControlValues {
-  return {
-    count: 4,
-    dataCount: 50,
-  };
-}
 
 function FormCoordControl(props: {
   coordName: 'x' | 'y';
@@ -81,16 +60,39 @@ function FormSeriesControl(props: {
   );
 }
 
-export function Form(props: SidebarProps) {
-  const { height, width, padding = 10 } = props;
+export function Form(props: FormProps) {
+  const { w, padding = 10 } = props;
   const { setSeries } = useExampleChartContext();
+
+  const initialCoordValues: CoordControlValues = useMemo(
+    () => ({
+      typeName: 'number',
+      numberRange: {
+        min: -1000,
+        max: 1000,
+      },
+      dateRange: {
+        min: new Date('2020-01-01 UTC'),
+        max: new Date('2021-01-01 UTC'),
+      },
+    }),
+    [],
+  );
+
+  const initialSeriesValues: SeriesControlValues = useMemo(
+    () => ({
+      count: 4,
+      dataCount: 50,
+    }),
+    [],
+  );
 
   const form = useForm<RandomSeriesFormProps>({
     initialValues: {
-      xCoord: initialCoordValues(),
-      yCoord: initialCoordValues(),
-      lineSeries: initialSeriesValues(),
-      scatterSeries: initialSeriesValues(),
+      xCoord: initialCoordValues,
+      yCoord: initialCoordValues,
+      lineSeries: initialSeriesValues,
+      scatterSeries: initialSeriesValues,
     },
   });
 
@@ -121,24 +123,15 @@ export function Form(props: SidebarProps) {
         },
       ]);
       setSeries(series);
+      props.onSubmit?.();
     },
-    [setSeries],
+    [props, setSeries],
   );
-
-  useEffect(() => {
-    onSubmit({
-      xCoord: initialCoordValues(),
-      yCoord: initialCoordValues(),
-      lineSeries: initialSeriesValues(),
-      scatterSeries: initialSeriesValues(),
-    });
-  }, [onSubmit]);
 
   return (
     <form onSubmit={form.onSubmit(onSubmit)}>
       <Stack
-        w={width}
-        h={height}
+        w={w}
         justify="flex-start"
         p={padding}
       >

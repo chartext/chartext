@@ -59,7 +59,6 @@ export const defaultChartProps: ChartProps = {
   size: {
     height: window.innerHeight,
     width: window.innerWidth,
-    scale: window.devicePixelRatio,
   },
   series: [],
   style: defaultChartStyle,

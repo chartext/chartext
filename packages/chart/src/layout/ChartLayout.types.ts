@@ -21,5 +21,4 @@ export type Margin = {
 export type Size = {
   height: number;
   width: number;
-  scale: number;
 };

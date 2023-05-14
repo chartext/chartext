@@ -19,15 +19,15 @@ export class YAxis<Y extends CoordType> extends Axis<Y> {
 
     const textAlign: TextAlign =
       axisConfig.position === 'left'
-        ? ckGraphics.CK.TextAlign.Right
-        : ckGraphics.CK.TextAlign.Left;
+        ? ckGraphics.TextAlign.Right
+        : ckGraphics.TextAlign.Left;
 
     const labelParagraph = axisConfig.label
       ? ckGraphics.createParagraph({
           text: axisConfig.label,
           fontSize: labelFontSize,
           color: labelColor,
-          textAlign: ckGraphics.CK.TextAlign.Center,
+          textAlign: ckGraphics.TextAlign.Center,
         })
       : null;
 

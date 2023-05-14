@@ -22,31 +22,24 @@ function buildAxisTickLayout(
 }
 
 export function buildXYAxisTickLayout(
-  series: Series[],
+  seriesArr: Series[],
   xyTypeName: XYTuple<CoordTypeName>,
   xyMaxTicks: XYTuple<number>,
 ): XYTuple<AxisTickLayout> {
   const xValues: CoordType[] = [];
   const yValues: CoordType[] = [];
 
-  series.forEach(({ data }) => {
+  seriesArr.forEach(({ data }) =>
     data.forEach(({ x, y }) => {
-      /* if ('x' in item) {
-        xValues.push((item as XY).x);
-      } else {
-        xValues.push(xProps.)
-      } */
-
       xValues.push(x);
       yValues.push(y);
-    });
-  });
+    }),
+  );
 
   const [xTypeName, yTypeName] = xyTypeName;
   const [xMaxTicks, yMaxTicks] = xyMaxTicks;
 
   const xAxisTickLayout = buildAxisTickLayout(xTypeName, xMaxTicks, xValues);
-
   const yAxisTickLayout = buildAxisTickLayout(yTypeName, yMaxTicks, yValues);
 
   return [xAxisTickLayout, yAxisTickLayout];

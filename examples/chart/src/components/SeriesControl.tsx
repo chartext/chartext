@@ -1,10 +1,5 @@
-import {
-  Group,
-  NumberInput,
-  NumberInputProps,
-  Stack,
-  Text,
-} from '@mantine/core';
+import { Group, NumberInput, NumberInputProps, Stack } from '@mantine/core';
+import { Label } from '@/components/Label';
 
 type SeriesControlProps = {
   label: string;
@@ -22,13 +17,7 @@ export function SeriesControl(props: SeriesControlProps) {
 
   return (
     <Stack spacing={5}>
-      <Text
-        align="center"
-        size="s"
-        fw="bold"
-      >
-        {label}
-      </Text>
+      <Label label={label} />
       <Group
         grow
         spacing={5}
