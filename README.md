@@ -53,6 +53,81 @@ return (
 );
 ```
 
+## Configs (All properties are optional)
+
+[ChartDefaults](packages/chart/src/ChartDefaults.ts)
+
+### [ChartConfig](./packages/chart/src/Chart.types.ts)
+
+```ts
+height: number;
+width: number;
+xAxis: {
+  position: 'top' | 'bottom';
+  label: string;
+  size: number;
+  showZero: boolean;
+}
+yAxis: {
+  position: 'left' | 'right';
+  label: string;
+  size: number;
+  showZero: boolean;
+}
+x: {
+  formatter: CoordFormatter;
+  parser: CoordParser<CoordType>;
+  key: string;
+}
+y: {
+  formatter: CoordFormatter;
+  parser: CoordParser<CoordType>;
+  key: string;
+}
+theme: ChartThemeConfig;
+```
+
+### [ChartThemeConfig](./packages/chart/src/Chart.types.ts)
+
+```ts
+backgroundColor: string;
+margin: {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+};
+seriesColors: string[];
+xAxis: {
+  labelStyle: {
+    fontSize: number;
+    fontColor: string;
+  };
+  tickStyle: {
+    color: string;
+    zeroColor: string;
+    labelStyle: {
+      fontSize: number;
+      fontColor: string;
+    };
+  };
+};
+yAxis: {
+  labelStyle: {
+    fontSize: number;
+    fontColor: string;
+  };
+  tickStyle: {
+    color: string;
+    zeroColor: string;
+    labelStyle: {
+      fontSize: number;
+      fontColor: string;
+    };
+  };
+};
+```
+
 ## Contributing
 
 ### Prerequisites

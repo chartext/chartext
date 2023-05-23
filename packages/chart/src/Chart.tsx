@@ -1,14 +1,15 @@
 import { CkSurface } from '@chartext/canvaskit';
 import { Suspense, lazy, useMemo } from 'react';
-import { ChartStyle, ChartConfig } from '@/Chart.types';
-import { defaultChartProps } from '@/ChartDefaults';
-import { ChartEmpty } from '@/ChartEmpty';
-import { ChartLoading } from '@/ChartLoading';
-import { XAxisConfig, YAxisConfig } from '@/axis/Axis.types';
-import { AxisSurface } from '@/axis/AxisSurface';
-import { ChartProvider } from '@/context/ChartProvider';
-import { Size } from '@/layout/ChartLayout.types';
-import { SeriesSurface } from '@/series/SeriesSurface';
+import { ChartConfig } from '@chartext/chart/Chart.types';
+import { defaultChartProps } from '@chartext/chart/ChartDefaults';
+import { ChartEmpty } from '@chartext/chart/ChartEmpty';
+import { ChartLoading } from '@chartext/chart/ChartLoading';
+import { XAxisConfig, YAxisConfig } from '@chartext/chart/axis/Axis.types';
+import { AxisSurface } from '@chartext/chart/axis/AxisSurface';
+import { ChartProvider } from '@chartext/chart/context/ChartProvider';
+import { Size } from '@chartext/chart/layout/ChartLayout.types';
+import { SeriesSurface } from '@chartext/chart/series/SeriesSurface';
+import { ChartTheme } from '@chartext/chart/theme/ChartTheme.types';
 
 const CkGraphicsProviderLazy = lazy(() =>
   import('@chartext/canvaskit').then(({ CkGraphicsProvider }) => ({
@@ -17,12 +18,12 @@ const CkGraphicsProviderLazy = lazy(() =>
 );
 
 export function Chart(props: ChartConfig) {
-  const style: ChartStyle = useMemo(
+  const theme: ChartTheme = useMemo(
     () => ({
-      ...defaultChartProps.style,
-      ...props.style,
+      ...defaultChartProps.theme,
+      ...props.theme,
     }),
-    [props.style],
+    [props.theme],
   );
 
   const xAxisConfig: XAxisConfig = useMemo(
@@ -55,11 +56,11 @@ export function Chart(props: ChartConfig) {
     <Suspense fallback={<ChartLoading />}>
       <CkGraphicsProviderLazy>
         <div
-          style={{ ...size, backgroundColor: style.backgroundColor, margin: 0 }}
+          style={{ ...size, backgroundColor: theme.backgroundColor, margin: 0 }}
         >
           {props.series && props.series.length > 0 ? (
             <ChartProvider
-              style={style}
+              theme={theme}
               series={props.series}
               size={size}
               xAxisConfig={xAxisConfig}

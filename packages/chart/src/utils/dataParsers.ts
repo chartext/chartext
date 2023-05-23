@@ -1,4 +1,4 @@
-import { CoordType, CoordTypeName } from '@/coord/Coord.types';
+import { CoordType, CoordTypeName } from '@chartext/chart/coord/Coord.types';
 
 export function coordTypeName<T extends CoordType = CoordType>(
   coord: T,

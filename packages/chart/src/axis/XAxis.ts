@@ -1,38 +1,31 @@
 import { CkGraphics, CkPaintRepository } from '@chartext/canvaskit';
 import { Canvas, Paint, Paragraph } from 'canvaskit-wasm';
-import { Axis } from '@/axis/Axis';
-import { AxisTickLayout, XAxisConfig } from '@/axis/Axis.types';
-import { CoordType } from '@/coord/Coord.types';
-import { CoordLayout } from '@/coord/CoordLayout';
-import { Margin, RectLayout } from '@/layout/ChartLayout.types';
+import { Axis } from '@chartext/chart/axis/Axis';
+import { AxisConfig, AxisTickLayout } from '@chartext/chart/axis/Axis.types';
+import { CoordType } from '@chartext/chart/coord/Coord.types';
+import { CoordLayout } from '@chartext/chart/coord/CoordLayout';
+import { Margin, RectLayout } from '@chartext/chart/layout/ChartLayout.types';
+import { AxisStyle } from '@chartext/chart/theme/ChartTheme.types';
 
 export class XAxis<X extends CoordType> extends Axis<X> {
   constructor(
-    axisConfig: XAxisConfig,
+    axisConfig: AxisConfig,
+    axisStyle: AxisStyle,
     axisTickLayout: AxisTickLayout<X>,
     chartMargin: Margin,
     ckGraphics: CkGraphics,
     coordLayout: CoordLayout<X>,
     paintRepository: CkPaintRepository,
   ) {
-    const { labelColor, labelFontSize } = axisConfig;
-
-    const labelParagraph = axisConfig.label
-      ? ckGraphics.createParagraph({
-          text: axisConfig.label,
-          fontSize: labelFontSize,
-          color: labelColor,
-          textAlign: ckGraphics.TextAlign.Center,
-        })
-      : null;
+    const { label = 'X-Axis' } = axisConfig;
 
     super(
       axisTickLayout,
       chartMargin,
       ckGraphics,
       coordLayout,
-      labelParagraph,
-      axisConfig,
+      label,
+      axisStyle,
       paintRepository,
       ckGraphics.TextAlign.Center,
     );
@@ -40,24 +33,27 @@ export class XAxis<X extends CoordType> extends Axis<X> {
 
   protected override drawLabel(
     canvas: Canvas,
+    labelParagraph: Paragraph,
     seriesSurfaceRect: RectLayout,
   ): void {
-    if (this.labelParagraph) {
-      CkGraphics.drawParagraph({
-        canvas,
-        paragraph: this.labelParagraph,
-        width: seriesSurfaceRect.width,
-        x: seriesSurfaceRect.x0,
-        y: seriesSurfaceRect.y1 + this.tickFontSize + this.chartMargin.bottom,
-      });
-    }
+    const {
+      labelStyle: { fontSize },
+    } = this.style;
+
+    CkGraphics.drawParagraph({
+      canvas,
+      paragraph: labelParagraph,
+      width: seriesSurfaceRect.width,
+      x: seriesSurfaceRect.x0,
+      y: seriesSurfaceRect.y1 + fontSize + this.chartMargin.bottom,
+    });
   }
 
   protected override drawTick(
     canvas: Canvas,
     paint: Paint,
     seriesSurfaceRect: RectLayout,
-    paragraph: Paragraph,
+    tickParagraph: Paragraph,
     value: number,
     spacing: number,
   ) {
@@ -68,7 +64,7 @@ export class XAxis<X extends CoordType> extends Axis<X> {
 
     CkGraphics.drawParagraph({
       canvas,
-      paragraph,
+      paragraph: tickParagraph,
       width: spacing,
       x: x - Math.round(spacing / 2),
       y: y1 + 5,

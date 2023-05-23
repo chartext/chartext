@@ -1,8 +1,8 @@
 import { CkGraphics, CkPaintSet } from '@chartext/canvaskit';
 import { Paint, Surface } from 'canvaskit-wasm';
-import { CoordType, XY, XYTuple } from '@/coord/Coord.types';
-import { RectLayout } from '@/layout/ChartLayout.types';
-import { CoordLayout } from '@/coord/CoordLayout';
+import { CoordType, XY, XYTuple } from '@chartext/chart/coord/Coord.types';
+import { RectLayout } from '@chartext/chart/layout/ChartLayout.types';
+import { CoordLayout } from '@chartext/chart/coord/CoordLayout';
 
 export type SeriesType = 'line' | 'scatter' | 'box' | 'area' | 'bar';
 

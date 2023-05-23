@@ -1,10 +1,10 @@
 import { CkGraphics, useCkGraphics, useCkSurface } from '@chartext/canvaskit';
 import { Canvas, Surface } from 'canvaskit-wasm';
 import { useLayoutEffect } from 'react';
-import { XAxis } from '@/axis/XAxis';
-import { YAxis } from '@/axis/YAxis';
-import { useChartContext } from '@/context/ChartProvider';
-import { CoordType } from '@/coord/Coord.types';
+import { XAxis } from '@chartext/chart/axis/XAxis';
+import { YAxis } from '@chartext/chart/axis/YAxis';
+import { useChartContext } from '@chartext/chart/context/ChartProvider';
+import { CoordType } from '@chartext/chart/coord/Coord.types';
 
 export function AxisSurface() {
   const ckGraphics: CkGraphics = useCkGraphics();
@@ -12,15 +12,16 @@ export function AxisSurface() {
   const {
     paintRepository,
     seriesSurfaceLayout,
-    style: { margin: chartMargin },
     xyAxisConfig: [xAxisConfig, yAxisConfig],
     xyAxisTickLayout: [xAxisTickLayout, yAxisTickLayout],
     xyCoordLayout: [xLayout, yLayout],
+    theme: { margin: chartMargin, xAxisStyle, yAxisStyle },
   } = useChartContext();
 
   useLayoutEffect(() => {
     const xAxis: XAxis<CoordType> = new XAxis<CoordType>(
       xAxisConfig,
+      xAxisStyle,
       xAxisTickLayout,
       chartMargin,
       ckGraphics,
@@ -30,6 +31,7 @@ export function AxisSurface() {
 
     const yAxis: YAxis<CoordType> = new YAxis<CoordType>(
       yAxisConfig,
+      yAxisStyle,
       yAxisTickLayout,
       chartMargin,
       ckGraphics,
@@ -63,9 +65,11 @@ export function AxisSurface() {
     seriesSurfaceLayout,
     surface,
     xAxisConfig,
+    xAxisStyle,
     xAxisTickLayout,
     xLayout,
     yAxisConfig,
+    yAxisStyle,
     yAxisTickLayout,
     yLayout,
   ]);

@@ -1,5 +1,8 @@
-export * from '@/CkGraphics.types';
-export * from '@/CkGraphics';
-export * from '@/CkPaintRepository';
-export { CkSurface, useCkSurface } from '@/CkSurface';
-export { CkGraphicsProvider, useCkGraphics } from '@/CkGraphicsProvider';
+export * from '@chartext/canvaskit/CkGraphics.types';
+export * from '@chartext/canvaskit/CkGraphics';
+export * from '@chartext/canvaskit/CkPaintRepository';
+export { CkSurface, useCkSurface } from '@chartext/canvaskit/CkSurface';
+export {
+  CkGraphicsProvider,
+  useCkGraphics,
+} from '@chartext/canvaskit/CkGraphicsProvider';

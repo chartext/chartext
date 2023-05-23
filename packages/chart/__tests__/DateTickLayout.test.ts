@@ -1,10 +1,11 @@
-import { describe } from 'vitest';
-import { DateTickLayout } from '@/axis/DateTickLayout';
+import { describe, it } from 'vitest';
+import { DateTickLayout } from '@chartext/chart/axis/DateTickLayout';
+import { MonthIndex } from '@chartext/chart/index';
 
 describe('DateTickLayout tests', () => {
   it('should create month ticks', () => {
     const tickLayout: DateTickLayout = new DateTickLayout(
-      [new Date('2020-01-01'), new Date('2020-12-31')],
+      [new Date(2020, MonthIndex.Jan, 1), new Date(2020, MonthIndex.Dec, 31)],
       10,
     );
 
@@ -17,7 +18,7 @@ describe('DateTickLayout tests', () => {
 
   it('should create quarter ticks', () => {
     const tickLayout: DateTickLayout = new DateTickLayout(
-      [new Date('2020-01-01'), new Date('2022-12-31')],
+      [new Date(2018, MonthIndex.Jan, 1), new Date(2020, MonthIndex.Dec, 31)],
       10,
     );
 
@@ -30,7 +31,7 @@ describe('DateTickLayout tests', () => {
 
   it('should create year ticks', () => {
     const tickLayout: DateTickLayout = new DateTickLayout(
-      [new Date('2020-01-01'), new Date('2027-12-31')],
+      [new Date(2020, MonthIndex.Jan, 1), new Date(2027, MonthIndex.Dec, 31)],
       10,
     );
 

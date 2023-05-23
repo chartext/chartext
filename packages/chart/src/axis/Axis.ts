@@ -1,9 +1,10 @@
 import { CkGraphics, CkPaintRepository } from '@chartext/canvaskit';
 import { Canvas, Paint, Paragraph, TextAlign } from 'canvaskit-wasm';
-import { AxisTickLayout, XAxisConfig, YAxisConfig } from '@/axis/Axis.types';
-import { CoordType } from '@/coord/Coord.types';
-import { CoordLayout } from '@/coord/CoordLayout';
-import { Margin, RectLayout } from '@/layout/ChartLayout.types';
+import { AxisTickLayout } from '@chartext/chart/axis/Axis.types';
+import { CoordType } from '@chartext/chart/coord/Coord.types';
+import { CoordLayout } from '@chartext/chart/coord/CoordLayout';
+import { Margin, RectLayout } from '@chartext/chart/layout/ChartLayout.types';
+import { AxisStyle, LabelStyle } from '@chartext/chart/theme/ChartTheme.types';
 
 type TickParagraph = {
   value: number;
@@ -11,8 +12,7 @@ type TickParagraph = {
 };
 
 export abstract class Axis<C extends CoordType> {
-  protected readonly labelFontSize: number;
-  protected readonly tickFontSize: number;
+  readonly #labelParagraph: Paragraph | null;
   readonly #tickPaint: Paint;
   readonly #tickParagraphs: TickParagraph[];
   readonly #zeroTickPaint: Paint;
@@ -24,41 +24,59 @@ export abstract class Axis<C extends CoordType> {
     protected readonly chartMargin: Margin,
     protected readonly ckGraphics: CkGraphics,
     protected readonly coordLayout: CoordLayout<C>,
-    protected readonly labelParagraph: Paragraph | null,
-    axisConfig: XAxisConfig | YAxisConfig,
+    protected readonly label: string | undefined,
+    protected readonly style: AxisStyle,
     paintRepository: CkPaintRepository,
-    textAlign: TextAlign,
+    tickTextAlign: TextAlign,
   ) {
-    const {
-      labelFontSize,
-      tickFontSize,
-      tickLabelColor,
-      tickColor,
-      tickZeroColor,
-    } = axisConfig;
-
     const { ticks } = axisTickLayout;
 
-    this.labelFontSize = labelFontSize;
-    this.tickFontSize = tickFontSize;
+    const {
+      labelStyle,
+      tickStyle: { labelStyle: tickLabelStyle },
+    } = style;
 
-    this.#tickPaint = paintRepository.getPaintSet(tickColor).stroke;
-    this.#zeroTickPaint = paintRepository.getPaintSet(tickZeroColor).stroke;
+    this.#labelParagraph = label
+      ? this.createParagraph(label, labelStyle)
+      : null;
+
+    this.#tickPaint = paintRepository.getPaintSet(style.tickStyle.color).stroke;
+    this.#zeroTickPaint = paintRepository.getPaintSet(
+      style.tickStyle.zeroColor,
+    ).stroke;
 
     this.#tickParagraphs = [];
 
     ticks.forEach(({ plotValue, display }) => {
-      const paragraph = ckGraphics.createParagraph({
-        text: display,
-        fontSize: tickFontSize,
-        color: tickLabelColor,
-        textAlign,
-      });
+      const paragraph = this.createParagraph(
+        display,
+        tickLabelStyle,
+        tickTextAlign,
+      );
 
       this.#tickParagraphs.push({
         value: plotValue,
         paragraph,
       });
+    });
+  }
+
+  private createParagraph(
+    text: string,
+    labelStyle: LabelStyle,
+    textAlign?: TextAlign,
+  ) {
+    const { fontColor, fontSize } = labelStyle;
+
+    return this.ckGraphics.createParagraph({
+      style: {
+        textAlign: textAlign ?? this.ckGraphics.TextAlign.Center,
+        textStyle: {
+          color: this.ckGraphics.color(fontColor),
+          fontSize,
+        },
+      },
+      text,
     });
   }
 
@@ -73,6 +91,7 @@ export abstract class Axis<C extends CoordType> {
 
   protected abstract drawLabel(
     canvas: Canvas,
+    labelParagraph: Paragraph,
     seriesSurfaceRect: RectLayout,
   ): void;
 
@@ -96,7 +115,9 @@ export abstract class Axis<C extends CoordType> {
 
     const tickSpacing = secondTickCoord - firstTickCoord;
 
-    this.drawLabel(canvas, seriesSurfaceRect);
+    if (this.#labelParagraph) {
+      this.drawLabel(canvas, this.#labelParagraph, seriesSurfaceRect);
+    }
 
     this.#tickParagraphs.forEach(({ value, paragraph }) => {
       const paint: Paint = value === 0 ? this.#zeroTickPaint : this.#tickPaint;
@@ -118,9 +139,7 @@ export abstract class Axis<C extends CoordType> {
 
   delete(): void {
     this.#isDeleted = true;
-    this.#tickParagraphs.forEach(({ paragraph }) =>
-      CkGraphics.delete(paragraph),
-    );
-    CkGraphics.delete(this.labelParagraph);
+    this.#tickParagraphs.forEach(({ paragraph }) => paragraph.delete());
+    this.#labelParagraph?.delete();
   }
 }

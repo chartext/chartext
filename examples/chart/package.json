@@ -10,6 +10,7 @@
     "email": "threaddot@users.noreply.github.com",
     "url": "https://github.com/threaddot"
   },
+  "packageManager": "pnpm@8.5.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/chartext/chartext.git",
@@ -25,7 +26,6 @@
   "dependencies": {
     "@chartext/chart": "workspace:*",
     "@emotion/react": "^11.11.0",
-    "@js-temporal/polyfill": "^0.4.3",
     "@mantine/core": "^6.0.10",
     "@mantine/dates": "^6.0.10",
     "@mantine/form": "^6.0.10",
@@ -34,9 +34,5 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0"
   },
-  "devDependencies": {
-    "@types/testing-library__jest-dom": "^5.14.5"
-  },
-  "private": true,
-  "packageManager": "pnpm@8.5.0"
+  "private": true
 }

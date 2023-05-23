@@ -1,11 +1,15 @@
-import { CoordType, XY } from '@/coord/Coord.types';
-import { coordTypeName } from '@/utils/dataParsers';
-import { Series } from '@/series/Series.types';
+import { CoordType, XY } from '@chartext/chart/coord/Coord.types';
+import { coordTypeName } from '@chartext/chart/utils/dataParsers';
+import { Series } from '@chartext/chart/series/Series.types';
 import {
   RandomSeriesConfig,
   RandomSeriesProps,
-} from '@/utils/generateData.types';
-import { randomDate, randomInt, randomNumber } from '@/utils/random';
+} from '@chartext/chart/utils/generateData.types';
+import {
+  randomDate,
+  randomInt,
+  randomNumber,
+} from '@chartext/chart/utils/random';
 
 export function generateIntData(
   min: number,

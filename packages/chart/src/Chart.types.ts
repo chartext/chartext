@@ -1,13 +1,12 @@
-import { XAxisConfig, YAxisConfig } from '@/axis/Axis.types';
-import { CoordConfig } from '@/coord/Coord.types';
-import { Margin, Size } from '@/layout/ChartLayout.types';
-import { Series } from '@/series/Series.types';
-
-export type ChartStyle = {
-  backgroundColor: string;
-  margin: Margin;
-  seriesColors: string[];
-};
+import { XAxisConfig, YAxisConfig } from '@chartext/chart/axis/Axis.types';
+import { CoordConfig } from '@chartext/chart/coord/Coord.types';
+import { Size } from '@chartext/chart/layout/ChartLayout.types';
+import { Series } from '@chartext/chart/series/Series.types';
+import {
+  AxisStyle,
+  ChartStyle,
+  ChartTheme,
+} from '@chartext/chart/theme/ChartTheme.types';
 
 export type ChartProps = Readonly<{
   size: Size;
@@ -16,8 +15,14 @@ export type ChartProps = Readonly<{
   yAxis: YAxisConfig;
   xConfig?: CoordConfig | undefined;
   yConfig?: CoordConfig | undefined;
-  style: ChartStyle;
+  theme: ChartTheme;
 }>;
+
+export type ChartThemeConfig = Partial<ChartStyle> &
+  Readonly<{
+    xAxis: Partial<AxisStyle>;
+    yAxis: Partial<AxisStyle>;
+  }>;
 
 export type ChartConfig = Partial<
   Omit<ChartProps, 'style' | 'xAxis' | 'yAxis' | 'size' | 'xConfig' | 'yConfig'>
@@ -29,5 +34,5 @@ export type ChartConfig = Partial<
     yAxis?: Partial<YAxisConfig>;
     x?: CoordConfig;
     y?: CoordConfig;
-    style?: Partial<ChartStyle>;
+    theme?: ChartThemeConfig;
   }>;

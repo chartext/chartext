@@ -8,9 +8,11 @@ import {
   addSeconds,
   addWeeks,
   addYears,
+  endOfQuarter,
   isLeapYear,
   nextSaturday,
   previousSunday,
+  startOfQuarter,
 } from 'date-fns';
 
 export type DatePart =
@@ -24,7 +26,21 @@ export type DatePart =
   | 'second'
   | 'millisecond';
 
-export const Months = {
+export type Month =
+  | 'Jan'
+  | 'Feb'
+  | 'Mar'
+  | 'Apr'
+  | 'May'
+  | 'Jun'
+  | 'Jul'
+  | 'Aug'
+  | 'Sep'
+  | 'Oct'
+  | 'Nov'
+  | 'Dec';
+
+export const MonthIndex: Record<Month, number> = {
   Jan: 0,
   Feb: 1,
   Mar: 2,
@@ -46,21 +62,21 @@ export function maxDayOfMonth(
   monthIndex: number,
 ): 28 | 29 | 30 | 31 {
   switch (monthIndex) {
-    case Months.Jan:
-    case Months.Mar:
-    case Months.May:
-    case Months.Jul:
-    case Months.Aug:
-    case Months.Oct:
-    case Months.Dec:
+    case MonthIndex.Jan:
+    case MonthIndex.Mar:
+    case MonthIndex.May:
+    case MonthIndex.Jul:
+    case MonthIndex.Aug:
+    case MonthIndex.Oct:
+    case MonthIndex.Dec:
       return 31;
-    case Months.Apr:
-    case Months.Jun:
-    case Months.Sep:
-    case Months.Nov:
+    case MonthIndex.Apr:
+    case MonthIndex.Jun:
+    case MonthIndex.Sep:
+    case MonthIndex.Nov:
       return 30;
-    case Months.Feb: {
-      return isLeapYear(new Date(year, Months.Feb, 1)) ? 29 : 28;
+    case MonthIndex.Feb: {
+      return isLeapYear(new Date(year, MonthIndex.Feb, 1)) ? 29 : 28;
     }
     default:
       throw new Error(`Invalid monthIndex: ${monthIndex}`);
@@ -135,22 +151,16 @@ export function roundDate(
     case 'quarter': {
       const month = date.getMonth();
 
-      let quarterMonth;
+      if (direction === 'floor' || month % 4 < 2) {
+        return roundDate(startOfQuarter(date), 'month', 'floor');
+      }
 
-      if (month === Months.Jan || month === Months.Dec)
-        quarterMonth = Months.Jan;
-      else if (month <= Months.Apr) quarterMonth = Months.Apr;
-      else if (month <= Months.Jul) quarterMonth = Months.Jul;
-      else quarterMonth = Months.Oct;
-
-      // const adjustment =
-      //   direction === 'floor' || (!direction && date.getMonth());
-
-      return new Date(date.getFullYear(), quarterMonth);
+      return roundDate(endOfQuarter(date), 'month', 'ceiling');
     }
     case 'year': {
       const adjustment =
         direction === 'floor' || (!direction && date.getMonth() < 6) ? 0 : 1;
+
       return new Date(date.getFullYear() + adjustment, 0);
     }
     default:

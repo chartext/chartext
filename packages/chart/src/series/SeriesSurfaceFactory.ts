@@ -1,7 +1,7 @@
-import { ChartStyle } from '@/Chart.types';
-import { XAxisConfig, YAxisConfig } from '@/axis/Axis.types';
-import { XYTuple } from '@/coord/Coord.types';
-import { RectLayout, Size } from '@/layout/ChartLayout.types';
+import { XAxisConfig, YAxisConfig } from '@chartext/chart/axis/Axis.types';
+import { XYTuple } from '@chartext/chart/coord/Coord.types';
+import { RectLayout, Size } from '@chartext/chart/layout/ChartLayout.types';
+import { ChartStyle } from '@chartext/chart/theme/ChartTheme.types';
 
 export function buildSeriesSurfaceLayout(
   size: Size,

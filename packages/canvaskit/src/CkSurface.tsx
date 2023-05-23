@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { useCkGraphics } from '@/CkGraphicsProvider';
+import { useCkGraphics } from '@chartext/canvaskit/CkGraphicsProvider';
 
 type CkSurfaceProps = {
   height: number;

@@ -1,5 +1,5 @@
-import { XY } from '@/coord/Coord.types';
-import { Series } from '@/series/Series.types';
+import { XY } from '@chartext/chart/coord/Coord.types';
+import { Series } from '@chartext/chart/series/Series.types';
 
 export function sortedSeriesData(series: Series): XY[] {
   return series.data.sort((xy1, xy2) => {

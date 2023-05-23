@@ -1,12 +1,11 @@
-import { CkGraphics } from '@chartext/canvaskit';
 import { Paint } from 'canvaskit-wasm';
-import { sortedSeriesData } from '@/series/Series';
+import { XY } from '@chartext/chart/coord/Coord.types';
+import { sortedSeriesData } from '@chartext/chart/series/Series';
 import {
   SeriesDrawProps,
   SeriesDrawer,
   SeriesDrawerProps,
-} from '@/series/Series.types';
-import { XY } from '@/coord/Coord.types';
+} from '@chartext/chart/series/Series.types';
 
 export class LineSeries implements SeriesDrawer {
   readonly #paint: Paint;
@@ -53,7 +52,7 @@ export class LineSeries implements SeriesDrawer {
 
           canvas.drawPath(path, this.#paint);
         } finally {
-          CkGraphics.delete(path);
+          path.delete();
         }
       });
     }

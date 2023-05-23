@@ -13,7 +13,7 @@ import {
   useViewportSize,
 } from '@mantine/hooks';
 import { useState } from 'react';
-import { TbMenu2 } from 'react-icons/tb';
+import { TbDatabase } from 'react-icons/tb';
 import { Form } from '@/components/Form';
 import { ExampleChartContext } from '@/ExampleChart.context';
 
@@ -27,7 +27,7 @@ export function ExampleChart() {
   const [height] = useDebouncedValue<number>(viewportHeight, 500);
   const [width] = useDebouncedValue<number>(viewportWidth, 500);
 
-  const [opened, { open, close }] = useDisclosure(false);
+  const [opened, { open, close }] = useDisclosure(true);
 
   const chartWidth =
     width - sidebarWidth < minChartWidth ? minChartWidth : width - sidebarWidth;
@@ -49,7 +49,7 @@ export function ExampleChart() {
           opened={opened}
           onClose={close}
           keepMounted={true}
-          title="Data"
+          title={<TbDatabase />}
         >
           <Form w={drawerSize - 10} />
         </Drawer>
@@ -62,7 +62,7 @@ export function ExampleChart() {
               onClick={open}
               w={sidebarWidth}
             >
-              <TbMenu2 />
+              <TbDatabase />
             </ActionIcon>
           </Stack>
           <ScrollArea w={scrollAreaWidth}>

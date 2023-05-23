@@ -1,54 +1,46 @@
 import { CkGraphics, CkPaintRepository } from '@chartext/canvaskit';
 import { Canvas, Paint, Paragraph, TextAlign } from 'canvaskit-wasm';
-import { Axis } from '@/axis/Axis';
-import { AxisTickLayout, YAxisConfig } from '@/axis/Axis.types';
-import { CoordType } from '@/coord/Coord.types';
-import { CoordLayout } from '@/coord/CoordLayout';
-import { Margin, RectLayout } from '@/layout/ChartLayout.types';
+import { Axis } from '@chartext/chart/axis/Axis';
+import { AxisTickLayout, YAxisConfig } from '@chartext/chart/axis/Axis.types';
+import { CoordType } from '@chartext/chart/coord/Coord.types';
+import { CoordLayout } from '@chartext/chart/coord/CoordLayout';
+import { Margin, RectLayout } from '@chartext/chart/layout/ChartLayout.types';
+import { AxisStyle } from '@chartext/chart/theme/ChartTheme.types';
 
 export class YAxis<Y extends CoordType> extends Axis<Y> {
   constructor(
     axisConfig: YAxisConfig,
+    axisStyle: AxisStyle,
     axisTickLayout: AxisTickLayout<Y>,
     chartMargin: Margin,
     ckGraphics: CkGraphics,
     coordLayout: CoordLayout<Y>,
     paintRepository: CkPaintRepository,
   ) {
-    const { labelColor, labelFontSize } = axisConfig;
+    const { label } = axisConfig;
 
-    const textAlign: TextAlign =
+    const tickTextAlign: TextAlign =
       axisConfig.position === 'left'
         ? ckGraphics.TextAlign.Right
         : ckGraphics.TextAlign.Left;
-
-    const labelParagraph = axisConfig.label
-      ? ckGraphics.createParagraph({
-          text: axisConfig.label,
-          fontSize: labelFontSize,
-          color: labelColor,
-          textAlign: ckGraphics.TextAlign.Center,
-        })
-      : null;
 
     super(
       axisTickLayout,
       chartMargin,
       ckGraphics,
       coordLayout,
-      labelParagraph,
-      axisConfig,
+      label,
+      axisStyle,
       paintRepository,
-      textAlign,
+      tickTextAlign,
     );
   }
 
   protected override drawLabel(
     canvas: Canvas,
+    labelParagraph: Paragraph,
     seriesSurfaceLayout: RectLayout,
   ): void {
-    if (!this.labelParagraph) return;
-
     const { y0, height, width } = seriesSurfaceLayout;
     const { left } = this.chartMargin;
 
@@ -58,7 +50,7 @@ export class YAxis<Y extends CoordType> extends Axis<Y> {
 
     CkGraphics.drawParagraph({
       canvas,
-      paragraph: this.labelParagraph,
+      paragraph: labelParagraph,
       width: width,
       x: -1 * Math.round(width / 2) - y0,
       y: left,
@@ -76,6 +68,11 @@ export class YAxis<Y extends CoordType> extends Axis<Y> {
   ) {
     const { x0, x1 } = seriesSurfaceLayout;
     const y = this.coordLayout.getSurfaceCoord(value, seriesSurfaceLayout);
+    const {
+      tickStyle: {
+        labelStyle: { fontSize },
+      },
+    } = this.style;
 
     canvas.drawLine(x0 - 7, y, x1, y, paint);
 
@@ -84,7 +81,7 @@ export class YAxis<Y extends CoordType> extends Axis<Y> {
       paragraph: tickParagraph,
       width: x0 - 5,
       x: 0,
-      y: y - Math.round(this.tickFontSize / 2),
+      y: y - Math.round(fontSize / 2),
     });
   }
 }

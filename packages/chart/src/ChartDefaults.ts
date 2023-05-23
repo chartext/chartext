@@ -1,5 +1,14 @@
-import { ChartProps, ChartStyle } from '@/Chart.types';
-import { AxisConfig, XAxisConfig, YAxisConfig } from '@/axis/Axis.types';
+import { ChartProps } from '@chartext/chart/Chart.types';
+import {
+  AxisConfig,
+  XAxisConfig,
+  YAxisConfig,
+} from '@chartext/chart/axis/Axis.types';
+import {
+  AxisStyle,
+  AxisTickStyle,
+  ChartTheme,
+} from '@chartext/chart/theme/ChartTheme.types';
 
 const defaultSeriesColors: string[] = [
   '#33b1ff',
@@ -18,7 +27,24 @@ const defaultSeriesColors: string[] = [
   '#08bdba',
 ];
 
-const defaultChartStyle: ChartStyle = {
+const defaultAxisTickStyle: AxisTickStyle = {
+  color: 'rgb(64, 64, 64)',
+  zeroColor: 'rgb(112, 112, 112)',
+  labelStyle: {
+    fontColor: 'rgb(198, 198, 198)',
+    fontSize: 10,
+  },
+};
+
+const defaultAxisStyle: AxisStyle = {
+  labelStyle: {
+    fontColor: 'rgb(198, 198, 198)',
+    fontSize: 12,
+  },
+  tickStyle: defaultAxisTickStyle,
+};
+
+const defaultChartTheme: ChartTheme = {
   backgroundColor: 'rgb(30, 30, 30)',
   margin: {
     top: 25,
@@ -27,17 +53,13 @@ const defaultChartStyle: ChartStyle = {
     left: 25,
   },
   seriesColors: defaultSeriesColors,
+  xAxisStyle: defaultAxisStyle,
+  yAxisStyle: defaultAxisStyle,
 };
 
 const defaultAxisConfig: AxisConfig = {
   showZero: true,
   size: 75,
-  labelFontSize: 13,
-  labelColor: 'rgb(198, 198, 198)',
-  tickLabelColor: 'rgb(198, 198, 198)',
-  tickFontSize: 12,
-  tickColor: 'rgb(64, 64, 64)',
-  tickZeroColor: 'rgb(112, 112, 112)',
 };
 
 export const defaultNumberFormatter = new Intl.NumberFormat(undefined, {
@@ -61,7 +83,7 @@ export const defaultChartProps: ChartProps = {
     width: window.innerWidth,
   },
   series: [],
-  style: defaultChartStyle,
+  theme: defaultChartTheme,
   xAxis: defaultXAxisConfig,
   yAxis: defaultYAxisConfig,
 };

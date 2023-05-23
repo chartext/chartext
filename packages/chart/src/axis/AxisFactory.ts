@@ -1,8 +1,13 @@
-import { AxisConfig, AxisTickLayout } from '@/axis/Axis.types';
-import { DateTickLayout } from '@/axis/DateTickLayout';
-import { NumberTickLayout } from '@/axis/NumberTickLayout';
-import { CoordType, CoordTypeName, XYTuple } from '@/coord/Coord.types';
-import { Series } from '@/series/Series.types';
+import { AxisTickLayout } from '@chartext/chart/axis/Axis.types';
+import { DateTickLayout } from '@chartext/chart/axis/DateTickLayout';
+import { NumberTickLayout } from '@chartext/chart/axis/NumberTickLayout';
+import {
+  CoordType,
+  CoordTypeName,
+  XYTuple,
+} from '@chartext/chart/coord/Coord.types';
+import { Series } from '@chartext/chart/series/Series.types';
+import { AxisStyle } from '@chartext/chart/theme/ChartTheme.types';
 
 function buildAxisTickLayout(
   coordTypeName: CoordTypeName,
@@ -45,17 +50,17 @@ export function buildXYAxisTickLayout(
   return [xAxisTickLayout, yAxisTickLayout];
 }
 
-function buildAxisColors(axisConfig: AxisConfig): string[] {
+function buildAxisColors(axisStyle: AxisStyle): string[] {
   return [
-    axisConfig.labelColor,
-    axisConfig.tickLabelColor,
-    axisConfig.tickColor,
-    axisConfig.tickZeroColor,
+    axisStyle.labelStyle.fontColor,
+    axisStyle.tickStyle.color,
+    axisStyle.tickStyle.zeroColor,
+    axisStyle.tickStyle.labelStyle.fontColor,
   ];
 }
 
-export function buildXYAxisColors(xyAxisConfig: XYTuple<AxisConfig>): string[] {
-  const [xAxisConfig, yAxisConfig] = xyAxisConfig;
+export function buildXYAxisColors(xyAxisStyle: XYTuple<AxisStyle>): string[] {
+  const [xAxisStyle, yAxisStyle] = xyAxisStyle;
 
-  return [...buildAxisColors(xAxisConfig), ...buildAxisColors(yAxisConfig)];
+  return [...buildAxisColors(xAxisStyle), ...buildAxisColors(yAxisStyle)];
 }

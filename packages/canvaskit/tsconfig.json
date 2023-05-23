@@ -4,9 +4,8 @@
     "baseUrl": ".",
     "outDir": "build",
     "tsBuildInfoFile": "build/.tsbuildinfo",
-    "esModuleInterop": true,
     "paths": {
-      "@/*": ["src/*"]
+      "@chartext/canvaskit/*": ["src/*"]
     }
   },
   "include": ["src", "__tests__", "vite.config.ts"]

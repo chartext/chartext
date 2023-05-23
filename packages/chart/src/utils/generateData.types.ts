@@ -1,5 +1,5 @@
-import { CoordType } from '@/coord/Coord.types';
-import { SeriesType } from '@/series/Series.types';
+import { CoordType } from '@chartext/chart/coord/Coord.types';
+import { SeriesType } from '@chartext/chart/series/Series.types';
 
 export type CoordRange<T extends CoordType> = {
   min: T;

@@ -1,15 +1,15 @@
 import { CkGraphics, useCkGraphics, useCkSurface } from '@chartext/canvaskit';
 import { Canvas, Surface } from 'canvaskit-wasm';
 import { useLayoutEffect } from 'react';
-import { useChartContext } from '@/context/ChartProvider';
-import { LineSeries } from '@/series/LineSeries';
-import { ScatterSeries } from '@/series/ScatterSeries';
+import { useChartContext } from '@chartext/chart/context/ChartProvider';
+import { LineSeries } from '@chartext/chart/series/LineSeries';
+import { ScatterSeries } from '@chartext/chart/series/ScatterSeries';
 import {
   SeriesDrawProps,
   SeriesDrawer,
   SeriesDrawerProps,
   SeriesType,
-} from '@/series/Series.types';
+} from '@chartext/chart/series/Series.types';
 
 function buildSeriesDrawer(
   props: SeriesDrawerProps,
@@ -35,7 +35,7 @@ export function SeriesSurface() {
     paintRepository,
     series,
     seriesSurfaceLayout,
-    style: { seriesColors },
+    theme: { seriesColors },
     xyCoordLayout,
   } = useChartContext();
 

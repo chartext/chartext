@@ -1,6 +1,5 @@
 import {
   Canvas,
-  Paint,
   PaintStyle,
   Paragraph,
   ParagraphStyle,
@@ -9,15 +8,7 @@ import {
 
 export type CkRect = [left: number, top: number, right: number, bottom: number];
 
-export type CkDrawLineParams = [
-  x0: number,
-  x1: number,
-  y0: number,
-  y1: number,
-  paint: Paint,
-];
-
-export type CkPaintProps = {
+export type CkCreatePaintParams = {
   color?: string | undefined;
   style?: PaintStyle | undefined;
   strokeWidth?: number | undefined;
@@ -26,27 +17,20 @@ export type CkPaintProps = {
 export type CkFontFamily = 'roboto';
 export type CkTypeface = Record<CkFontFamily, Typeface>;
 
-export type CkFontProps = {
+export type CkCreateFontParams = {
   size?: number | undefined;
   family?: CkFontFamily | undefined;
 };
 
-export type CkParagraphProps = ParagraphStyle & {
+export type CkCreateParagraphParams = {
   text: string;
-  fontSize?: number;
-  fontFamilies?: string[] | undefined;
-  color?: string | undefined;
+  style?: ParagraphStyle;
 };
 
-export type CkDrawParagraphProps = {
+export type CkDrawParagraphParams = {
   canvas: Canvas;
   paragraph: Paragraph;
   width: number;
   x: number;
   y: number;
-};
-
-export type CkEmbindObject = {
-  delete(): void;
-  isDeleted(): void;
 };

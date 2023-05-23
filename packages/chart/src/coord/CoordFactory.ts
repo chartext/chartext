@@ -1,17 +1,17 @@
-import { defaultNumberFormatter } from '@/ChartDefaults';
-import { AxisTickLayout } from '@/axis/Axis.types';
+import { defaultNumberFormatter } from '@chartext/chart/ChartDefaults';
+import { AxisTickLayout } from '@chartext/chart/axis/Axis.types';
 import {
   CoordConfig,
   CoordFormatter,
   CoordTypeName,
   XYTuple,
-} from '@/coord/Coord.types';
-import { CoordLayout } from '@/coord/CoordLayout';
-import { DateCoordLayout } from '@/coord/DateCoordLayout';
-import { NumberCoordLayout } from '@/coord/NumberCoordLayout';
-import { Direction } from '@/layout/ChartLayout.types';
-import { Series } from '@/series/Series.types';
-import { coordTypeName } from '@/utils/dataParsers';
+} from '@chartext/chart/coord/Coord.types';
+import { CoordLayout } from '@chartext/chart/coord/CoordLayout';
+import { DateCoordLayout } from '@chartext/chart/coord/DateCoordLayout';
+import { NumberCoordLayout } from '@chartext/chart/coord/NumberCoordLayout';
+import { Direction } from '@chartext/chart/layout/ChartLayout.types';
+import { Series } from '@chartext/chart/series/Series.types';
+import { coordTypeName } from '@chartext/chart/utils/dataParsers';
 
 export function buildXYTypeName(
   series: Series[],

@@ -18,8 +18,13 @@ sortFirst:
   - author
   - contributors
   - funding
+  - packageManager
+  - type
   - files
   - main
+  - module
+  - types
+  - exports
   - browser
   - bin
   - man

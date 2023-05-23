@@ -3,8 +3,8 @@ import {
   SeriesDrawProps,
   SeriesDrawer,
   SeriesDrawerProps,
-} from '@/series/Series.types';
-import { XY } from '@/coord/Coord.types';
+} from '@chartext/chart/series/Series.types';
+import { XY } from '@chartext/chart/coord/Coord.types';
 
 export class ScatterSeries implements SeriesDrawer {
   readonly #paint: Paint;

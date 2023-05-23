@@ -6,13 +6,14 @@ import {
   differenceInDays,
   differenceInMonths,
   differenceInQuarters,
+  format,
   max,
   min,
 } from 'date-fns';
-import { AxisTick, AxisTickLayout } from '@/axis/Axis.types';
-import { NumberTickLayout } from '@/axis/NumberTickLayout';
-import { CoordMinMax, DateFormatter } from '@/coord/Coord.types';
-import { Months, roundDate } from '@/utils/dates';
+import { AxisTick, AxisTickLayout } from '@chartext/chart/axis/Axis.types';
+import { NumberTickLayout } from '@chartext/chart/axis/NumberTickLayout';
+import { CoordMinMax, DateFormatter } from '@chartext/chart/coord/Coord.types';
+import { MonthIndex, roundDate } from '@chartext/chart/utils/dates';
 
 /* const minuteFormatter: DateFormatter = new Intl.DateTimeFormat(undefined, {
   timeStyle: 'short',
@@ -24,23 +25,25 @@ const hourFormatter: DateFormatter = new Intl.DateTimeFormat(undefined, {
 
 const dayOfMonthFormatter: DateFormatter = {
   format(date: Date) {
-    return date.getDate().toString();
+    return format(date, 'DD');
   },
 };
 
-const monthFormatter: DateFormatter = new Intl.DateTimeFormat(undefined, {
-  month: 'short',
-});
+const monthFormatter: DateFormatter = {
+  format(date: Date) {
+    return format(date, 'MMM');
+  },
+};
 
 const yearFormatter: DateFormatter = {
   format(date: Date) {
-    return date.getFullYear().toString();
+    return format(date, 'yyyy');
   },
 };
 
 const dateFormatter: DateFormatter = {
   format(date: Date): string {
-    if (date.getMonth() === Months.Jan && date.getDate() === 1) {
+    if (date.getMonth() === MonthIndex.Jan && date.getDate() === 1) {
       return yearFormatter.format(date);
     }
 

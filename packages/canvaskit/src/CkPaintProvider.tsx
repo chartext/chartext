@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { CkPaintSet } from '@/CkPaintRepository';
+import { CkPaintSet } from '@chartext/canvaskit/CkPaintRepository';
 
 type CkPaintContextProps = {
   addColor(color: string): void;

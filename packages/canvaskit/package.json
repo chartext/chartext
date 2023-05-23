@@ -15,46 +15,45 @@
     "email": "threaddot@users.noreply.github.com",
     "url": "https://github.com/threaddot"
   },
+  "packageManager": "pnpm@8.5.0",
+  "type": "module",
   "files": [
-    "dist"
+    "dist",
+    "LICENSE",
+    "README.md"
   ],
   "main": "./dist/index.umd.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/chartext/chartext.git",
     "directory": "packages/canvaskit"
   },
   "scripts": {
-    "build": "pnpm tsc && vite build",
     "clean": "rimraf dist && rimraf build",
-    "dist": "pnpm clean && tsc -b ./tsconfig.dist.json && vite build",
+    "dist": "pnpm tsc && vite build && pnpm dts",
+    "dts": "dts-bundle-generator --no-check -o dist/index.d.ts --project tsconfig.dist.json src/index.ts",
     "preinstall": "npx only-allow pnpm",
-    "test": "pnpm clean && vitest run",
-    "tsc": "pnpm clean && tsc -b"
+    "test": "rimraf build && vitest run",
+    "tsc": "rimraf build && tsc -b tsconfig.dist.json"
   },
   "dependencies": {
     "canvaskit-wasm": "^0.38.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "tinycolor2": "^1.6.0"
   },
   "peerDependencies": {
-    "canvaskit-wasm": "^0.38.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
-  "exports": {
-    "import": {
-      "default": "./dist/index.js",
-      "types": "./dist/types/index.d.ts"
-    },
-    "require": {
-      "default": "./dist/index.umd.cjs",
-      "types": "./dist/types/index.d.ts"
-    }
-  },
-  "module": "./dist/index.js",
-  "packageManager": "pnpm@8.5.0",
-  "type": "module",
-  "types": "./dist/types/index.d.ts"
+  "devDependencies": {
+    "@types/tinycolor2": "^1.4.3"
+  }
 }

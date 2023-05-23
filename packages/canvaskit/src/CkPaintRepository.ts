@@ -1,5 +1,5 @@
 import { Paint, PaintStyle } from 'canvaskit-wasm';
-import { CkGraphics } from '@/CkGraphics';
+import { CkGraphics } from '@chartext/canvaskit/CkGraphics';
 
 export type CkPaintSet = {
   fill: Paint;
@@ -71,7 +71,7 @@ export class CkPaintRepository {
       const paintSet = this.#paintSetMap.get(color);
 
       if (paintSet) {
-        CkGraphics.delete(paintSet.fill, paintSet.stroke);
+        this.deletePaintSet(paintSet);
       }
     }
   }
@@ -80,10 +80,13 @@ export class CkPaintRepository {
     return this.#paintSetMap.get(color) ?? this.#defaultPaintSet;
   }
 
+  private deletePaintSet(paintSet: CkPaintSet) {
+    paintSet.fill.deleteLater();
+    paintSet.stroke.deleteLater();
+  }
+
   delete() {
-    CkGraphics.delete(this.#defaultPaintSet.fill, this.#defaultPaintSet.stroke);
-    this.#paintSetMap.forEach((paintSet) =>
-      CkGraphics.delete(paintSet.fill, paintSet.stroke),
-    );
+    this.deletePaintSet(this.#defaultPaintSet);
+    this.#paintSetMap.forEach((paintSet) => this.deletePaintSet(paintSet));
   }
 }

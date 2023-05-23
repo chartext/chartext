@@ -1,6 +1,7 @@
 import {
   CoordRange,
   CoordType,
+  MonthIndex,
   Series,
   generateSeriesArr,
 } from '@chartext/chart';
@@ -72,8 +73,8 @@ export function Form(props: FormProps) {
         max: 1000,
       },
       dateRange: {
-        min: new Date('2020-01-01 UTC'),
-        max: new Date('2021-01-01 UTC'),
+        min: new Date(2020, MonthIndex.Jan, 1),
+        max: new Date(2020, MonthIndex.Dec, 31),
       },
     }),
     [],

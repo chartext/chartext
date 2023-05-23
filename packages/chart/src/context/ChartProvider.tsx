@@ -1,22 +1,36 @@
 import { CkPaintRepository, useCkGraphics } from '@chartext/canvaskit';
 import { PropsWithChildren, createContext, useContext, useMemo } from 'react';
-import { ChartProps, ChartStyle } from '@/Chart.types';
-import { AxisTickLayout, XAxisConfig, YAxisConfig } from '@/axis/Axis.types';
-import { CoordTypeName, XYTuple } from '@/coord/Coord.types';
-import { RectLayout, Size } from '@/layout/ChartLayout.types';
-import { Series } from '@/series/Series.types';
-import { buildXYCoordLayout, buildXYTypeName } from '@/coord/CoordFactory';
-import { buildXYAxisColors, buildXYAxisTickLayout } from '@/axis/AxisFactory';
-import { CoordLayout } from '@/coord/CoordLayout';
-import { defaultXAxisConfig, defaultYAxisConfig } from '@/ChartDefaults';
-import { buildSeriesSurfaceLayout } from '@/series/SeriesSurfaceFactory';
+import { ChartProps } from '@chartext/chart/Chart.types';
+import {
+  defaultXAxisConfig,
+  defaultYAxisConfig,
+} from '@chartext/chart/ChartDefaults';
+import {
+  AxisTickLayout,
+  XAxisConfig,
+  YAxisConfig,
+} from '@chartext/chart/axis/Axis.types';
+import {
+  buildXYAxisColors,
+  buildXYAxisTickLayout,
+} from '@chartext/chart/axis/AxisFactory';
+import { CoordTypeName, XYTuple } from '@chartext/chart/coord/Coord.types';
+import {
+  buildXYCoordLayout,
+  buildXYTypeName,
+} from '@chartext/chart/coord/CoordFactory';
+import { CoordLayout } from '@chartext/chart/coord/CoordLayout';
+import { RectLayout, Size } from '@chartext/chart/layout/ChartLayout.types';
+import { Series } from '@chartext/chart/series/Series.types';
+import { buildSeriesSurfaceLayout } from '@chartext/chart/series/SeriesSurfaceFactory';
+import { ChartTheme } from '@chartext/chart/theme/ChartTheme.types';
 
 export type ChartContextProps = {
   paintRepository: CkPaintRepository;
   series: Series[];
   seriesSurfaceLayout: RectLayout;
   size: Size;
-  style: ChartStyle;
+  theme: ChartTheme;
   xyAxisConfig: XYTuple<XAxisConfig, YAxisConfig>;
   xyAxisTickLayout: XYTuple<AxisTickLayout>;
   xyCoordLayout: XYTuple<CoordLayout>;
@@ -34,7 +48,7 @@ export function ChartProvider(props: PropsWithChildren<ChartProviderProps>) {
   const {
     series,
     size,
-    style,
+    theme,
     xAxisConfig,
     yAxisConfig,
     xConfig,
@@ -53,21 +67,24 @@ export function ChartProvider(props: PropsWithChildren<ChartProviderProps>) {
   );
 
   const seriesSurfaceLayout: RectLayout = useMemo(
-    () => buildSeriesSurfaceLayout(size, style, xyAxisConfig),
-    [size, style, xyAxisConfig],
+    () => buildSeriesSurfaceLayout(size, theme, xyAxisConfig),
+    [size, theme, xyAxisConfig],
   );
 
   const paintRepository = useMemo(() => {
     const colors: Set<string> = new Set<string>();
-    const { backgroundColor, seriesColors } = style;
+    const { backgroundColor, seriesColors } = theme;
 
     colors.add(backgroundColor);
 
     seriesColors.forEach(colors.add, colors);
-    buildXYAxisColors(xyAxisConfig).forEach(colors.add, colors);
+    buildXYAxisColors([theme.xAxisStyle, theme.yAxisStyle]).forEach(
+      colors.add,
+      colors,
+    );
 
     return new CkPaintRepository(ckGraphics, [...colors]);
-  }, [ckGraphics, style, xyAxisConfig]);
+  }, [ckGraphics, theme]);
 
   const xyTypeName: XYTuple<CoordTypeName> | null = useMemo(
     () => buildXYTypeName(series),
@@ -95,7 +112,7 @@ export function ChartProvider(props: PropsWithChildren<ChartProviderProps>) {
         series,
         seriesSurfaceLayout,
         size,
-        style,
+        theme,
         xyAxisTickLayout,
         xyAxisConfig,
         xyCoordLayout,

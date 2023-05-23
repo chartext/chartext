@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react';
 import CanvasKitInit, { CanvasKit, FontMgr, Typeface } from 'canvaskit-wasm';
-import { CkGraphics } from '@/CkGraphics';
+import { CkGraphics } from '@chartext/canvaskit/CkGraphics';
 
 async function fontFetch(url: string): Promise<ArrayBuffer> {
   return fetch(url).then((response) => response.arrayBuffer());

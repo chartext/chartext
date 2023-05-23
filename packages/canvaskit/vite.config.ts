@@ -1,15 +1,22 @@
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import dts from 'vite-plugin-dts';
+//import typescript from '@rollup/plugin-typescript';
+//import dts from 'rollup-plugin-dts';
 
 export default defineConfig({
   plugins: [
     tsconfigPaths(),
-    dts({
-      // rollupTypes: true,
-      outputDir: 'dist/types',
-    }),
+    /* typescript({
+      outDir: resolve(__dirname, 'dist/types'),
+      rootDir: resolve(__dirname, 'src'),
+      emitDeclarationOnly: true,
+      declaration: true,
+      // declarationDir: 'dist/types',
+    }), */
+    /* dts({
+      tsconfig: 'tsconfig.dist.json',
+    }), */
   ],
   build: {
     lib: {

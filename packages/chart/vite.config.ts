@@ -4,14 +4,7 @@ import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  plugins: [
-    react(),
-    tsconfigPaths(),
-    /* dts({
-      // rollupTypes: true,
-      outputDir: 'dist/types',
-    }), */
-  ],
+  plugins: [react(), tsconfigPaths()],
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
@@ -20,16 +13,21 @@ export default defineConfig({
     },
     rollupOptions: {
       external: [
-        'react',
-        'react-dom',
-        'react/jsx-runtime',
         '@chartext/canvaskit',
+        'bezier-js',
+        'date-fns-tz',
+        'date-fns',
+        'react-dom',
+        'react',
+        'react/jsx-runtime',
         'tinycolor2',
       ],
       treeshake: 'smallest',
       output: {
         globals: {
-          '@chartext/canvaskit': 'canvaskit',
+          '@chartext/canvaskit': '@chartext/canvaskit',
+          'date-fns-tz': 'date-fns-tz',
+          'bezier-js': 'bezier-js',
           react: 'React',
           'react/jsx-runtime': 'jsxRuntime',
           tinycolor2: 'tinycolor',

@@ -5,11 +5,10 @@
     "outDir": "build",
     "tsBuildInfoFile": "build/.tsbuildinfo",
     "paths": {
-      "@/*": ["./src/*"],
+      "@chartext/chart/*": ["src/*"],
       "@chartext/canvaskit": ["../canvaskit/src"]
     }
   },
   "references": [{ "path": "../canvaskit" }],
-  "include": ["src", "__tests__", "vite.config.ts"],
-  "exclude": ["node_modules"]
+  "include": ["src", "__tests__", "vite.config.ts"]
 }

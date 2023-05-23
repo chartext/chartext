@@ -1,6 +1,9 @@
-import { AxisTickLayout } from '@/axis/Axis.types';
-import { CoordFormatter, CoordType } from '@/coord/Coord.types';
-import { Direction, RectLayout } from '@/layout/ChartLayout.types';
+import { AxisTickLayout } from '@chartext/chart/axis/Axis.types';
+import { CoordFormatter, CoordType } from '@chartext/chart/coord/Coord.types';
+import {
+  Direction,
+  RectLayout,
+} from '@chartext/chart/layout/ChartLayout.types';
 
 export abstract class CoordLayout<C extends CoordType = CoordType> {
   readonly #min: number;

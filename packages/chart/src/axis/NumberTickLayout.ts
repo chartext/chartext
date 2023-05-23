@@ -1,6 +1,9 @@
-import { defaultNumberFormatter } from '@/ChartDefaults';
-import { AxisTick, AxisTickLayout } from '@/axis/Axis.types';
-import { CoordMinMax, NumberFormatter } from '@/coord/Coord.types';
+import { defaultNumberFormatter } from '@chartext/chart/ChartDefaults';
+import { AxisTick, AxisTickLayout } from '@chartext/chart/axis/Axis.types';
+import {
+  CoordMinMax,
+  NumberFormatter,
+} from '@chartext/chart/coord/Coord.types';
 
 export class NumberTickLayout implements AxisTickLayout<number> {
   readonly #min: number;

@@ -1,24 +1,26 @@
 import {
   CanvasKit,
-  EmbindObject,
   Font,
   FontMgr,
   Paint,
+  PaintStyleEnumValues,
   Paragraph,
   ParagraphBuilder,
+  ParagraphStyle,
   Path,
   Surface,
+  TextAlignEnumValues,
   WebGPUCanvasContext,
   WebGPUDeviceContext,
 } from 'canvaskit-wasm';
 import tinycolor, { Instance as Color } from 'tinycolor2';
 import {
-  CkDrawParagraphProps,
-  CkFontProps,
-  CkPaintProps as CkPaintParams,
-  CkParagraphProps as CkParagraphParams,
+  CkCreatePaintParams,
+  CkCreateParagraphParams,
+  CkDrawParagraphParams,
+  CkCreateFontParams,
   CkTypeface,
-} from '@/CkGraphics.types';
+} from '@chartext/canvaskit/CkGraphics.types';
 
 export class CkGraphics {
   constructor(
@@ -28,40 +30,31 @@ export class CkGraphics {
     readonly gpuDeviceContext?: WebGPUDeviceContext,
   ) {}
 
-  static drawParagraph(props: CkDrawParagraphProps) {
-    const { canvas, paragraph, width, x, y } = props;
+  static drawParagraph(params: CkDrawParagraphParams) {
+    const { canvas, paragraph, width, x, y } = params;
     paragraph.layout(width);
     canvas.drawParagraph(paragraph, x, y);
-  }
-
-  get TRANSPARENT() {
-    return this.CK.TRANSPARENT;
-  }
-
-  get TextAlign() {
-    return this.CK.TextAlign;
   }
 
   MakeImage(params: Parameters<CanvasKit['MakeImage']>) {
     this.CK.MakeImage(...params);
   }
 
-  createParagraph(params: CkParagraphParams): Paragraph {
-    const {
-      text,
-      fontSize = 10,
-      fontFamilies = ['Roboto'],
-      textAlign = this.CK.TextAlign.Left,
-      color = '#000',
-    } = params;
+  createParagraph(params: CkCreateParagraphParams): Paragraph {
+    const { text, style } = params;
+
+    const pStyleDefaults: ParagraphStyle = {
+      textStyle: {
+        color: this.color('#000'),
+        fontFamilies: ['Roboto'],
+        fontSize: 10,
+      },
+      textAlign: this.TextAlign.Left,
+    };
 
     const pStyle = new this.CK.ParagraphStyle({
-      textStyle: {
-        color: this.color(color),
-        fontFamilies,
-        fontSize,
-      },
-      textAlign,
+      ...pStyleDefaults,
+      ...style,
     });
 
     const pBuilder: ParagraphBuilder = this.CK.ParagraphBuilder.Make(
@@ -74,17 +67,17 @@ export class CkGraphics {
       const paragraph = pBuilder.build();
       return paragraph;
     } finally {
-      CkGraphics.delete(pBuilder);
+      pBuilder.delete();
     }
   }
 
   path(pathCallback: (path: Path) => void) {
-    const path = new this.CK.Path();
+    const path = this.createPath();
 
     try {
       pathCallback(path);
     } finally {
-      CkGraphics.delete(path);
+      path.delete();
     }
   }
 
@@ -103,7 +96,7 @@ export class CkGraphics {
     );
   }
 
-  createPaint(params?: CkPaintParams): Paint {
+  createPaint(params?: CkCreatePaintParams): Paint {
     const {
       color = '#000',
       style = this.CK.PaintStyle.Stroke,
@@ -122,12 +115,12 @@ export class CkGraphics {
     return paint;
   }
 
-  createTextPaint(params?: CkPaintParams): Paint {
+  createTextPaint(params?: CkCreatePaintParams): Paint {
     return this.createPaint({ ...params, style: this.CK.PaintStyle.Fill });
   }
 
-  createFont(props?: CkFontProps): Font {
-    const { size = 10, family = 'roboto' } = props ?? {};
+  createFont(params?: CkCreateFontParams): Font {
+    const { size = 10, family = 'roboto' } = params ?? {};
 
     return new this.CK.Font(this.typefaces[family], size);
   }
@@ -153,9 +146,15 @@ export class CkGraphics {
     ) as Surface | null;
   }
 
-  static delete<T extends EmbindObject<T>>(
-    ...objects: (EmbindObject<T> | null)[]
-  ) {
-    objects.forEach((obj) => obj?.delete());
+  get TRANSPARENT() {
+    return this.CK.TRANSPARENT;
+  }
+
+  get TextAlign(): TextAlignEnumValues {
+    return this.CK.TextAlign;
+  }
+
+  get PaintStyle(): PaintStyleEnumValues {
+    return this.CK.PaintStyle;
   }
 }

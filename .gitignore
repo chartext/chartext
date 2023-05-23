@@ -10,6 +10,7 @@ build
 .gitconfig
 .eslintcache
 *.log*
+.rollup.cache
 
 # app config
 .idea
